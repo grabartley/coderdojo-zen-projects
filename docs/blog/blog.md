@@ -1,72 +1,38 @@
-# Blog: MY-PROJECT-TITLE
+# Blog: CoderDojo Zen Projects
 
-**MY-NAME**
+**Graham Bartley**
 
-## My First Blog Entry
+## Project Approval & Next Steps
+#### 29th October 2017
 
-This is my first blog entry.
+I had my approval panel session on Monday 23rd October and after discussing my project with the panel, it was approved. I was also given some useful feedback to consider throughout the year as I work on it. This is the main feedback I was given:
 
-The blog is written in [markdown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet).
-Markdown is a simple text-based mark-up language.
+  * **Languages**: The release date of Scratch 3 being an unknown poses a major risk for the project, I should focus on implementing runtime for Python well instead of focusing on Scratch. Once one language is well supported and the runtime is abstracted enough, other languages are not completely necessary.
+  * **Testing**: Focus on testing throughout the project and not just towards the end, both technical and user-oriented.
+  * **Demonstration**: When it comes to demonstrating my project I should showcase the lifecycle of using my project from each user's perspective.
 
-## My Second Blog Entry
+Following on from my approval session, I decided to continue drawing up some early user interface (UI) mockups I have been working on for the past few weeks. Once they are finished I will be able to show them to potential users and the CoderDojo Foundation (CDF) for feedback. These are the ones I have drawn up so far which are early concepts and will certainly change as the project goes on:
 
-This week, I learned how to include
-[images](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet#images)
-in my blog.
+**Project Page (Logged in)**
+![UI mockup](./images/full-project-javascript(li).png)
 
-![cat](https://gitlab.computing.dcu.ie/sblott/2018-ca400-XXXX/raw/master/docs/blog/images/cat.jpg)
+**Project Page - Running (Logged in)**
+![UI mockup](./images/full-project-javascript-running(li).png)
 
-Here are the instructions:
+**Project Page - Dropdown Options (Logged in)**
+![UI mockup](./images/full-project-javascript-with-options-dropdown(li).png)
 
-- Add the image to your repo (probably using the `images` sub-directory here).
-  The cat example above is in `./images/cat.jpg`.
+**My Projects - Parent Perspective (Logged in)**
+![UI mockup](./images/personal-dashboard-with-children(li).png)
 
-- Commit that and push it to your repo.
+**Dojo Page Projects Section**
+![UI mockup](./images/dojo-page-with-projects.png)
 
-- On Gitlab, navigate to your new image and click *Raw*.  You get the raw URL of your image.  Copy that URL.
+I have also decided to create personas for each user type I will need to consider when working on the project. These will become useful when writing user stories and will ensure my project is always designed with it's users in mind. The personas I have created are as follows:
 
-- Add your image to this document using the following format:
+  * **Niamh (Youth)**: Niamh is 12 years old. She has been attending her local Dojo for three years since the age of 9. She started out by attending Scratch sessions and then moved on to Web Design and more recently Python. She works on coding projects in her spare time with her friends and showcased some of her work at the Coolest Projects event in the RDS in Dublin, Ireland in 2017.
+  * **Steven (Parent)**: Steve is 34 years old. He is the father of two children, one of which is Niamh. He is a radio show host and doesn't like to use computers much in his spare time out of personal preference. However, he does support his daughter's passion for technology and has a Zen account for this reason.
+  * **Allie (Mentor)**: Allie is 21 years old. She has been a mentor at her local Dojo for two years now teaching the youths Scratch, HTML, CSS, JavaScript and Python. She is in her final year studying in university and has a part-time job in a clothing shop. She volunteered to help run Coolest Projects 2017.
+  * **Chris (Champion)**: Chris is 52 years old. He is the champion of his own Dojo which he set up five years ago. He has worked in the technology industry his whole life and is now a product manager for a major software company. He is passionate about teaching youths how to code and promoting interest in technology at an early age.
 
-    <pre>![alternative text](URL)</pre>
-
-See the example [here](https://gitlab.computing.dcu.ie/sblott/2018-ca400-XXXX/raw/master/docs/blog/blog.md).
-
-You can also mention other users (like me: @sblott).
-
-## Including Code
-
-Raw text:
-```
-Mary had a little lamb,
-it's fleece was white as snow.
-```
-
-Syntax highlighting is also possible; for example...
-
-Python:
-```python
-i = 0
-while i < len(s):
-   # So something.
-   i = i + 1
-```
-
-Java:
-```java
-for (i=0; i<s.length(); i+=1) {
-   // Do something.
-}
-```
-
-Coffeescript:
-```coffeescript
-i = 0
-while i < s.length
-   # So something.
-   i = i + 1
-```
-
-## Instructions
-
-Once you've understood this sample, replace it with your own blog.
+Using these personas I can then begin to write user stories which I will be keeping track of using my own project board on [Pivotal Tracker - an agile software development tracker](https://www.pivotaltracker.com/). I have shared this board with my project supervisor and with relevant members of the CoderDojo Foundation so that they will all be kept up-to-date on my progress with the project. Writing these stories and continuing to create UI mockups will be what I focus on for the next week.
