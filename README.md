@@ -1,54 +1,7 @@
-# My Project Title
+# CoderDojo Zen Projects
 
-This is a template for CA400 projects.  Please read these instructions carefully.
+Last Summer, for my INTRA placement, I worked with the CoderDojo Foundation (CDF). Towards the end of my placement I was approached by them and asked if I would like to work on this project for their community platform, which is called Zen.
 
-This file is written in
-[markdown](https://guides.github.com/features/mastering-markdown/).  Markdown
-is a suitable format for documents stored in git repositories.
+The main focus of my project is to create an easily extendable browser runtime environment in JavaScript which will support various different programming languages and integrate this into the existing Zen architecture in order to facilitate the running of code from projects created by youths on the platform. The languages I will be supporting runtime for are Python, JavaScript and possibly Scratch or Java as stretch goals since these are the most popular languages used by youths in Dojos.
 
-## Instructions
-
-You *must* do the following:
-
-1 - Fork this repo.
-
-2 - Rename your fork using the format (all lower case letters)
-
-    2018-ca400-username
-
-replacing `username` with your School of Computing login name.
-
-For example, if Stephen Blott were to be doing a fourth-year project, he would rename
-his repo as:
-
- 2018-ca400-sblott
-
-You can rename your repo by selecting *Edit Project* from the drop-down menu
-(with a gear icon) on the top right of your project's home page.  Change the
-*Project name* field **and** the *Path*.
-
-You should also update the *Project description*.
-
-3 - This directory has two sub-directories.
-
-- All of your source code should be placed in the `src` sub-directory.
-
-- All of your documentation should be placed in the `docs` sub-directory.
-
-- Your project blog should be placed in the `blog` sub-directory. 
-
-
-4 - There is further important documentation in the `docs` directory.  Read that next.
-
-When you are have followed all of these instructions and are sure that you
-understand what is expected, you may replace the contents of this file with a
-brief description of your project (two or three paragraphs).
-
-## Additional Resources
-
-- Git [cheat sheet](https://gitlab.computing.dcu.ie/sblott/local-gitlab-documentation/blob/master/cheat-sheet.md)
-- Gitlab [CI environment](https://gitlab.computing.dcu.ie/sblott/docker-ci-environment) and it's [available software](https://gitlab.computing.dcu.ie/sblott/docker-ci-environment/blob/master/Dockerfile)
-- Example projects with CI configured:
-   * [Python](https://gitlab.computing.dcu.ie/sblott/test-project-python)
-   * [Java](https://gitlab.computing.dcu.ie/sblott/test-project-java)
-   * [MySql](https://gitlab.computing.dcu.ie/sblott/test-project-mysql)
+I will also be extending the functionality of Zen to allow youths to be able to upload their project code and I will be storing it with versioning using an existing version control system which will be abstracted away from the user. In addition to this, I will be tracking statistics relating to these projects and making them available to the CDF through an admin panel. I will also be handling project management by different user types and organizing of projects based on their content, level, language etc. in order to facilitate searching for projects and linking of projects to certain CoderDojo learning resources.
