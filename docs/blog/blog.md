@@ -14,24 +14,19 @@ I had my approval panel session on Monday 23rd October and after discussing my p
 Following on from my approval session, I decided to continue drawing up some early user interface (UI) mockups I have been working on for the past few weeks. Once they are finished I will be able to show them to potential users and the CoderDojo Foundation (CDF) for feedback. These are the ones I have drawn up so far which are early concepts and will certainly change as the project goes on:
 
 **Project Page (Logged in)**
-
-<img alt="UI Mockup" src="./images/full-project-javascript(li).png" style="width: 500px"></img>
+![UI mockup](./images/full-project-javascript(li).png)
 
 **Project Page - Running (Logged in)**
-
-<img alt="UI Mockup" src="./images/full-project-javascript-running(li).png" style="width: 500px"></img>
+![UI mockup](./images/full-project-javascript-running(li).png)
 
 **Project Page - Dropdown Options (Logged in)**
-
-<img alt="UI Mockup" src="./images/full-project-javascript-with-options-dropdown(li).png" style="width: 500px"></img>
+![UI mockup](./images/full-project-javascript-with-options-dropdown(li).png)
 
 **My Projects - Parent Perspective (Logged in)**
-
-<img alt="UI Mockup" src="./images/personal-dashboard-with-children(li).png" style="width: 500px"></img>
+![UI mockup](./images/personal-dashboard-with-children(li).png)
 
 **Dojo Page Projects Section**
-
-<img alt="UI Mockup" src="./images/dojo-page-with-projects.png" style="width: 500px"></img>
+![UI mockup](./images/dojo-page-with-projects.png)
 
 I have also decided to create personas for each user type I will need to consider when working on the project. These will become useful when writing user stories and will ensure my project is always designed with it's users in mind. The personas I have created are as follows:
 
