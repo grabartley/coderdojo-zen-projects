@@ -1,0 +1,285 @@
+<div class="cd-dojo-lead">
+  <div class="row">
+    <div class="cd-dojo-lead__actions">
+      <div class="btn-group">
+        <button class="btn btn-primary" ng-click="$ctrl.verify()" ng-if="!$ctrl.dojo.verified && $ctrl.lead.completed">
+          <i class="fa fa-check"></i>Verify
+        </button>
+        <a class="btn btn-secondary" href="https://hwf.zendesk.com/agent/tickets/new/1"><i class="fa fa-envelope"></i>New ticket</a>
+      </div>
+    </div>
+    <div class="col-xs-12">
+      <h1 class="cd-dojo-lead__link">
+        <a ui-sref="start-dojo({id: $ctrl.lead.id})" target="_blank">
+          {@i18n key="Application"/}
+        </a>
+      </h1>
+      <div class="cd-dojo-lead__application-status">
+        <ul class="btn-group">
+          <li role="button" ng-repeat="tab in $ctrl.tabs" class="btn" ng-class="tab.isValid ? 'btn-success': 'btn-danger'">
+            <span ng-bind="::tab.name" class="h5"></span>
+          </li>
+          <li role="button" class="btn btn-default">
+            &nbsp;
+          </li>
+          <li role="button" class="btn" ng-class="$ctrl.lead.completed ? 'btn-success': 'btn-default'">
+            <a class="h5" href="#submittedAt">Submitted</a>
+          </li>
+          <li role="button" class="btn" ng-class="$ctrl.dojo.verified ? 'btn-success': 'btn-default'">
+            <a class="h5" href="#verifiedAt">Verified</a>
+          </li>
+        </ul>
+      </div>
+      <div class="cd-dojo-lead__application">
+        <table>
+          <thead>
+            <th colspan="2"><h4>Champion details</h4></th>
+            <th colspan="2"><h4>Dojo information</h4></th>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Name</td>
+              <td><a ui-sref="user-profile({userId: $ctrl.profile.userId})" ng-bind="::$ctrl.profile.name"></a></td>
+              <td>Dojo Name</td>
+              <td><a target="_blank" ui-sref="dojo-detail-id({id: $ctrl.dojo.id})" ng-bind="::$ctrl.dojo.name"></a></td>
+            </tr>
+            <tr>
+              <td>Email</td>
+              <td><span ng-bind="::$ctrl.champion.email"></span></td>
+              <td>Dojo Email</td>
+              <td>
+                <span ng-bind="::$ctrl.dojo.email"></span>
+                <span ng-if="$ctrl.dojo.email === $ctrl.champion.email" class="label label-error">Same email :(</span>
+                <span ng-if="!$ctrl.dojo.email && $ctrl.dojo.requestEmail" class="label label-warning">Require manual activation</span>
+              </td>
+            </tr>
+            <tr>
+              <td>Date of Birth</td>
+              <td> <span ng-bind="::$ctrl.champion.dob | date: 'MM/dd/yyyy'"></span>
+                &nbsp;
+                <span class="label" ng-bind="::$ctrl.champion.age" ng-class="$ctrl.champion.age < 18? 'label-warning': 'label-default'"></span></td>
+            </tr>
+            <tr>
+              <td>Parent Name</td>
+              <td ng-bind="::$ctrl.champion.parentName"></td>
+            </tr>
+            <tr>
+              <td>Parent email</td>
+              <td ng-bind="::$ctrl.champion.parentEmail"></td>
+            </tr>
+            <tr>
+              <td>Phone number</td>
+              <td ng-bind="::$ctrl.champion.phone"></td>
+            </tr>
+            <tr>
+              <td>Twitter</td>
+              <td><a target="_blank" ng-href="//twitter.com/{{ $ctrl.champion.twitter }}" ng-bind="::$ctrl.champion.twitter"></a></td>
+              <td>Twitter</td>
+              <td><a target="_blank" ng-href="//twitter.com/{{ $ctrl.dojo.twitter }}" ng-bind="::$ctrl.dojo.twitter"></a></td>
+            </tr>
+            <tr>
+              <td>Facebook</td>
+              <td><a target="_blank" ng-href="//facebook.com/{{ $ctrl.champion.facebook }}" ng-bind="::$ctrl.champion.facebook"></a></td>
+              <td>Facebook</td>
+              <td><a target="_blank" ng-href="//facebook.com/{{ $ctrl.dojo.facebook }}" ng-bind="::$ctrl.dojo.facebook"></a></td>
+            </tr>
+            <tr>
+              <td>Linkedin</td>
+              <td><a ng-href="//linkedin.com/in/{{ $ctrl.champion.linkedin }}" ng-bind="::$ctrl.champion.linkedin"></a></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td>Website</td>
+              <td><a target="_blank" ng-href="{{ $ctrl.dojo.website }}" ng-bind="::$ctrl.dojo.website"></a></td>
+            </tr>
+            <tr>
+              <td>Where did you hear from us ?</td>
+              <td>
+                <span ng-if="$ctrl.champion.reference !== 'other'" ng-bind="$ctrl.getReferenceValue($ctrl.champion.reference)"></span>
+                <span ng-if="$ctrl.champion.reference === 'other'">Other: <span class="label label-warning" ng-bind="::$ctrl.champion.alternativeReference"></span></span>
+              </td>
+            </tr>
+          </tbody>
+          <thead>
+            <th colspan="4"><h4>Location</h4></th>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Champion address</td>
+              <td ng-bind="::$ctrl.profile.address"></td>
+              <td>Dojo location</td>
+              <td>
+                <p ng-if="!$ctrl.lead.application.venue.isFound" class="help-block"> Champion looking for a venue </p>
+                <a ng-href="https://google.com/maps/?q={{ $ctrl.dojo.geoPoint.lat }},{{ $ctrl.dojo.geoPoint.lon }}" ng-bind="::$ctrl.dojo.address1"></a>
+            </td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td>City</td>
+              <td ng-bind="::$ctrl.dojo.placeName"></td>
+            </tr>
+            <tr>
+              <td>Country</td>
+              <td ng-bind="::$ctrl.profile.country.countryName"></td>
+              <td>Country</td>
+              <td ng-bind="::$ctrl.dojo.countryName"></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td>Type</td>
+              <td>
+                <span ng-show="$ctrl.lead.application.venue.type != 'other'" ng-bind="::$ctrl.lead.application.venue.type"></span>
+                <span ng-show="$ctrl.lead.application.venue.type == 'other'">
+                  Other : <span ng-bind="::$ctrl.lead.application.venue.alternativeType" class="label label-warning"></span>
+                </span>
+
+              </td>
+            </tr>
+            <tr ng-show="$ctrl.lead.application.venue.type == 'office'">
+              <td></td>
+              <td></td>
+              <td>Corporate</td>
+              <td>
+                <span ng-show="$ctrl.lead.application.venue.corporate != 'other'" ng-bind="::$ctrl.lead.application.venue.corporate" class="label label-info"></span>
+                <!-- TODO: migrate review to cdf ? -->
+                <span ng-show="$ctrl.lead.application.venue.corporate == 'other'"> Other :
+                  <a ui-sref="orgs" ng-bind="::$ctrl.lead.application.venue.alternativeCorporate" class="label label-warning"></a></span>
+              </td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td>Private</td>
+              <td ng-bind="::$ctrl.dojo.private | boolToString"></td>
+            </tr>
+          </tbody>
+          <thead>
+            <th colspan="4"><h4>Dojo information</h4></th>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="cd-dojo-lead__title-cell">Champion Skills</td>
+              <td></td>
+              <td>Team</td>
+              <td>
+                <div ng-if="$ctrl.lead.application.team.status === 'solo'">
+                  Solo
+                </div>
+                <div ng-if="$ctrl.lead.application.team.status === 'exists'">
+                  <span ng-show="$ctrl.lead.application.team.src">
+                    <span ng-repeat="(key, val) in $ctrl.lead.application.team.src">
+                      {{ key }} <span ng-if="!$last">, </span>
+                    </span>
+                  </span>
+                  <p class="help-block" ng-show="!$ctrl.lead.application.team.src"> No sources specified</p>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>Technical confidence</td>
+              <td> {{ $ctrl.champion.confidentCoding }} / 5 </td>
+              <td>Frequency</td>
+              <td>
+                <span ng-if="$ctrl.dojo.frequency !== 'other'">
+
+                  <span ng-bind="::$ctrl.dojo.frequency"></span>
+                </span>
+                <span ng-if="$ctrl.dojo.alternativeFrequency && $ctrl.dojo.frequency === 'other'"> Other : <span ng-bind="::$ctrl.dojo.alternativeFrequency"></span></span>
+              </td>
+            </tr>
+            <tr>
+              <td>Mentoring confidence</td>
+              <td> {{ $ctrl.champion.confidentMentoring }} / 5 </td>
+              <td>Day</td>
+              <td>
+                <span ng-if="$ctrl.dojo.alternativeFrequency && $ctrl.dojo.frequency='1/m'" ng-bind="::$ctrl.dojo.alternativeFrequency"></span>
+                <span ng-bind="::$ctrl.days[$ctrl.dojo.day]"></span>
+              </td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td>Time of session</td>
+              <td>
+                <span ng-bind="::$ctrl.dojo.startTime"> </span>-
+                <span ng-bind="::$ctrl.dojo.endTime"></span>
+              </td>
+            </tr>
+            <tr>
+              <td>Member of other Dojos</td>
+              <td>
+                <div ng-if="$ctrl.otherDojos.length > 0">
+                  <span ng-repeat="role in $ctrl.otherDojos">
+                    {{ role }} <span ng-if="!$last">,</span>
+                  </span>
+                </div>
+                <div ng-if="$ctrl.otherDojos.length === 0" class="help-block">
+                  No other experience in Dojo found
+                </div>
+              </td>
+              <td>Date of first session</td>
+              <td ng-bind="::$ctrl.lead.application.dojo.firstSession | date: 'MM/dd/yyyy'"></td>
+            </tr>
+            <tr>
+              <td>Notes</td>
+              <td colspan="3">
+                <span ng-bind-html="::$ctrl.dojo.notes"></span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="cd-dojo-lead__actions">
+        <div class="btn-group">
+          <button class="btn btn-primary" ng-click="$ctrl.verify()" ng-if="!$ctrl.dojo.verified && $ctrl.lead.completed">
+            <i class="fa fa-check"></i>Verify
+          </button>
+          <a class="btn btn-secondary" href="https://hwf.zendesk.com/agent/tickets/new/1"><i class="fa fa-envelope"></i>New ticket</a>
+        </div>
+      </div>
+      <div class="cd-dojo-lead__time">
+        <table>
+          <thead>
+            <th colspan="4"><h4>Application information</h4></th>
+          </thead>
+          <tbody>
+            <tr>
+              <td>User created</td>
+              <td><span ng-bind="::$ctrl.profile.user.when | date: 'MM/dd/yyyy HH:mm'"></span></td>
+              <td>Listing created</td>
+              <td><span ng-bind="::$ctrl.dojo.created | date: 'MM/dd/yyyy HH:mm'"></span></td>
+            </tr>
+            <tr>
+              <td>Latest update</td>
+              <td><span ng-bind="::$ctrl.profile.lastEdited | date: 'MM/dd/yyyy HH:mm'"></span></td>
+              <td>Latest update</td>
+              <td><span ng-bind="::$ctrl.lead.updatedAt | date: 'MM/dd/yyyy HH:mm'"></span></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td id="submittedAt">Submitted</td>
+              <td><span ng-if="$ctrl.lead.completed" ng-bind="::$ctrl.lead.completedAt | date: 'MM/dd/yyyy HH:mm'"></span></td>
+            </tr>
+
+            <tr>
+              <td></td>
+              <td></td>
+              <td>Charter signed</td>
+              <td><span ng-bind="::$ctrl.charter.timestamp | date: 'MM/dd/yyyy HH:mm'"></span></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td id="verifiedAt">Verified</td>
+              <td><span ng-bind="::$ctrl.dojo.verifiedAt | date: 'MM/dd/yyyy HH:mm'"></span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

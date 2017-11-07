@@ -1,0 +1,33 @@
+
+  <section ng-if="mapLoaded" id="map">
+    <div ui-map-info-window="model.markerInfoWindow">
+      <h3><a ng-href="{{ getDojoURL(currentMarker.dojo) }}">{{ currentMarker.dojoName }}</a></h3>
+    </div>
+    <div ng-repeat="marker in markers" ui-map-marker="markers[$index]" ui-event="{'map-click': 'openMarkerInfo(marker)'}"></div>
+    <div id="googleMap" ui-map="model.map" ui-event="{'map-dragend':'mapDragEnd()', 'map-zoom_changed':'mapZoomChanged()'}" ui-options="mapOptions" class="map-canvas"></div>
+  </section>
+
+  <ol ng-if="searchResult" class="breadcrumb">
+    <li><button class="btn btn-info btn-xs" ng-click="loadMap()">Back</button></li>
+  </ol>
+
+  <form name="dojoSearch" ng-submit="search()">
+    <div id="find-dojo-form" class="input-group">
+      <input id="location" ng-model="search.dojo" placeholder="{@i18n key="Where are you?"/}" type="text" class="form-control">
+      <span class="input-group-btn">
+        <button class="btn btn-primary" type="submit">{@i18n key="Find nearby Dojos"/}</button>
+      </span>
+    </div>
+  </form>
+
+  <div ng-if="searchResult" class="row">
+    <div class="col-lg-12">
+      <h5 ng-if="!noResultsFound" class="state-heading">{@i18n key="Your closest dojos"/}</h5>
+      <ul ng-repeat="dojo in searchResult">
+        <li><a ng-href="{{ getDojoURL(dojo) }}">{{ dojo.name }}</a></li>
+      </ul>
+      <div ng-if="noResultsFound">
+        <p>{{ noResultsFound }}</p>
+      </div>
+    </div>
+  </div>

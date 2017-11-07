@@ -1,0 +1,86 @@
+input[type='date'],
+input[type='email'],
+input[type='number'],
+input[type='text'],
+textarea {
+  &.ng-dirty {
+
+    &.ng-valid {
+      border-color: @success-color;
+    }
+
+    &.ng-invalid {
+      border-color: @error-color;
+    }
+  }
+}
+
+.timepicker.ng-dirty {
+  &.ng-valid-time input {
+    border: 1px solid @success-color !important;
+  }
+
+  &.ng-invalid-time input {
+    border: 1px solid @error-color !important;
+  }
+}
+
+legend::after{
+  width: 50% !important;
+}
+
+legend.hidden-lg{
+  clear: both;
+}
+
+.form-control[type='date'].selectable{
+  cursor: pointer;
+}
+
+.padding input[type=number]{
+  width:75px;
+}
+
+.padding {
+  margin-left: 10px;
+}
+
+.icon-group {
+  padding-right:1em;
+}
+
+@media (max-width: 1200px) {
+  .padding {
+      margin-left: 0px;
+  }
+}
+
+.cd-input-row {
+  margin: 20px 0;
+
+  .cd-form-label1 {
+    text-align: right;
+    padding-top: 5px;
+
+    &.with-info-btn {
+
+      .cd-info-btn {
+        display: inline-block;
+        padding-left: 10px;
+        float: none;
+        text-decoration: none;
+        color: inherit;
+      }
+    }
+
+    &.with-checkbox {
+      padding-top: 8px;
+    }
+  }
+}
+
+label.validationMessage {
+  text-align: left;
+  width: auto;
+  color: @cd-red;
+}

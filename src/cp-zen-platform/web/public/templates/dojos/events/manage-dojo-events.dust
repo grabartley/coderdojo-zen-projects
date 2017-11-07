@@ -1,0 +1,66 @@
+<span spinner-key="manage-dojo-events-spinner" us-spinner="{radius:30, width:8, length: 16}" spinner-start-active="true"></span>
+<div ng-if="isTicketingAdmin">
+  <div class="manage-event" ui-view>
+    <legend>{@i18n key="Events for Dojo"/}: {{ dojo.name }}</legend>
+    <div class="row">
+      <div class="col-md-12 table-responsive">
+        <div class="row" ng-if="events.length > 0">
+          <div class="col-md-12 table-responsive">
+            <table id="dojoEventsTable" class="table cd-grid-table">
+              <thead>
+                <tr>
+                  <th><span ng-click="toggleSort($event, 'name')" ng-class="getSortClass(sort.name)">&nbsp;</span>{@i18n key="Name"/}</th>
+                  <th><span ng-click="toggleSort($event, 'createdAt')" ng-class="getSortClass(sort.createdAt)">&nbsp;</span>{@i18n key="Date"/}</th>
+                  <th>{@i18n key="Capacity"/}</th>
+                  <th>{@i18n key="Applicants"/}</th>
+                  <th>{@i18n key="Attending"/}</th>
+                  <th>{@i18n key="Status"/}</th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="event in events">
+                  <td class="pointer">
+                    <a ng-if="!event.eventbriteId" ui-sref="manage-applications({dojoId: dojoId, eventId:event.id})">{{ event.name }}</a>
+                    <a ng-if="event.eventbriteId" ng-href="https://www.eventbrite.com/myevent?eid={{ event.eventbriteId }}">{{ event.name }}</a>
+                  </td>
+                  <td>{{ event.formattedDate }}</td>
+                  <td><span ng-if="!event.eventbriteId">{{ event.eventStats.capacity }}</span></td>
+                  <td><span ng-if="!event.eventbriteId">{{ event.eventStats.totalApplicants }}</span></td>
+                  <td><span ng-if="!event.eventbriteId">{{ event.eventStats.totalAttending }}</span></td>
+                  <td>{{ event.status }}</td>
+                  <td class="pointer">
+                    <a ui-sref="edit-dojo-event({eventId:event.id, dojoId: dojoId})" ng-if="!event.eventbriteId">{@i18n key="Edit"/}</a>
+                    <a ng-href="https://www.eventbrite.com/edit?eid={{ event.eventbriteId }}" ng-if="event.eventbriteId">{@i18n key="Edit"/}</a>
+                  </td>
+                  <td class="pointer">
+                    <a ui-sref="manage-applications({dojoId: dojoId, eventId:event.id})" ng-if="!event.eventbriteId">{@i18n key="Manage"/}</a>
+                    <a ng-href="https://www.eventbrite.com/myevent?eid={{ event.eventbriteId }}" ng-if="event.eventbriteId">{@i18n key="Manage"/}</a>
+                  </td>
+                  <td class="pointer" ng-if="!event.eventbriteId">
+                    <button ng-if="event.status === 'published' && isNotPast(event)" class="btn btn-danger" ng-bootbox-confirm="{@i18n key="Are you sure you want to cancel this event?"/}" ng-bootbox-confirm-action="updateEventStatus(event, 'cancelled')">{@i18n key="Cancel"/}</button>
+                    <button ng-if="event.status === 'saved' && isNotPast(event)" class="btn btn-success" ng-click="updateEventStatus(event, 'published')">{@i18n key="Publish"/}</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12 text-center" ng-if="events.length > 0">
+            <uib-pagination total-items="pagination.totalItems" ng-change="pageChanged()" items-per-page="pagination.itemsPerPage" ng-model="pagination.pageNo" class="pagination-sm" first-text="{@i18n key="First" /}" previous-text="{@i18n key="Previous" /}" next-text="{@i18n key="Next" /}" last-text="{@i18n key="Last" /}" boundary-links="true"></uib-pagination>
+          </div>
+        </div>
+        <div ng-if="!events || events.length < 1">
+          {@i18n key="This Dojo currently has no active events"/}
+        </div>
+        <div class="inline pull-right">
+          <button class="btn btn-warning margin-right-10" ng-click="showNotifyAllMembers()">{@i18n key="Notify all Members"/}</button>
+          <button class="btn btn-primary pull-right" ng-click="createEvent()">{@i18n key="Create Event"/}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

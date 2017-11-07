@@ -1,0 +1,34 @@
+<div class="cd-dashboard events-display">
+
+  <div class="my-dojos">
+    <h3 class="text-center cd-section-header"><a id="events"></a><a name="events" href="#events">{@i18n key="Events"/}</a></h3>
+    <div class="row cd-event-list">
+      <div class="col-md-12">
+        <p ng-show="currentPageEvents.length === 0">{@i18n key="There are no events currently listed for this Dojo. Please contact the Dojo to find out about upcoming events."/}
+        </p>
+
+        <div class="row" ng-transclude>
+
+        </div>
+
+        <div ng-hide="currentPageEvents.length === 0">
+          <cd-event-list-item ng-repeat="event in currentPageEvents" event="event"
+            can-book="canBook(event)"
+            class="row flex-row cd-event-list-item"></cd-event-list-item>
+        </div>
+      </div>
+    </div>
+    <div class="row center-children" ng-show="events.length > itemsPerPage">
+      <span class="row col-lg-7 centered-child">
+        <uib-pagination total-items="totalItems" ng-change="pageChanged()" items-per-page="itemsPerPage" ng-model="pageNo"
+                    class="pagination-sm"
+                    first-text="{@i18n key="First" /}"
+                    previous-text="{@i18n key="Previous" /}"
+                    next-text="{@i18n key="Next" /}"
+                    last-text="{@i18n key="Last" /}"
+                    boundary-links="true"></uib-pagination>
+      </span>
+    </div>
+    <span class="help-block" ng-hide="events.length >= 10"></span>
+  </div>
+</div>

@@ -1,0 +1,42 @@
+.cd-dojo-lead {
+  &__link,  &__time {
+    text-align: center;
+  }
+  &__actions {
+    text-align: right;
+  }
+  &__application, &__time {
+    display: flex;
+    justify-content: space-around;
+    &-status {
+      text-align: center;
+      &.btn {
+        cursor: pointer;
+      }
+    }
+    table {
+      border-spacing: 8px 8px;
+      th {
+        text-align: center;
+      }
+      tr {
+        td:first-child:not(:empty), td:nth-child(3):not(:empty) {
+          background-color: @cd-very-light-grey;
+        }
+        td {
+          padding: 5px;
+          &.cd-dojo-lead__title-cell {
+            background: repeating-linear-gradient(
+              45deg,
+              @cd-white,
+              @cd-white 10px,
+              @cd-very-light-grey 10px,
+              @cd-very-light-grey 20px
+            );
+          }
+        }
+      }
+    }
+
+  }
+}

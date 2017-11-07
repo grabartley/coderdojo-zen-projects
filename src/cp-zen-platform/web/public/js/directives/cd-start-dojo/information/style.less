@@ -1,0 +1,146 @@
+.flex-block() {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  box-shadow: @cd-box-shadow;
+  padding: 8px;
+  margin: 8px;
+}
+
+cd-sad-information {
+  display: block;
+}
+
+.cd-sad-information {
+  display: flex;
+  align-items: center;
+  align-content: space-around;
+  flex-wrap: wrap;
+  flex-basis: 100%;
+  & > * {
+    @media (min-width: @screen-sm-min) {
+      padding-left: 8px;
+      padding-right: 8px;
+    }
+    flex-basis: 100%;
+  }
+  &__social-network {
+    flex-wrap: wrap;
+    .form-group {
+      .input-group-addon {
+        background-color: @cd-alt-white;
+        padding: 6px 6px;
+      }
+    }
+  }
+
+  #cke_dojoNotes .cke_contents {
+    height: 20vh !important; // Needed because CKEditor adds a height style tag
+  }
+
+  &__time {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    &-date {
+      display: flex;
+      flex-basis: 100%;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      margin-bottom: 15px;
+      &-session {
+        flex: 1;
+        flex-direction: column;
+        display: flex;
+        min-width: 300px;
+        justify-content: center;
+      }
+      &-frequency {
+        flex: 1;
+        min-width: 320px;
+        &--main {
+          order: 2;
+          @media (max-width: @screen-sm-min) {
+            order: 1;
+          }
+        }
+        &--alternative {
+          flex-basis: 100%;
+          margin-top: 15px;
+          order: 3;
+          @media (max-width: @screen-sm-min) {
+            order: 2;
+          }
+        }
+      }
+    }
+    &-picker {
+      display: flex;
+      flex: 1;
+      flex-basis: 100%;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      &-wrapper {
+        flex: 1;
+        min-width: 300px;
+        flex-wrap: wrap;
+        display: flex;
+        order: 1;
+        @media (max-width: @screen-sm-min) {
+          order: 3;
+        }
+      }
+      &-description {
+        flex: 1;
+        display: inline-block;
+        flex-wrap: wrap;
+      }
+      &-day {
+        align-self: flex-end;;
+      }
+      &-hour {
+        display: flex;
+        flex: 1;
+        min-width: 200px;
+        justify-content: space-around;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+    }
+  }
+  &__email {
+    &-answer {
+      .flex-block();
+    }
+    &-choice {
+      .flex-block();
+      flex-basis: 200px;
+      min-height: 150px;
+      &-action {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        height: 100%;
+      }
+      &-selector {
+        display: flex;
+        align-self: flex-start;
+        margin: 0px;
+      }
+      &-selected {
+        flex: 2;
+        flex-basis: 300px;
+      }
+      &-not-selected {
+        background-color: @cd-very-light-grey;
+      }
+      &-group {
+        text-align: center;
+        display: flex;
+        flex-wrap: wrap;
+      }
+    }
+  }
+}

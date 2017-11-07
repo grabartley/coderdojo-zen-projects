@@ -1,0 +1,135 @@
+.cd-sidebar {
+  margin: 0 -16px 0px -16px;
+  overflow: hidden;
+  &__headers {
+    display: flex;
+    align-items: center;
+  }
+  .cd-sidebar__header-title() {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding: 16px;
+  }
+  &__header {
+    flex: 1;
+    &-title {
+      .cd-sidebar__header-title();
+    }
+  }
+  &__tab-header {
+    flex: 2;
+    line-height: 39px; // To be able to align w/ header's font
+    &-title {
+      .cd-sidebar__header-title();
+    }
+  }
+  &__actions {
+    flex: 1;
+  }
+
+  &__body {
+    display: flex;
+    min-height: 50vh;
+    border-top: 1px solid @cd-light-gray;
+  }
+
+  &__tabs {
+    @media print {
+      display: none;
+    }
+    flex: 1;
+    border-right: 1px solid @cd-light-gray;
+    transition: margin-left 0.2s ease-in-out;
+    &.ng-hide {
+      margin-left: calc(~'-25% - 16px');
+    }
+  }
+
+  &__tab {
+    display: flex;
+    padding: 8px;
+    transition: background 0.2s ease-in-out, color 0.2s ease-in-out;
+    cursor: pointer;
+
+    &-image {
+      &-wrapper {
+        flex: 1;
+        padding: 8px;
+        max-width: 128px;
+      }
+
+      border-radius: 100%;
+      width: 100%;
+      padding-top: 100%;
+      background-size: cover;
+    }
+
+    &-text {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      flex: 2;
+      padding: 8px;
+    }
+    &-status {
+      align-self: center;
+    }
+
+    &-title {
+      font-size: 18px;
+    }
+
+    &:hover {
+      background: @cd-alt-white;
+      text-decoration: none;
+    }
+
+    &--active, &--active:hover {
+      background: @cd-purple-20;
+    }
+  }
+
+  &__content {
+    flex: 3;
+    &--padded {
+      padding: 16px 16px;
+    }
+  }
+
+  @media screen and (max-width: @screen-xs-max) {
+    border-top: none;
+
+    &__tabs {
+      border-right: none;
+      &--collapsible {
+        background-color: @cd-white;
+        position: absolute;
+        z-index: 2;
+        height: 100%;
+      }
+    }
+
+    &__content {
+      display: none;
+    }
+
+    &__tab-header {
+      display: none;
+    }
+    &__header {
+      margin-right: 0px;
+    }
+
+    &--list-visible {
+      display: block;
+    }
+
+    &--child-state-active {
+      .cd-sidebar {
+        &__content {
+          display: block;
+        }
+      }
+    }
+  }
+}

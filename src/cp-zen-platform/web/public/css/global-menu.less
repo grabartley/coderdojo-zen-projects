@@ -1,0 +1,215 @@
+.header {
+  @media print {
+    display: none;
+  }
+}
+
+.navbar-toggle {
+  margin: 0;
+  padding: 5px 0 0 5px;
+}
+
+.login-container {
+  width: 100%;
+  position: relative;
+  top: 0;
+  left: 0;
+  height: 37px;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.language-selector {
+  margin-top: 8px;
+  overflow: hidden;
+  width: 30px;
+  height: 15px;
+}
+.language-selector-fullscreen {
+  margin-top: 7px;
+}
+.language-selector select {
+  -webkit-appearance: none;
+  -webkit-border-radius: 0px;
+  background: url("../../img/earth.png");
+  background-repeat: no-repeat;
+  background-size: 30px 15px;
+  font-size: 11px;
+  font-weight: bold;
+  height:15px;
+  width:30px;
+  cursor: pointer;
+}
+
+
+.alert-message {
+  .row {
+    width: 1130px;
+
+    p{
+      padding-left: 38px;
+    }
+  }
+}
+
+#jQueryCookieDisclaimer {
+  padding: 2px 0px 2px 0px;
+}
+
+.cdbar {
+  font-size: 14px;
+}
+
+.cdbar .cdbar-text {
+  width: 59%;
+  margin: 0px;
+}
+
+.cdbtn {
+  text-align: center;
+  font-size: 12px;
+  width: 14px;
+  height: 14px;
+  line-height: 8px;
+  border-radius: 100% !important;
+  padding: 0px 0px 1px 0px;
+  font-weight: bold;
+}
+
+.navbar-global {
+  overflow: hidden;
+  background-color: #333;
+  border-color: #333;
+  color: #fff;
+  margin-bottom: 0px;
+  line-height: 30px;
+  min-height: 30px;
+}
+
+.navbar-main {
+  text-align: center;
+  min-height: 0px;
+  margin-bottom: 20px;
+  border: none;
+  background-color: transparent;
+}
+
+.mainnav-toggle {
+  float: left;
+}
+
+@media only screen and (max-width: 1200px) {
+
+  .navbar-main {
+    margin-bottom: 0px;
+    min-height: 0px;
+  }
+
+  .horiz-align {
+    width: 940px;
+  }
+
+  .alert-message .row {
+    width: 930px;
+  }
+
+
+}
+
+@media only screen and (max-width: 992px) {
+  .horiz-align {
+    width: 95%;
+  }
+
+  .alert-message .row {
+    width: 710px;
+  }
+}
+
+
+@media only screen and (max-width: 767px) {
+
+  .cdgm-left {
+    width: 20%;
+  }
+  .cdgm-buttons-left {
+    display: none;
+  }
+  .cdgm-buttons-right {
+    display: none;
+  }
+  .separator {
+    display: none;
+  }
+  .navbar-global {
+    /*ul {
+      line-height: 33px;
+    }*/
+  }
+  .language-selector-fullscreen {
+    display: none;
+  }
+
+  .dl-menu li {
+    clear: both;
+    float: left;
+  }
+
+  .dl-menu li a {
+    padding-left: 5px;
+    border-left: solid 4px;
+    border-color: transparent;
+  }
+
+  .dl-menu :hover {
+    border: none;
+  }
+
+  .dl-menu li :hover {
+    border-left: solid 4px;
+    border-color: #fff;
+  }
+
+  .collapse {
+    display: none;
+  }
+
+  .collapse.in {
+    display: block;
+  }
+
+  .collapsing {
+    position: relative;
+    height: 0;
+    overflow: hidden;
+    -webkit-transition: height 0.35s ease;
+    transition: height 0.35s ease;
+  }
+
+  .cd-active-tab {
+    border-style: solid;
+    border-width: thin;
+    border-color: rgb(0, 0, 0);
+    color: rgb(0, 0, 0);
+  }
+
+  #cd-mainnav-collapse {
+    border: none;
+    overflow-y: hidden;
+  }
+
+  .horiz-align {
+    width: 100%;
+  }
+
+  .alert-message .row {
+    width: 100%;
+  }
+
+  .alert-message.active {
+    text-align: center;
+  }
+
+}
