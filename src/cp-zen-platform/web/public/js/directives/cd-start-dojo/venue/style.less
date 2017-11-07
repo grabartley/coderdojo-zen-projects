@@ -1,0 +1,71 @@
+cd-sad-venue {
+  display: block;
+}
+.cd-sad-venue {
+  display: flex;
+  align-items: flex-start;
+  align-content: space-around;
+  flex-wrap: wrap;
+  & > * {
+    @media (min-width: @screen-sm-min) {
+      padding-left: 8px;
+      padding-right: 8px;
+    }
+  }
+  &__video {
+    width: 100%;
+    text-align: center;
+    &-container {
+      width: 80%;
+    }
+  }
+  &__container {
+    margin-top: 16px;
+  }
+  &__button-group {
+    text-align: center;
+  }
+  &__bottom-form {
+    flex: 1;
+    flex-basis: 100%;
+  }
+  &__venue-choice {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    box-shadow: @cd-box-shadow;
+    padding: 8px;
+    margin: 8px;
+    flex-basis: 200px;
+    min-height: 100px;
+    &-selected {
+      flex: 2;
+      flex-basis: 250px;
+    }
+    &-selector {
+      display: flex;
+      align-self: flex-start;
+      margin: 0px;
+    }
+    &-action {
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      height: 100%;
+    }
+    &-not-selected {
+      background-color: @cd-very-light-grey;
+      flex-basis: 100px;
+    }
+    &-group {
+      text-align: center;
+      display: flex;
+      flex-wrap: wrap;
+    }
+  }
+  &__private {
+    align-self: center;
+  }
+}

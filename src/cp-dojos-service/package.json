@@ -1,0 +1,77 @@
+{
+  "name": "dojos-service",
+  "version": "0.0.1",
+  "description": "Seneca microservice for dojos",
+  "main": "service.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "start": "node service.js",
+    "dev": "nodemon service.js",
+    "lint": "./node_modules/.bin/semistandard *.js config/config.js",
+    "test": "bash -c 'source ./config/development.env; npm run lint && ./node_modules/.bin/lab lib/controllers -P spec --ignore __core-js_shared__ '",
+    "testdata": "node test/lib/service.js",
+    "legacytest": "bash -c 'source ./config/development.env; npm run lint && ./node_modules/.bin/lab --ignore __core-js_shared__ --flat'",
+    "coverage": "bash -c 'source ./config/development.env; ./node_modules/.bin/lab --threshold 68 -r html -o ./coverage/coverage.html -r lcov -o ./coverage/lcov.info -r json -o ./coverage/coverage.json -r console -o stdout'",
+    "covrep": "bash test/covrep.sh"
+  },
+  "pre-commit": ["test"],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/CoderDojo/cp-dojos-service.git"
+  },
+  "author": "CoderDojo Foundation",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/CoderDojo/community-platform/issues"
+  },
+  "devDependencies": {
+    "chai": "2.2.0",
+    "chai-moment": "^0.1.0",
+    "lab": "5.15.1",
+    "nodemon": "^1.11.0",
+    "pre-commit": "1.0.7",
+    "semistandard": "7.0.3",
+    "sinon": "1.16.1"
+  },
+  "dependencies": {
+    "async": "0.9.2",
+    "countries-list": "1.0.3",
+    "cp-i18n-lib": "git+https://github.com/CoderDojo/cp-i18n-lib.git",
+    "cp-logs-lib": "git://github.com/CoderDojo/cp-logs-lib#1.1.0",
+    "cp-permissions-plugin": "git://github.com/CoderDojo/cp-permissions-plugin#1.0.4",
+    "cp-translations": "^1.0.4",
+    "csvtojson": "^1.0.2",
+    "debug": "2.2.0",
+    "ejs": "1.0.0",
+    "googleapis": "2.0.5",
+    "isoc": "0.0.1",
+    "jed": "1.1.0",
+    "js-yaml": "3.2.7",
+    "json2csv": "2.11.0",
+    "limax": "~1.2.0",
+    "lodash": "4.6.1",
+    "moment": "2.10.3",
+    "newrelic": "1.19.2",
+    "node-geocoder": "2.23.0",
+    "pg": "4.4.0",
+    "phoneformat.js": "^1.0.3",
+    "pkgcloud": "^1.3.0",
+    "po2json": "0.4.2",
+    "postgrator": "2.5.0",
+    "randomstring": "1.0.6",
+    "request": "2.55.0",
+    "sanitize-html": "^1.14.1",
+    "seneca": "1.4.0",
+    "seneca-kue": "git://github.com/wardormeur/seneca-kue",
+    "seneca-mail": "0.2.2",
+    "seneca-postgresql-store": "1.1.3",
+    "seneca-queue": "^0.3.0",
+    "shortid": "2.2.2",
+    "twilio": "~2.9.1",
+    "util": "^0.10.3",
+    "xoauth2": "1.1.0",
+    "yargs": "3.7.2"
+  }
+}
