@@ -1,0 +1,44 @@
+<% include ../common-en_US/header.ejs %>
+<!-- MAIN CONTENT GOES HERE -->
+
+  <h1>Hi <%= applicantName %>,</h1>
+
+  <p><%= intro %></p>
+
+  <h3>Order Summary</h3>
+  <p> - Date: <%= applicationDate %></p>
+  <p> - Session: <%= sessionName %></p>
+  <table class="contentTable">
+    <thead>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Quantity</th>
+    </thead>
+    <tbody>
+      <% for(var i=0; i<tickets.length; i++) { %>
+        <tr>
+          <td><%= tickets[i].ticketName %></td>
+          <td><%= tickets[i].ticketType %></td>
+          <td><%= tickets[i].quantity %></td>
+        </tr>
+      <% } %>
+    </tbody>
+  </table>
+
+  <p>Status: <%= status %></p>
+
+  <h3>About this event</h3>
+  <p> - Event date: <%= eventDate %></p>
+  <p> - Event address: <%= event.address %></p>
+
+  <% if (applicationId) { %>
+    <p>
+      If you are unable to attend this event, please click this link to cancel your booking:
+      <a href="<%= cancelLinkBase + '/' + event.id + '/' + applicationId %>"><%= cancelLinkBase + '/' + event.id + '/' + applicationId %></a>
+    </p>
+  <% } %>
+
+  <p>Best wishes,</br>
+  The CoderDojo Foundation Team</p>
+
+<% include ../common-en_US/footer.ejs %>

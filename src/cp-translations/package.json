@@ -1,0 +1,30 @@
+{
+  "name": "cp-translations",
+  "version": "1.0.80",
+  "description": "Translations for the CoderDojo Community Platform",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CoderDojo/cp-translations.git"
+  },
+  "keywords": [
+    "i18n",
+    "translations",
+    "coderdojo"
+  ],
+  "author": "CoderDojo Foundation <webteam@coderdojo.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/CoderDojo/cp-translations/issues"
+  },
+  "homepage": "https://github.com/CoderDojo/cp-translations#readme",
+  "devDependencies": {
+    "ejs": "^2.5.7",
+    "email-templates": "^2.0.1",
+    "mocha": "^4.0.1"
+  },
+  "dependencies": {}
+}

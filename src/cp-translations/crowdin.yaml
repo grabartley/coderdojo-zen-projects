@@ -1,0 +1,238 @@
+api_key: <%= ENV['CROWDIN_API_KEY'] %>
+project_identifier: zen-community-platform
+base_path: .
+preserve_hierarchy: true
+
+files:
+  -
+    source: '/strings/en_US/messages.po'
+    dest: '/messages.po'
+    translation: '/strings/%locale_with_underscore%/%original_file_name%'
+
+  -
+    source: '/email-templates/auth-create-reset-en_US/users-auth-create-reset.text.ejs'
+    dest: '/users-auth-create-reset.text.txt'
+    translation: '/email-templates/auth-create-reset-%locale_with_underscore%/%file_name%.ejs'
+    type: 'txt'
+
+  -
+    source: '/email-templates/auth-create-reset-en_US/users-auth-create-reset.html.ejs'
+    dest: '/users-auth-create-reset.html.html'
+    translation: '/email-templates/auth-create-reset-%locale_with_underscore%/%file_name%.ejs'
+    type: 'html'
+
+  -
+    source: '/email-templates/auth-register-en_US/users-auth-register.html.ejs'
+    dest: '/users-auth-register.html.html'
+    translation: '/email-templates/auth-register-%locale_with_underscore%/%file_name%.ejs'
+    type: 'html'
+
+  -
+    source: '/email-templates/auth-register-en_US/users-auth-register.text.ejs'
+    dest: '/users-auth-register.text.txt'
+    translation: '/email-templates/auth-register-%locale_with_underscore%/%file_name%.ejs'
+    type: 'txt'
+
+  -
+    source: '/email-templates/invite-ninja-over-13-en_US/users-invite-ninja-over-13.html.ejs'
+    dest: '/users-invite-ninja-over-13.html.html'
+    translation: '/email-templates/invite-ninja-over-13-%locale_with_underscore%/%file_name%.ejs'
+    type: 'html'
+
+  -
+    source: '/email-templates/invite-ninja-over-13-en_US/users-invite-ninja-over-13.text.ejs'
+    dest: '/users-invite-ninja-over-13.text.txt'
+    translation: '/email-templates/invite-ninja-over-13-%locale_with_underscore%/%file_name%.ejs'
+    type: 'txt'
+
+  -
+    source: '/email-templates/invite-parent-guardian-en_US/invite-parent-guardian.html.ejs'
+    dest: '/invite-parent-guardian.html.html'
+    translation: '/email-templates/invite-parent-guardian-%locale_with_underscore%/%file_name%.ejs'
+    type: 'html'
+
+  -
+    source: '/email-templates/invite-parent-guardian-en_US/invite-parent-guardian.text.ejs'
+    dest: '/invite-parent-guardian.text.txt'
+    translation: '/email-templates/invite-parent-guardian-%locale_with_underscore%/%file_name%.ejs'
+    type: 'txt'
+
+  -
+    source: '/email-templates/accept-badge-award-en_US/dojos-accept-badge-award.html.ejs'
+    dest: '/dojos-accept-badge-award.html.html'
+    translation: '/email-templates/accept-badge-award-%locale_with_underscore%/%file_name%.ejs'
+    type: 'html'
+
+  -
+    source: '/email-templates/accept-badge-award-en_US/dojos-accept-badge-award.text.ejs'
+    dest: '/dojos-accept-badge-award.text.txt'
+    translation: '/email-templates/accept-badge-award-%locale_with_underscore%/%file_name%.ejs'
+    type: 'txt'
+
+  -
+    source: '/email-templates/google-email-pass-en_US/dojos-google-email-pass.html.ejs'
+    dest: '/dojos-google-email-pass.html.html'
+    translation: '/email-templates/google-email-pass-%locale_with_underscore%/%file_name%.ejs'
+    type: 'html'
+
+  -
+    source: '/email-templates/google-email-pass-en_US/dojos-google-email-pass.text.ejs'
+    dest: '/dojos-google-email-pass.text.txt'
+    translation: '/email-templates/google-email-pass-%locale_with_underscore%/%file_name%.ejs'
+    type: 'txt'
+
+  -
+    source: '/email-templates/invite-user-en_US/dojos-invite-user.html.ejs'
+    dest: '/dojos-invite-user.html.html'
+    translation: '/email-templates/invite-user-%locale_with_underscore%/%file_name%.ejs'
+    type: 'html'
+
+  -
+    source: '/email-templates/invite-user-en_US/dojos-invite-user.text.ejs'
+    dest: '/dojos-invite-user.text.txt'
+    translation: '/email-templates/invite-user-%locale_with_underscore%/%file_name%.ejs'
+    type: 'txt'
+
+  -
+    source: '/email-templates/invited-to-session-en_US/html.ejs'
+    dest: '/email-templates/invited-to-session-en_US/html.html'
+    translation: '/email-templates/invited-to-session-%locale_with_underscore%/%file_name%.ejs'
+    type: 'html'
+
+  -
+    source: '/email-templates/invited-to-session-en_US/text.ejs'
+    dest: '/email-templates/invited-to-session-en_US/text.txt'
+    translation: '/email-templates/invited-to-session-%locale_with_underscore%/%file_name%.ejs'
+    type: 'txt'
+
+  -
+    source: '/email-templates/notify-all-members-oneoff-en_US/html.ejs'
+    dest: '/email-templates/notify-all-members-oneoff-en_US/html.html'
+    translation: '/email-templates/notify-all-members-oneoff-%locale_with_underscore%/%file_name%.ejs'
+    type: 'html'
+
+  -
+    source: '/email-templates/notify-all-members-oneoff-en_US/text.ejs'
+    dest: '/email-templates/notify-all-members-oneoff-en_US/text.txt'
+    translation: '/email-templates/notify-all-members-oneoff-%locale_with_underscore%/%file_name%.ejs'
+    type: 'txt'
+
+  -
+    source: '/email-templates/notify-all-members-recurring-en_US/html.ejs'
+    dest: '/email-templates/notify-all-members-recurring-en_US/html.html'
+    translation: '/email-templates/notify-all-members-recurring-%locale_with_underscore%/%file_name%.ejs'
+    type: 'html'
+
+  -
+    source: '/email-templates/notify-all-members-recurring-en_US/text.ejs'
+    dest: '/email-templates/notify-all-members-recurring-en_US/text.txt'
+    translation: '/email-templates/notify-all-members-recurring-%locale_with_underscore%/%file_name%.ejs'
+    type: 'txt'
+
+  -
+    source: '/email-templates/parents-notify-all-members-oneoff-en_US/html.ejs'
+    dest: '/email-templates/parents-notify-all-members-oneoff-en_US/html.html'
+    translation: '/email-templates/parents-notify-all-members-oneoff-%locale_with_underscore%/%file_name%.ejs'
+    type: 'html'
+
+  -
+    source: '/email-templates/parents-notify-all-members-oneoff-en_US/text.ejs'
+    dest: '/email-templates/parents-notify-all-members-oneoff-en_US/text.txt'
+    translation: '/email-templates/parents-notify-all-members-oneoff-%locale_with_underscore%/%file_name%.ejs'
+    type: 'txt'
+
+  -
+    source: '/email-templates/parents-notify-all-members-recurring-en_US/html.ejs'
+    dest: '/email-templates/parents-notify-all-members-recurring-en_US/html.html'
+    translation: '/email-templates/parents-notify-all-members-recurring-%locale_with_underscore%/%file_name%.ejs'
+    type: 'html'
+
+  -
+    source: '/email-templates/parents-notify-all-members-recurring-en_US/text.ejs'
+    dest: '/email-templates/parents-notify-all-members-recurring-en_US/text.txt'
+    translation: '/email-templates/parents-notify-all-members-recurring-%locale_with_underscore%/%file_name%.ejs'
+    type: 'txt'
+
+  -
+    source: '/email-templates/polls-notification-en_US/html.ejs'
+    dest: '/email-templates/polls-notification-en_US/html.html'
+    translation: '/email-templates/polls-notification-%locale_with_underscore%/%file_name%.ejs'
+    type: 'html'
+
+  -
+    source: '/email-templates/polls-notification-en_US/text.ejs'
+    dest: '/email-templates/polls-notification-en_US/text.txt'
+    translation: '/email-templates/polls-notification-%locale_with_underscore%/%file_name%.ejs'
+    type: 'txt'
+
+  -
+    source: '/email-templates/session-cancelled-en_US/html.ejs'
+    dest: '/email-templates/session-cancelled-en_US/html.html'
+    translation: '/email-templates/session-cancelled-%locale_with_underscore%/%file_name%.ejs'
+    type: 'html'
+
+  -
+    source: '/email-templates/session-cancelled-en_US/text.ejs'
+    dest: '/email-templates/session-cancelled-en_US/text.txt'
+    translation: '/email-templates/session-cancelled-%locale_with_underscore%/%file_name%.ejs'
+    type: 'txt'
+
+  -
+    source: '/email-templates/ticket-application-approved-en_US/html.ejs'
+    dest: '/email-templates/ticket-application-approved-en_US/html.html'
+    translation: '/email-templates/ticket-application-approved-%locale_with_underscore%/%file_name%.ejs'
+    type: 'html'
+
+  -
+    source: '/email-templates/ticket-application-approved-en_US/text.ejs'
+    dest: '/email-templates/ticket-application-approved-en_US/text.txt'
+    translation: '/email-templates/ticket-application-approved-%locale_with_underscore%/%file_name%.ejs'
+    type: 'txt'
+
+  -
+    source: '/email-templates/ticket-application-cancelled-en_US/html.ejs'
+    dest: '/email-templates/ticket-application-cancelled-en_US/html.html'
+    translation: '/email-templates/ticket-application-cancelled-%locale_with_underscore%/%file_name%.ejs'
+    type: 'html'
+
+  -
+    source: '/email-templates/ticket-application-cancelled-en_US/text.ejs'
+    dest: '/email-templates/ticket-application-cancelled-en_US/text.txt'
+    translation: '/email-templates/ticket-application-cancelled-%locale_with_underscore%/%file_name%.ejs'
+    type: 'txt'
+
+  -
+    source: '/email-templates/ticket-application-received-en_US/html.ejs'
+    dest: '/email-templates/ticket-application-received-en_US/html.html'
+    translation: '/email-templates/ticket-application-received-%locale_with_underscore%/%file_name%.ejs'
+    type: 'html'
+
+  -
+    source: '/email-templates/ticket-application-received-en_US/text.ejs'
+    dest: '/email-templates/ticket-application-received-en_US/text.txt'
+    translation: '/email-templates/ticket-application-received-%locale_with_underscore%/%file_name%.ejs'
+    type: 'txt'
+
+  -
+    source: '/email-templates/user-left-dojo-en_US/dojos-user-left-dojo.html.ejs'
+    dest: '/dojos-user-left-dojo.html.html'
+    translation: '/email-templates/user-left-dojo-%locale_with_underscore%/%file_name%.ejs'
+    type: 'html'
+
+  -
+    source: '/email-templates/user-left-dojo-en_US/dojos-user-left-dojo.text.ejs'
+    dest: '/dojos-user-left-dojo.text.txt'
+    translation: '/email-templates/user-left-dojo-%locale_with_underscore%/%file_name%.ejs'
+    type: 'txt'
+
+  -
+    source: '/email-templates/user-request-to-join-en_US/dojos-user-request-to-join.html.ejs'
+    dest: '/dojos-user-request-to-join.html.html'
+    translation: '/email-templates/user-request-to-join-%locale_with_underscore%/%file_name%.ejs'
+    type: 'html'
+
+  -
+    source: '/email-templates/user-request-to-join-en_US/dojos-user-request-to-join.text.ejs'
+    dest: '/dojos-user-request-to-join.text.txt'
+    translation: '/email-templates/user-request-to-join-%locale_with_underscore%/%file_name%.ejs'
+    type: 'txt'
