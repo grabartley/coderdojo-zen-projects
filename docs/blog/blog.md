@@ -4,6 +4,21 @@
 
 ****
 
+## First Draft Functional Specification
+#### 14th November 2017
+
+This week I worked on writing a first draft of my functional specification. I didn't make as much progress with it as I would have liked due to working on assignments for other modules and lab work. However, I did finish the first and fourth sections including a high level System Architecture diagram which I spent a lot of my time working on:
+
+![System Architecture diagram](./images/system-architecture.png)
+
+Although I said I wouldn't continue the UI mockups for a while, I decided to fill in what I could for now for the "New Project Creation Page" so that I would have a better idea of exactly what areas of it I am unsure on. My mockup from this week can be seen below:
+
+![UI mockup](./images/new-project-information-page(li)(pt.2).png)
+
+This week I am continuing my first draft of the functional specification and will have more time to dedicate to it. I am aiming to have the first draft finished by next week.
+
+****
+
 ## More UI Mockups & First User Stories
 #### 6th November 2017
 
