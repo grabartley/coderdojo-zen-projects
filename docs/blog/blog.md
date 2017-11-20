@@ -4,6 +4,26 @@
 
 ****
 
+## Functional Specification Complete
+#### 20th November 2017
+
+This week I completed my functional specification which details what my project will achieve from a high-level functional point of view. I created the following diagrams and Gantt Chart as part of this:
+
+**Context Diagram**
+![Context Diagram](./images/context.png)
+
+**Logical Data Model**
+![Logical Data Model](./images/logical-data-model.png)
+
+**Gantt Chart of Project Schedule**
+![Gantt Chart of Project Schedule](./images/gantt-chart.png)
+
+I am doing a final proof-read and making any necessary last minute modifications to my functional specification before adding it to my GitLab repository. I also met with the CoderDojo Foundation this week to update them on my progress with the project which they were happy with. I have set up monthly meetings with them from now on in order to continue to keep them up to date as well as the weekly meetings I have already set up with my project supervisor.
+
+The focus of next week is to continue researching how best to implement runtimes for Python, HTML/CSS/JavaScript and JavaScript-only projects since this is likely to be the most complex part of my project. I want to decide on how to do this so that I can begin to implement runtimes early in case any unexpected issues arise.
+
+****
+
 ## First Draft Functional Specification
 #### 14th November 2017
 
