@@ -4,6 +4,135 @@
 
 ****
 
+## Python Runtimes Research & Experimentation
+#### 28th November 2017
+
+This week I have been researching and experimenting with different methods of running Python code in a browser environment. I've found various existing libraries for this and experimented with the following ones which I thought might be suitable for my project:
+
+  * [**Transcrypt**](https://www.transcrypt.org/home): Transcrypt is a Python to JavaScript transpiler. This means that it converts Python code into the equivalent JavaScript code which can then be run natively in a browser. This seems to be the most promising of the libraries I have looked at for my purposes as it provides the following benefits:
+    * **Compact JavaScript**: Transpiling produces readable JavaScript with roughly equivalent file sizes as the Python source which means faster page loading. It also produces minified JavaScript with greatly reduced file sizes for even faster page loading.
+    * **Debugging**: The produced JavaScript can be debugged from the source Python code using source maps which could provide useful feedback for youths uploading their projects.
+    * **Runs on NodeJS**: Transcrypt runs on top of NodeJS which is what the Zen backend is built using. This is a benefit since I will be integrating this into the Zen backend if I do choose to use it. 
+    * **Python libraries**: Importing of code from Python libraries is supported in the transpiling process.
+    * **Client-side**: Transpiling Python into JavaScript will allow me to run Python projects client-side through the user's browser. This alleviates many security concerns that would be associated with running project code on the backend. 
+    * **Open Source**: Transcrypt is an open source transpiler which is a requirement of all external libraries used as part of my project in line with CoderDojo's open source ethos.
+    
+    
+  * [**Brython**](http://brython.info/index.html): Brython attempts to use Python directly within HTML through the use of \<script\> tags with a type="text/python" attribute. It seems very promising as an alternative to Transcrypt if I find that, for any reason, that may not be suitable.
+
+Through my experimentation with Transcrypt, I developed a small JavaScript file to act as middleware between the Python project, Transcrypt and the web browser. The code basically reads in a Python file and wraps it in a function called main(). This code is then saved to a new file and a new HTML file and Transcrypt is called on this wrapped code. A new HTML file is then created which will import the transpiled script and call it's main() function which effectively runs the original Python code through the browser. I've outlined the general process below in the form of a process diagram.
+
+**Process of Running Python Projects**
+![Transcrypt Process Diagram](./images/transcrypt.png)
+
+This is a simple process so far and will only support projects consisting of a single Python file with command line input and output. The input and output are handled by JavaScript prompt() and console.log() corresponding to Python input() and print(). The JavaScript code I wrote can be found below:
+
+**run-python-project.js**
+```javascript
+// dependencies
+const fs = require('fs');
+const exec = require('child_process').exec;
+
+// store filename read in on the command line
+const filename = process.argv[2];
+
+// generate filename for wrapped file
+const splitFilename = filename.split('.');
+const newFilename = splitFilename[0] + 'Wrapped.py';
+
+// generate the html file contents
+const htmlFile = `<html>
+  <head>
+    <script src="./__javascript__/` + splitFilename[0] + `Wrapped.js"></script>
+  </head>
+  <body>
+    <div id="input-div">
+    <center>
+      <form>
+        <input type="text" id="input" width="500px"></input>
+        <button type="submit">Enter</button>
+      </form>
+    </center>
+    </div>
+    <div id="output"></div>
+    <script>
+    `+ splitFilename[0] + `Wrapped.main();
+    </script>
+  </body>
+</html>
+`;
+
+// read in the file
+fs.readFile(filename, 'utf8', (err, res) => {
+  // report errors
+  if (err) {
+    return console.log(err);
+  }
+  
+  // variables
+  let resLines;
+  let newFile = '';
+  let firstRun = true;
+  
+  // wrap the code with def main():
+  res = 'def main(): \n' + res;
+  
+  // split the code into lines
+  resLines = res.split('\n');
+  
+  // for each line in the code
+  resLines.forEach((line) => {
+    // indent each line but the first
+    if (!firstRun) {
+      newFile += '  ' + line + '\n';
+    } else {
+      newFile += line + '\n';
+      firstRun = false;
+    }    
+  });
+  
+  // save the new file with the newFilename
+  fs.writeFile(newFilename, newFile, 'utf8');
+});
+
+// save the html file
+fs.writeFile(splitFilename[0] + '.html', htmlFile, 'utf8');
+
+// run transcrypt shell script to transpile Python to JavaScript
+exec('transcrypt ' + newFilename, (err, stdout, stderr) => {
+  // output syntax errors
+  if (err !== null) {
+    console.log(`exec error: ${err}`);
+  }
+  
+  // output results and runtime errors
+  console.log(`${stdout}`);
+  console.log(`${stderr}`);
+});
+
+// open html file in Google Chrome
+exec('google-chrome ' + splitFilename[0] + '.html', (err, stdout, stderr) => {
+  // output syntax errors
+  if (err !== null) {
+    console.log(`exec error: ${err}`);
+  }
+  
+  // output results and runtime errors
+  console.log(`${stdout}`);
+  console.log(`${stderr}`);
+});
+```
+
+This JavaScript code assumes the file name of a Python file has been passed as a command line argument and transcrypt and google-chrome are available in the system $PATH. I have validated that it will work with the following types of Python projects:
+
+  * Single file, output only, no imports
+  * Single file, input and output, no imports
+  * Single file, output only, with imports
+
+With this simple Python runtime working using Transcrypt, I will be experimenting further to see if I can achieve runtime for projects with multiple files and graphical outputs. I will also be experimenting with overriding command line input and output methods to allow input to programs from a HTML input field and output to a HTML div rather than the developers console of the browser.
+
+****
+
 ## Functional Specification Complete
 #### 20th November 2017
 
