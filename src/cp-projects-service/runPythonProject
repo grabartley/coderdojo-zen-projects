@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# variables
+# filename=$1
+
+# create Dockerfile
+echo "creating Dockerfile..."
+rm Dockerfile &> /dev/null
+touch Dockerfile &> /dev/null
+# hardcoded ChessFull as an example project file for now (simple chess program)
+echo "FROM python:3
+ADD ./projects/ChessFull/*.py /
+CMD [ \"python\", \"./ChessFull.py\" ]" >> Dockerfile
+
+# build docker image
+echo "building docker image..."
+docker build -t project . &> /dev/null
+
+# run the project
+echo "running project..."
+echo ""
+docker run -i project
+
+# remove the image
+echo ""
+echo "END OF PROJECT OUTPUT"
+docker rmi -f project &> /dev/null
+rm Dockerfile &> /dev/null
