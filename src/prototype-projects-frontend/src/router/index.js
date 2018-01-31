@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Upload from '@/components/Upload';
+import ProjectList from '@/components/project-list';
+import ProjectCreationForm from '@/components/project-creation-form';
 import Runtime from '@/components/Runtime';
 import Acknowledgements from '@/components/Acknowledgements';
 
@@ -11,8 +12,13 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Upload',
-      component: Upload,
+      name: 'ProjectList',
+      component: ProjectList,
+    },
+    {
+      path: '/create-project',
+      name: 'ProjectCreationForm',
+      component: ProjectCreationForm,
     },
     {
       path: '/run',
