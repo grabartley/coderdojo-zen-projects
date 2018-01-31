@@ -1,10 +1,10 @@
 <template>
-  <div class="runtime">
-    <div class="runtime-overlay" ref="overlay">
+  <div class="project-runtime">
+    <div class="project-runtime-overlay" ref="overlay">
       <button id="runtime-overlay-runButton" @click="runProject()">Run Project</button>
     </div>
-    <div class="runtime-header">Project Name</div>
-    <div class="runtime-terminal" ref="terminal"></div>
+    <div class="project-runtime-header">Project Name</div>
+    <div class="project-runtime-terminal" ref="terminal"></div>
   </div>
 </template>
 
@@ -12,11 +12,12 @@
 import Terminal from 'xterm2';
 
 export default {
-  name: 'Runtime',
+  name: 'ProjectRuntime',
   data() {
     return {
+      projectId: null,
       term: null,
-      projectRunning: false,  
+      projectRunning: false,
     };
   },
   sockets: {
@@ -28,11 +29,6 @@ export default {
         this.term.write(data);
       }
     },
-    // when the backend sends a stop event
-    stop() {
-      // go back to the project list
-      this.$router.push('/');
-    }
   },
   methods: {
     runProject() {
@@ -52,8 +48,8 @@ export default {
       // a project is now running
       this.projectRunning = true;
       
-      // tell the backend to spawn a container
-      this.$socket.emit('start');
+      // tell the backend to spawn a container for this project
+      this.$socket.emit('start', this.projectId);
       
       // when a command is entered
       this.term.on('data', (data) => {
@@ -62,11 +58,14 @@ export default {
       });
     },
   },
+  created() {
+    this.projectId = this.$route.params.id;
+  },
 }
 </script>
 
 <style scoped lang="less">
-  .runtime {
+  .project-runtime {
     &-overlay {
       opacity: 0.9;
       background-color: black;

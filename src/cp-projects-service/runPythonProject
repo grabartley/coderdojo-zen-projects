@@ -1,16 +1,17 @@
 #!/bin/bash
 
 # variables
-# filename=$1
+id=$1
+name=$2
+main=$3
 
 # create Dockerfile
 echo "creating Dockerfile..."
 rm Dockerfile &> /dev/null
 touch Dockerfile &> /dev/null
-# hardcoded ChessFull as an example project file for now (simple chess program)
 echo "FROM python:3
-ADD ./projects/ChessFull/*.py /
-CMD [ \"python\", \"./ChessFull.py\" ]" >> Dockerfile
+ADD ./projects/$id/$name/* /
+CMD [ \"python\", \"./$main\" ]" >> Dockerfile
 
 # build docker image
 echo "building docker image..."
