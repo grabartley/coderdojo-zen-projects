@@ -28,14 +28,17 @@ export default {
         this.$refs.projectFilesFormRef.submitForm();
         
         // create data structure for the information
-        let fileData = {
-          filename: window.sessionStorage.getItem('filename'),
+        let projectData = {
+          name: window.sessionStorage.getItem('projectName'),
           type: window.sessionStorage.getItem('projectType'),
+          main: window.sessionStorage.getItem('projectMain'),
+          description: window.sessionStorage.getItem('projectDescription'),
+          filename: window.sessionStorage.getItem('filename'),
           file: window.sessionStorage.getItem('projectFiles'),
         };
         
         // send the project to the backend to save
-        projectService.createProject(fileData);
+        projectService.createProject(projectData);
         
         // send the user back to the projects list for now
         this.$router.push('/');

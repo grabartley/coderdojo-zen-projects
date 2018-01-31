@@ -6,6 +6,7 @@ import io from 'socket.io';
 import http from 'http';
 import fs from 'file-system';
 import zip from 'adm-zip';
+import moment from 'moment';
 
 const app = express();
 const server = http.createServer(app);
@@ -25,6 +26,55 @@ app.use(cors());
 server.listen(port, () => {
   console.log('Server listening on port ' + port + '!');
 });
+
+// generate a unique id for a new project of the following form:
+// 8-4-4-4-12 where the numbers represent the amount of characters
+// each character is in range (a-z0-9)
+// format may change in the future
+function generateProjectId() {
+  let idIsUnique = false;
+  let possibleCharacters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+  let id;
+  
+  // while a unique id has not been found
+  while (!idIsUnique) {
+    let index;
+    let numOfCharacters;
+    id = '';
+    for (let i = 0; i < 4; i++) {
+      if (i == 0) {
+        numOfCharacters = 8;
+      } else {
+        numOfCharacters = 4;
+      }
+      for (let i = 0; i < numOfCharacters; i++) {
+        index = Math.floor(Math.random() * possibleCharacters.length);
+        id += possibleCharacters[index];
+      }
+      id += '-';
+    }
+    for (let i = 0; i < 12; i++) {
+      index = Math.floor(Math.random() * possibleCharacters.length);
+      id += possibleCharacters[index];
+    }
+    
+    idIsUnique = checkIsIdUnique(id);
+  }
+  return id;
+}
+
+// check if the given id is a unique id (using file system for prototype rather than db)
+function checkIsIdUnique(id) {
+  let isUnique = true;
+  
+  fs.readdirSync('./projects').forEach(dir => {
+    if (id === dir) {
+      isUnique = false;
+    }
+  });
+  
+  return isUnique;
+}
 
 // when a client connects
 ioServer.on('connection', function (socket) {
@@ -85,19 +135,39 @@ app.post('/api/2.0/projects/create-project', (req, res) => {
   console.log('POST /api/2.0/projects/create-project with ');
   console.log(req.body);
   
-  let fileData = req.body;
-  let filename = fileData.filename;
+  // store project data
+  let projectData = req.body;
+  let filename = projectData.filename;
+  // remove extension from filename to get name for folder
   let foldername = filename.split('.');
   foldername = foldername[0];
-  let file = fileData.file.split(',');
+  // remove header information from file data
+  let file = projectData.file.split(',');
   file = file[1];
   
-  // save the file in the projects folder
+  // project data to be saved (empty strings have yet to be implemented)
+  let metadata = {
+    name: projectData.name,
+    type: projectData.type,
+    main: projectData.main,
+    description: projectData.description,
+    github: '',
+    createdAt: moment().toISOString(),
+    updatedAt: '',
+    author: '',
+    userId: '',
+    deleted: false,
+  };
+  
+  // generate a new id for this project
+  let id = generateProjectId();
+  
+  // save the project archive in the projects folder
   fs.writeFileSync('./projects/' + filename, file, 'base64');
   
   // extract the project files
   let zipFile = new zip('./projects/' + filename);
-  zipFile.extractAllTo('./projects/' + foldername, true);
+  zipFile.extractAllTo('./projects/' + id + '/' + foldername, true);
   
   // remove zip file
   fs.unlink('./projects/' + filename, (err) => {
@@ -106,6 +176,9 @@ app.post('/api/2.0/projects/create-project', (req, res) => {
     }
   });
   
+  // store project metadata
+  fs.writeFileSync('./projects/' + id + '/project-data.json', JSON.stringify(metadata));
+  
   // respond to client
-  res.send('OK');
+  res.send('Project created successfully');
 });
