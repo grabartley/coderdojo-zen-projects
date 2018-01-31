@@ -1,0 +1,58 @@
+<template>
+  <div class="project-list">
+    <h2>All Projects</h2>
+    <h3>Python</h3>
+    <div v-for="project in pythonProjectData">
+      {{ project }} : 
+      <router-link :to="{ name: 'Runtime', params: {} }">Run the project</router-link>
+    </div>
+    <h3>JavaScript</h3>
+    <div v-for="project in javascriptProjectData">
+      {{ project }} : 
+      <router-link :to="{ name: 'Runtime', params: {} }">Run the project</router-link>
+    </div>
+    <h3>HTML/CSS/JavaScript</h3>
+    <div v-for="project in htmlProjectData">
+      {{ project }} : 
+      <router-link :to="{ name: 'Runtime', params: {} }">Run the project</router-link>
+    </div>
+    <div class="project-list-footer">
+      <router-link :to="{ name: 'ProjectCreationForm', params: {} }">Create a Project</router-link>
+      <router-link :to="{ name: 'Acknowledgements', params: {} }">Acknowledgements</router-link>
+    </div>
+  </div>
+</template>
+
+<script>
+import ProjectCreationForm from '@/components/project-creation-form';
+import projectService from '@/projects/service';
+
+export default {
+  name: 'ProjectList',
+  data() {
+    return {
+      pythonProjectData: null,
+      javascriptProjectData: null,
+      htmlProjectData: null,
+    };
+  },
+  async created() {
+    // get the project data to display
+    let allProjectData = await projectService.getAllProjectData();
+    this.pythonProjectData = allProjectData.body.python;
+    this.javascriptProjectData = allProjectData.body.javascript;
+    this.htmlProjectData = allProjectData.body.html;
+  },
+}
+</script>
+
+<style scoped lang="less">
+  .project-list {
+    margin-top: 50px;
+    text-align: center;
+    
+    &-footer {
+      margin-top: 50px;
+    }
+  }
+</style>

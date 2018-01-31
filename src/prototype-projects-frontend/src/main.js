@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import VueResource from 'vue-resource';
 import VueSocketIO from 'vue-socket.io';
+import VeeValidate from 'vee-validate';
 import App from './App'
 import router from './router'
 
@@ -13,6 +14,8 @@ Vue.config.apiServer = process.env.API_SERVER;
 Vue.use(VueResource);
 // server socket is on port 3000
 Vue.use(VueSocketIO, 'http://localhost:3000');
+// used for form validation
+Vue.use(VeeValidate);
 
 /* eslint-disable no-new */
 new Vue({
