@@ -79,9 +79,12 @@ function checkIsIdUnique(id) {
 // when a client connects
 ioServer.on('connection', function (socket) {
   // when a start event is emited by the frontend
-  socket.on('start', function (data) {
+  socket.on('start', function (projectId) {
+    // get data for this project id
+    let projectData = JSON.parse(fs.readFileSync('./projects/' + projectId + '/project-data.json', 'utf-8'));
+    
     // spawn a process to create the Docker container
-    var term = pty.spawn('./runPythonProject', [], {
+    var term = pty.spawn('./runPythonProject', [projectId, projectData.name.replace(/ /g,''), projectData.main], {
       name: 'xterm-color'
     });
     
@@ -89,11 +92,6 @@ ioServer.on('connection', function (socket) {
     term.on('data', function(data) {
       // emit it to the client to display
       socket.emit('output', data);
-      // if the project is finished
-      if (data.includes('END OF PROJECT OUTPUT')) {
-        // tell the frontend
-        socket.emit('stop');
-      }
     });
     
     // when a command is received from the frontend
@@ -148,9 +146,6 @@ app.post('/api/2.0/projects/create-project', (req, res) => {
   // store project data
   let projectData = req.body;
   let filename = projectData.filename;
-  // remove extension from filename to get name for folder
-  let foldername = filename.split('.');
-  foldername = foldername[0];
   // remove header information from file data
   let file = projectData.file.split(',');
   file = file[1];
@@ -178,7 +173,7 @@ app.post('/api/2.0/projects/create-project', (req, res) => {
   
   // extract the project files
   let zipFile = new zip('./projects/' + filename);
-  zipFile.extractAllTo('./projects/' + id + '/' + foldername, true);
+  zipFile.extractAllTo('./projects/' + id + '/' + metadata.name.replace(/ /g,''), true);
   
   // remove zip file
   fs.unlink('./projects/' + filename, (err) => {
