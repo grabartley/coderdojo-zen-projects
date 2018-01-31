@@ -104,7 +104,7 @@ ioServer.on('connection', function (socket) {
   });
 });
 
-/* REST API */
+/* API */
 
 // returns all project data (tmp)
 app.get('/api/2.0/projects/all-project-data', (req, res) => {
@@ -119,13 +119,23 @@ app.get('/api/2.0/projects/all-project-data', (req, res) => {
     html: []
   };
   
-  // read the data
-  fs.readdirSync('./projects').forEach((file) => {
-    // add them all to python until other types are supported
-    allProjectData.python.push(file);
+  // for each project that is stored
+  fs.readdirSync('./projects').forEach((projectId) => {
+    let projectData = JSON.parse(fs.readFileSync('./projects/' + projectId + '/project-data.json', 'utf-8'));
+    // store it's information in relation to it's type
+    switch (projectData.type) {
+      case 'python':
+        allProjectData.python.push(projectData);
+        break;
+      case 'javascript':
+        allProjectData.javascript.push(projectData);
+        break;
+      case 'html':
+        allProjectData.html.push(projectData);
+    }
   });
   
-  // return it
+  // return all project data sorted by type
   res.send(allProjectData);
 });
 
@@ -145,8 +155,12 @@ app.post('/api/2.0/projects/create-project', (req, res) => {
   let file = projectData.file.split(',');
   file = file[1];
   
+  // generate a new id for this project
+  let id = generateProjectId();
+  
   // project data to be saved (empty strings have yet to be implemented)
   let metadata = {
+    id: id,
     name: projectData.name,
     type: projectData.type,
     main: projectData.main,
@@ -158,9 +172,6 @@ app.post('/api/2.0/projects/create-project', (req, res) => {
     userId: '',
     deleted: false,
   };
-  
-  // generate a new id for this project
-  let id = generateProjectId();
   
   // save the project archive in the projects folder
   fs.writeFileSync('./projects/' + filename, file, 'base64');
@@ -177,7 +188,7 @@ app.post('/api/2.0/projects/create-project', (req, res) => {
   });
   
   // store project metadata
-  fs.writeFileSync('./projects/' + id + '/project-data.json', JSON.stringify(metadata));
+  fs.writeFileSync('./projects/' + id + '/project-data.json', JSON.stringify(metadata), 'utf-8');
   
   // respond to client
   res.send('Project created successfully');
