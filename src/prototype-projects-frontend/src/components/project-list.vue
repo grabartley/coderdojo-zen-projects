@@ -3,18 +3,18 @@
     <h2>All Projects</h2>
     <h3>Python</h3>
     <div v-for="project in pythonProjectData">
-      {{ project }} : 
-      <router-link :to="{ name: 'Runtime', params: {} }">Run the project</router-link>
+      {{ project.name }} : 
+      <router-link :to="{ name: 'Runtime', params: { id: project.id } }">Run the project</router-link>
     </div>
     <h3>JavaScript</h3>
     <div v-for="project in javascriptProjectData">
-      {{ project }} : 
-      <router-link :to="{ name: 'Runtime', params: {} }">Run the project</router-link>
+      {{ project.name }} : 
+      <router-link :to="{ name: 'Runtime', params: { id: project.id } }">Run the project</router-link>
     </div>
     <h3>HTML/CSS/JavaScript</h3>
     <div v-for="project in htmlProjectData">
-      {{ project }} : 
-      <router-link :to="{ name: 'Runtime', params: {} }">Run the project</router-link>
+      {{ project.name }} : 
+      <router-link :to="{ name: 'Runtime', params: { id: project.id } }">Run the project</router-link>
     </div>
     <div class="project-list-footer">
       <router-link :to="{ name: 'ProjectCreationForm', params: {} }">Create a Project</router-link>
