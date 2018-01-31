@@ -93,21 +93,17 @@ app.post('/api/2.0/projects/create-project', (req, res) => {
   file = file[1];
   
   // save the file in the projects folder
-  fs.writeFile('./projects/' + filename, file, 'base64', (err) => {
+  fs.writeFileSync('./projects/' + filename, file, 'base64');
+  
+  // extract the project files
+  let zipFile = new zip('./projects/' + filename);
+  zipFile.extractAllTo('./projects/' + foldername, true);
+  
+  // remove zip file
+  fs.unlink('./projects/' + filename, (err) => {
     if (err) {
       console.log(err);
     }
-    
-    // extract the project files
-    let zipFile = new zip('./projects/' + filename);
-    zipFile.extractAllTo('./projects/' + foldername, true);
-    
-    // remove zip file
-    fs.unlink('./projects/' + filename, (err) => {
-      if (err) {
-        console.log(err);
-      }
-    });
   });
   
   // respond to client
