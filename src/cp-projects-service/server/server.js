@@ -7,6 +7,7 @@ import http from 'http';
 import fs from 'file-system';
 import zip from 'adm-zip';
 import moment from 'moment';
+import idService from './id-service';
 
 const app = express();
 const server = http.createServer(app);
@@ -26,55 +27,6 @@ app.use(cors());
 server.listen(port, () => {
   console.log('Server listening on port ' + port + '!');
 });
-
-// generate a unique id for a new project of the following form:
-// 8-4-4-4-12 where the numbers represent the amount of characters
-// each character is in range (a-z0-9)
-// format may change in the future
-function generateProjectId() {
-  let idIsUnique = false;
-  let possibleCharacters = 'abcdefghijklmnopqrstuvwxyz0123456789';
-  let id;
-  
-  // while a unique id has not been found
-  while (!idIsUnique) {
-    let index;
-    let numOfCharacters;
-    id = '';
-    for (let i = 0; i < 4; i++) {
-      if (i == 0) {
-        numOfCharacters = 8;
-      } else {
-        numOfCharacters = 4;
-      }
-      for (let i = 0; i < numOfCharacters; i++) {
-        index = Math.floor(Math.random() * possibleCharacters.length);
-        id += possibleCharacters[index];
-      }
-      id += '-';
-    }
-    for (let i = 0; i < 12; i++) {
-      index = Math.floor(Math.random() * possibleCharacters.length);
-      id += possibleCharacters[index];
-    }
-    
-    idIsUnique = checkIsIdUnique(id);
-  }
-  return id;
-}
-
-// check if the given id is a unique id (using file system for prototype rather than db)
-function checkIsIdUnique(id) {
-  let isUnique = true;
-  
-  fs.readdirSync('./projects').forEach(dir => {
-    if (id === dir) {
-      isUnique = false;
-    }
-  });
-  
-  return isUnique;
-}
 
 // when a client connects
 ioServer.on('connection', function (socket) {
@@ -162,7 +114,7 @@ app.post('/api/2.0/projects/create-project', (req, res) => {
   file = file[1];
   
   // generate a new id for this project
-  let id = generateProjectId();
+  let id = idService.generateProjectId();
   
   // project data to be saved (empty strings have yet to be implemented)
   let metadata = {
