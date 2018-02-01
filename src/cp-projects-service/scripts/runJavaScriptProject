@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# variables
+id=$1
+name=$2
+main=$3
+
+# create Dockerfile
+echo "creating Dockerfile..."
+rm Dockerfile &> /dev/null
+touch Dockerfile &> /dev/null
+echo "FROM node:carbon
+ADD ./projects/$id/$name/* /
+RUN npm install
+CMD [ \"node\", \"./$main\" ]" >> Dockerfile
+
+# build docker image
+echo "building docker image..."
+docker build -t project . &> /dev/null
+
+# run the project
+echo "running project..."
+echo ""
+docker run -i project
+
+# remove the image
+echo ""
+echo "END OF PROJECT OUTPUT"
+docker rmi -f project &> /dev/null
+rm Dockerfile &> /dev/null

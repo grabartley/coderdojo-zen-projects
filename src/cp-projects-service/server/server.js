@@ -82,9 +82,20 @@ ioServer.on('connection', function (socket) {
   socket.on('start', function (projectId) {
     // get data for this project id
     let projectData = JSON.parse(fs.readFileSync('./projects/' + projectId + '/project-data.json', 'utf-8'));
+    // used to store the name of the runtime script to execute
+    let runtimeScript = '';
     
-    // spawn a process to create the Docker container
-    var term = pty.spawn('./runPythonProject', [projectId, projectData.name.replace(/ /g,''), projectData.main], {
+    // set the runtime script to use based on the project type
+    switch (projectData.type) {
+      case 'python':
+        runtimeScript = './scripts/runPythonProject';
+        break;
+      case 'javascript':
+        runtimeScript = './scripts/runJavaScriptProject';
+    }
+    
+    // spawn a process to create the Docker container and run the project
+    var term = pty.spawn(runtimeScript, [projectId, projectData.name.replace(/ /g,''), projectData.main], {
       name: 'xterm-color'
     });
     
