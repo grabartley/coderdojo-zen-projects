@@ -48,7 +48,4 @@ export default {
 }
 </script>
 <style scoped lang="less">
-  .project-creation-form {
-    text-align: center;
-  }
 </style>

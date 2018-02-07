@@ -4,6 +4,8 @@ import ProjectList from '@/components/project-list';
 import ProjectCreationForm from '@/components/project-creation-form';
 import ProjectRuntime from '@/components/project-runtime';
 import Acknowledgements from '@/components/Acknowledgements';
+import Login from '@/components/login';
+import ViewProfile from '@/components/view-profile';
 
 Vue.use(Router)
 
@@ -29,6 +31,16 @@ export default new Router({
       path: '/acknowledgements',
       name: 'Acknowledgements',
       component: Acknowledgements,
+    },
+    {
+      path: '/login',
+      name: 'Login',
+      component: Login,
+    },
+    {
+      path: '/view-profile/:userId',
+      name: 'ViewProfile',
+      component: ViewProfile,
     },
   ],
 });

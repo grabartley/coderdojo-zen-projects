@@ -1,5 +1,9 @@
 <template>
   <div class="project-list">
+    <div class="project-list-header">
+      <button @click="logout" v-if="loggedIn">Logout</button>
+      <router-link v-else :to="{ name: 'Login', params: {} }">Login</router-link>
+    </div>
     <h2>All Projects</h2>
     <h3>Python</h3>
     <div v-for="project in pythonProjectData">
@@ -34,7 +38,14 @@ export default {
       pythonProjectData: null,
       javascriptProjectData: null,
       htmlProjectData: null,
+      loggedIn: false,
     };
+  },
+  methods: {
+    logout() {
+      this.$cookies.remove('loggedIn');
+      this.loggedIn = false;
+    },
   },
   async created() {
     // get the project data to display
@@ -42,14 +53,19 @@ export default {
     this.pythonProjectData = allProjectData.body.python;
     this.javascriptProjectData = allProjectData.body.javascript;
     this.htmlProjectData = allProjectData.body.html;
+    
+    // check if logged in
+    this.loggedIn = this.$cookies.get('loggedIn');
   },
 }
 </script>
 
 <style scoped lang="less">
   .project-list {
-    margin-top: 50px;
-    text-align: center;
+    &-header {
+      margin-right: 50px;
+      text-align: right;
+    }
     
     &-footer {
       margin-top: 50px;

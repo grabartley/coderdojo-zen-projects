@@ -100,6 +100,25 @@ app.get('/api/2.0/projects/all-project-data', (req, res) => {
   res.send(allProjectData);
 });
 
+// returns all user data for a given id (mock of Zen API)
+app.get('/api/2.0/profiles/load-user-profile/:userId', (req, res) => {
+  // log api call
+  console.log('GET /api/2.0/profiles/load-user-profile/:userId with ');
+  console.log(req.params);
+  
+  // get all users from store of mock users
+  let allUsers = JSON.parse(fs.readFileSync('./users/users.json'));
+  allUsers = allUsers.users;
+  
+  // find user data for this userId
+  let userData = allUsers.find((user) => {
+    return user.id === req.params.userId;
+  });
+  
+  // respond with the data
+  res.send(userData);
+});
+
 // creates a project
 app.post('/api/2.0/projects/create-project', (req, res) => {
   // log api call
@@ -150,4 +169,23 @@ app.post('/api/2.0/projects/create-project', (req, res) => {
   
   // respond to client
   res.send('Project created successfully');
+});
+
+// mock of the Zen login API call for my prototype (disregards password since it's just a mock)
+app.post('/api/2.0/users/login', (req, res) => {
+  // log api call
+  console.log('POST /api/2.0/users/login with ');
+  console.log(req.body);
+  
+  // get all users from store of mock users
+  let allUsers = JSON.parse(fs.readFileSync('./users/users.json'));
+  allUsers = allUsers.users;
+  
+  // find the user who is trying to login
+  let currentUser = allUsers.find((user) => {
+    return user.email === req.body.email;
+  });
+  
+  // respond with what was found
+  res.send(currentUser);
 });

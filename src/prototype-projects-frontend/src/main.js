@@ -4,6 +4,7 @@ import Vue from 'vue'
 import VueResource from 'vue-resource';
 import VueSocketIO from 'vue-socket.io';
 import VeeValidate from 'vee-validate';
+import VueCookies from 'vue-cookies';
 import App from './App'
 import router from './router'
 
@@ -16,6 +17,8 @@ Vue.use(VueResource);
 Vue.use(VueSocketIO, 'http://localhost:3000');
 // used for form validation
 Vue.use(VeeValidate);
+// used to store and get browser cookies
+Vue.use(VueCookies);
 
 /* eslint-disable no-new */
 new Vue({
