@@ -4,6 +4,90 @@
 
 ****
 
+## Python & JavaScript Runtimes Complete, GitHub Integration Started
+#### 7th February 2018
+
+Since my last post I have pushed my prototype to GitLab and have been working on finishing project runtimes. I am happy to say that my prototype now supports running **single and multiple file** command line Python and JavaScript projects in **containerized environments**. JavaScript projects are run using NodeJS and support use of packages from npm which opens up a lot of possibilities for very creative projects.
+
+In the process of finishing these runtime implementations I also made **several improvements** to the prototype with regard to **project creation, storage and display**. Although I still haven't styled the frontend I have improved the project list to list all projects by type with working links to allow each specific project to be run when clicked whereas before I was only able to run a project through hardcoded filenames in the runtime script. Further details on my other improvements are outlined in the commit messages on GitLab. The following bash scripts are now used to run projects which take project information as command line parameters:
+
+**runPythonProject**
+```bash
+#!/bin/bash
+
+# variables
+id=$1
+name=$2
+main=$3
+
+# create Dockerfile
+echo "creating Dockerfile..."
+rm Dockerfile &> /dev/null
+touch Dockerfile &> /dev/null
+echo "FROM python:3
+ADD ./projects/$id/$name/* /
+CMD [ \"python\", \"./$main\" ]" >> Dockerfile
+
+# build docker image
+echo "building docker image..."
+docker build -t project . &> /dev/null
+
+# run the project
+echo "running project..."
+echo ""
+docker run -i project
+
+# remove the image
+echo ""
+echo "END OF PROJECT OUTPUT"
+docker rmi -f project &> /dev/null
+rm Dockerfile &> /dev/null
+```
+
+**runJavaScriptProject**
+```bash
+#!/bin/bash
+
+# variables
+id=$1
+name=$2
+main=$3
+
+# create Dockerfile
+echo "creating Dockerfile..."
+rm Dockerfile &> /dev/null
+touch Dockerfile &> /dev/null
+echo "FROM node:carbon
+ADD ./projects/$id/$name/* /
+RUN npm install
+CMD [ \"node\", \"./$main\" ]" >> Dockerfile
+
+# build docker image
+echo "building docker image..."
+docker build -t project . &> /dev/null
+
+# run the project
+echo "running project..."
+echo ""
+docker run -i project
+
+# remove the image
+echo ""
+echo "END OF PROJECT OUTPUT"
+docker rmi -f project &> /dev/null
+rm Dockerfile &> /dev/null
+```
+
+With runtimes for Python and JavaScript projects complete for now I moved on to **GitHub integration for projects**. This involves making API calls to GitHub in order to create repositories for new projects, pull the code when projects are run and update the repositories when projects are updated. The first problem to be overcome here is **authentication** since all calls made to the API need to be authenticated to a particular GitHub user. While experimenting with the API I have been authenticating my API calls using a test account I made called grahambartley.
+
+Authentication in the long-term will need to be done using **GitHub accounts of the users of Zen**, particularly the Champions of each Dojo who will allow Zen permission to use their GitHub accounts for projects of the Ninjas in their Dojos. This will be achieved using **OAuth** which is what I am working on at present. By registering an OAuth App with GitHub I can specify a **callback URL** which they will send users to after they have authenticated themselves. This callback URL will exist somewhere on Zen and will extract their authentication token and store it with their user data in order for the authentication to be persistent so they will not have to authenticate more than once.
+
+In order for this to be attempted in my prototype, I need to have mock user data which I can use to emulate logging in, authenticating and having the authentication be persistent. In order to achieve this I have created some **mock user data** in the typical format it would have on Zen and emulated Zen login by **mocking the necessary API calls**. Once I have OAuth working in this way it will be fairly simple to integrate with Zen's existing login system due to it using the same API calls that I have mocked.
+
+As a final note, through my experimentation with GitHub API calls I have discovered that the GitHub v4 GraphQL API does **not** contain all the functionality of the v3 REST API which I initially thought it had. Missing functionality includes **creation of repositories** which is substantial to my project. It had been my intention to exclusively use the v4 API in my project but I will have to use the v3 API for any API calls that v4 does not support. However, **I will use v4 wherever possible** since it is the newer API.
+
+****
+
 ## Research & Exams Complete, Prototype Progress
 #### 28th January 2018
 
