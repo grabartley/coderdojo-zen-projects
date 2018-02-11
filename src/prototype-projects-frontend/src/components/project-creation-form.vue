@@ -35,6 +35,9 @@ export default {
           description: window.sessionStorage.getItem('projectDescription'),
           filename: window.sessionStorage.getItem('filename'),
           file: window.sessionStorage.getItem('projectFiles'),
+          userId: this.$cookies.get('loggedIn'),
+          // the same as the logged in user for now (will be champion in future)
+          githubUserId: this.$cookies.get('loggedIn'),
         };
         
         // send the project to the backend to save

@@ -7,6 +7,7 @@
     <div v-if="userData" class="view-profile-integration">
       GitHub: {{ isGitHubLinked }}
     </div>
+    <a :href="githubAuthUrl" target="_blank">Authorize GitHub</a>
   </div>
 </template>
 <script>
@@ -17,11 +18,15 @@
     data() {
       return {
         userData: null,
+        githubClientId: process.env.GITHUB_CLIENT_ID,
       };
     },
     computed: {
       isGitHubLinked() {
-        return !!this.userData.githubOauth;
+        return !!this.userData.githubAccessToken;
+      },
+      githubAuthUrl() {
+        return `https://github.com/login/oauth/authorize?scope=public_repo&client_id=${this.githubClientId}`;
       },
     },
     async created() {

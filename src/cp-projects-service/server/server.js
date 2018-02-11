@@ -8,11 +8,13 @@ import fs from 'file-system';
 import zip from 'adm-zip';
 import moment from 'moment';
 import idService from './id-service';
+import githubService from './github-service';
 
 const app = express();
 const server = http.createServer(app);
 const port = 3000;
 const ioServer = io(server);
+const githubClientSecret = process.env.GITHUB_CLIENT_SECRET;
 
 // used to parse POST data
 app.use(bodyParser.urlencoded({ 
@@ -120,7 +122,7 @@ app.get('/api/2.0/profiles/load-user-profile/:userId', (req, res) => {
 });
 
 // creates a project
-app.post('/api/2.0/projects/create-project', (req, res) => {
+app.post('/api/2.0/projects/create-project', async (req, res) => {
   // log api call
   console.log('POST /api/2.0/projects/create-project with ');
   console.log(req.body);
@@ -146,8 +148,10 @@ app.post('/api/2.0/projects/create-project', (req, res) => {
     createdAt: moment().toISOString(),
     updatedAt: '',
     author: '',
-    userId: '',
-    deleted: false,
+    userId: projectData.userId,
+    dojoId: '',
+    githubUserId: projectData.githubUserId,
+    deletedAt: '',
   };
   
   // save the project archive in the projects folder
@@ -167,8 +171,10 @@ app.post('/api/2.0/projects/create-project', (req, res) => {
   // store project metadata
   fs.writeFileSync('./projects/' + id + '/project-data.json', JSON.stringify(metadata), 'utf-8');
   
+  const response = await githubService.createRepo(metadata, projectData.githubUserId);
+  
   // respond to client
-  res.send('Project created successfully');
+  res.send(response);
 });
 
 // mock of the Zen login API call for my prototype (disregards password since it's just a mock)
@@ -188,4 +194,33 @@ app.post('/api/2.0/users/login', (req, res) => {
   
   // respond with what was found
   res.send(currentUser);
+});
+
+// completes GitHub integration for user with userId
+app.post('/api/2.0/users/:userId/integrations/github', async (req, res) => {
+  // log api call
+  console.log('POST /api/2.0/users/:userId/integrations/github with ');
+  console.log(req.params);
+  console.log(req.body);
+  
+  // get data from POST and set secret
+  let githubData = req.body;
+  githubData['client_secret'] = githubClientSecret;
+  
+  // get access token
+  let data = await githubService.getAccessToken(githubData);
+  data = data.split('&');
+  const accessToken = ((data[0]).split('='))[1];
+  
+  // store access token for this user
+  let allUsers = JSON.parse(fs.readFileSync('./users/users.json'));
+  allUsers.users.forEach((user) => {
+    if (user.id === req.params.userId) {
+      user.githubAccessToken = accessToken
+    }
+  });
+  fs.writeFileSync('./users/users.json', JSON.stringify(allUsers), 'utf-8');
+  
+  // respond
+  res.send('Successful integration');
 });
