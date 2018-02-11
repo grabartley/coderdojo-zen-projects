@@ -1,10 +1,10 @@
 <template>
   <div class="acknowledgements">
-    <div class="acknowledgements-header">
+    <div class="acknowledgements__header">
       <h2>Acknowledgements</h2>
       This list acknowledges any packages/tools used in this project which require that they be referenced.
     </div>
-    <div class="acknowledgements-list">
+    <div class="acknowledgements__list">
       <ul>
         <li><a href="https://www.npmjs.com/package/file-system" target="_blank">file-system package</a></li>
         Copyright (c) 2004-2010 by Internet Systems Consortium, Inc. ("ISC") 

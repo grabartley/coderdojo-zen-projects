@@ -1,8 +1,8 @@
 <template>
   <div class="login">
-    <input class="login-email" v-model="email" v-validate.initial="'required|email'" name="email" type="email"></input>
+    <input class="login__email" v-model="email" v-validate.initial="'required|email'" name="email" type="email"></input>
     <div class="error-message" v-show="isFormValidated && errors.has('email')">{{ errors.first('email') }}</div>
-    <input class="login-password" v-model="password" v-validate.initial="'required'" name="password" type="password"></input>
+    <input class="login__password" v-model="password" v-validate.initial="'required'" name="password" type="password"></input>
     <div class="error-message" v-show="isFormValidated && errors.has('password')">{{ errors.first('password') }}</div>
     <button @click="login()">Login</button>
     <div class="error-message" v-show="loginFailed">Login was unsuccessful</div>

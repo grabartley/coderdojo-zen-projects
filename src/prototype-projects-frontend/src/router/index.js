@@ -3,7 +3,7 @@ import Router from 'vue-router';
 import ProjectList from '@/components/project-list';
 import ProjectCreationForm from '@/components/project-creation-form';
 import ProjectRuntime from '@/components/project-runtime';
-import Acknowledgements from '@/components/Acknowledgements';
+import Acknowledgements from '@/components/acknowledgements';
 import Login from '@/components/login';
 import ViewProfile from '@/components/view-profile';
 import GitHubCallback from '@/components/github-callback';

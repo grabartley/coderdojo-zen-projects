@@ -1,6 +1,6 @@
 <template>
   <div class="project-list">
-    <div class="project-list-header">
+    <div class="project-list__header">
       <button @click="logout" v-if="loggedIn">Logout</button>
       <router-link v-else :to="{ name: 'Login', params: {} }">Login</router-link>
     </div>
@@ -20,7 +20,7 @@
       {{ project.name }} : 
       <router-link :to="{ name: 'ProjectRuntime', params: { id: project.id } }">Run the project</router-link>
     </div>
-    <div class="project-list-footer">
+    <div class="project-list__footer">
       <router-link :to="{ name: 'ProjectCreationForm', params: {} }">Create a Project</router-link>
       <router-link :to="{ name: 'Acknowledgements', params: {} }">Acknowledgements</router-link>
     </div>
@@ -62,12 +62,12 @@ export default {
 
 <style scoped lang="less">
   .project-list {
-    &-header {
+    &__header {
       margin-right: 50px;
       text-align: right;
     }
     
-    &-footer {
+    &__footer {
       margin-top: 50px;
     }
   }

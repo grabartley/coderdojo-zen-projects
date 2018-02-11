@@ -1,10 +1,10 @@
 <template>
   <div class="view-profile">
-    <div v-if="userData" class="view-profile-basic">
+    <div v-if="userData" class="view-profile__basic">
       Name: {{ userData.name }}<br>
       Email: {{ userData.email }}
     </div>
-    <div v-if="userData" class="view-profile-integration">
+    <div v-if="userData" class="view-profile__integration">
       GitHub: {{ isGitHubLinked }}
     </div>
     <a :href="githubAuthUrl" target="_blank">Authorize GitHub</a>
