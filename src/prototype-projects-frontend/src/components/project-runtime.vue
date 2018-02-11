@@ -1,10 +1,10 @@
 <template>
   <div class="project-runtime">
-    <div class="project-runtime-overlay" ref="overlay">
+    <div class="project-runtime__overlay" ref="overlay">
       <button id="runtime-overlay-runButton" @click="runProject()">Run Project</button>
     </div>
-    <div class="project-runtime-header">Project Name</div>
-    <div class="project-runtime-terminal" ref="terminal"></div>
+    <div class="project-runtime__header">Project Name</div>
+    <div class="project-runtime__terminal" ref="terminal"></div>
   </div>
 </template>
 
@@ -66,7 +66,7 @@ export default {
 
 <style scoped lang="less">
   .project-runtime {
-    &-overlay {
+    &__overlay {
       opacity: 0.9;
       background-color: black;
       position: fixed;
@@ -97,14 +97,14 @@ export default {
       }
     }
     
-    &-header {
+    &__header {
       font-size: 2em;
       font-weight: 300;
       padding: 20px;
       text-align: center;
     }
     
-    &-terminal {
+    &__terminal {
       background-color: black;
       padding: 10px 10px 10px 10px;
       margin: 0 40px;
