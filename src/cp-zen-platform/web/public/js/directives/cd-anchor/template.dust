@@ -1,4 +1,0 @@
-<div>
-  <a class="cd-anchor" name="{{ $ctrl.anchorText }}"></a>
-  <a href="#{{ $ctrl.anchorText }}">{{ $ctrl.anchorText }} </a>
-</div>

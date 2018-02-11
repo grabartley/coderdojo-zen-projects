@@ -1,8 +1,0 @@
-# i18n dictionaries from crowdin, except en_US
-strings/*
-!strings/en_US
-email-templates/*
-!email-templates/*-en_US
-
-.DS_Store
-node_modules/

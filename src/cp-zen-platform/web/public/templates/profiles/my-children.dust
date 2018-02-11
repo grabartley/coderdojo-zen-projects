@@ -1,3 +1,0 @@
-<cd-sidebar header="{{ 'MY_CHILDREN' | translateFromKey }}" tabs="tabs" base-state="my-children">
-  <cd-family class="cd-sidebar__content--padded"></cd-family>
-</cd-sidebar>

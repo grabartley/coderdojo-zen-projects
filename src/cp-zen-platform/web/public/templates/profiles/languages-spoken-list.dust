@@ -1,8 +1,0 @@
-<div class="profile-section cd-language-spoken">
-  <h3>{@i18n key="Languages Spoken"/}</h3>
-  <div>
-    <ul ng-repeat="languageSpoken in profile.widget.languagesSpoken">
-      <li>{{ languageSpoken }}</li>
-    </ul>
-  </div>
-</div>

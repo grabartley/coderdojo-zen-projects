@@ -1,7 +1,0 @@
-{>"layouts/master" /}
-{<body}
-{>"common/embedding-header" /}
-  <div class="container cd-embedded">
-    <div ui-view></div>
-  </div>
-{/body}
