@@ -1,0 +1,4 @@
+image: node:carbon
+test:
+  script:
+    - ls -a
