@@ -1,6 +1,7 @@
 image: node:carbon
 frontendTests:
   script:
+    - apt-get install google-chrome
     - cd src/prototype-projects-frontend
     - npm install
     - npm test
