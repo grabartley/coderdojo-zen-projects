@@ -1,0 +1,6 @@
+image: geekykaran/headless-chrome-node-docker:latest
+frontendTests:
+  script:
+    - cd src/prototype-projects-frontend
+    - npm install
+    - npm test
