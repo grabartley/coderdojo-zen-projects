@@ -1,4 +1,6 @@
 image: node:carbon
-test:
+frontendTests:
   script:
-    - ls -a
+    - cd src/prototype-projects-frontend
+    - npm install
+    - npm test
