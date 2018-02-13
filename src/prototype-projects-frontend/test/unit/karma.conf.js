@@ -6,13 +6,21 @@
 var webpackConfig = require('../../build/webpack.test.conf')
 
 module.exports = function karmaConfig (config) {
+  let browser = 'HeadlessChrome';
+  if (process.env.GITLAB_CI) {
+    browser = 'HeadlessChromeCI';
+  }
   config.set({
-    browsers: ['HeadlessChrome'],
+    browsers: [browser],
     customLaunchers: {
       HeadlessChrome: {
         base: 'Chrome',
         flags: ['--headless', '--disable-gpu', ' --remote-debugging-port=9222']
-      }
+      },
+      HeadlessChromeCI: {
+        base: 'HeadlessChrome',
+        flags: ['--no-sandbox']
+      },
     },
     frameworks: ['mocha', 'sinon-chai', 'phantomjs-shim'],
     reporters: ['spec', 'coverage'],
