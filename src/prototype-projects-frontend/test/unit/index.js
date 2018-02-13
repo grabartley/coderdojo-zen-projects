@@ -1,6 +1,10 @@
 import Vue from 'vue'
+import VueResource from 'vue-resource';
 
 Vue.config.productionTip = false
+
+// used to mock API calls in tests
+Vue.use(VueResource);
 
 // require all test files (files that ends with .spec.js)
 const testsContext = require.context('./specs', true, /\.spec$/)

@@ -10,9 +10,15 @@
     data() {
       return {
         githubClientId: process.env.GITHUB_CLIENT_ID,
-        callbackCode: this.$route.query.code,
-        loggedInUserId: this.$cookies.get('loggedIn'),
       };
+    },
+    computed: {
+      callbackCode() {
+        return this.$route.query.code;
+      },
+      loggedInUserId() {
+        return this.$cookies.get('loggedIn');
+      },
     },
     methods: {
       async getAccessToken() {

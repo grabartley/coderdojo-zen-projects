@@ -1,7 +1,7 @@
 <template>
   <div class="project-files-form">
     <h3>Upload Project</h3>
-    <input v-validate.initial="'required'" type="file" name="project files" @change="onFileUplaod"></input>
+    <input v-validate.initial="'required'" type="file" name="project files" @change="onFileUpload"></input>
     <label v-if="!isZip">Please upload a zip file</label>
     <div class="error-message" v-show="isFormValidated && errors.has('project files')">{{ errors.first('project files') }}</div>
   </div>
@@ -30,7 +30,7 @@ export default {
       window.sessionStorage.setItem('projectFiles', this.uploadedFile);
     },
     // when a file is chosen for upload
-    onFileUplaod(e) {
+    onFileUpload(e) {
       let files = e.target.files || e.dataTransfer.files;
       
       // if files exist
