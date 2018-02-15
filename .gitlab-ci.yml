@@ -6,6 +6,8 @@ frontendTests:
     - npm test
 backendTests:
   script:
+    - cd ..
+    - pwd
     - apt-get update
     - apt-get -y install build-essential checkinstall
     - cd /usr/src
