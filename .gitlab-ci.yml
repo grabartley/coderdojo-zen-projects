@@ -6,8 +6,6 @@ frontendTests:
     - npm test
 backendTests:
   script:
-    - cd ..
-    - pwd
     - apt-get update
     - apt-get -y install build-essential checkinstall
     - cd /usr/src
@@ -17,6 +15,6 @@ backendTests:
     - ./configure
     - make altinstall
     - export PYTHON=$(pwd)/python2.7
-    - cd ../2018-ca400-bartleg3/src/cp-projects-service
+    - cd /builds/bartleg3/src/cp-projects-service
     - npm install
     - npm test
