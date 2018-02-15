@@ -5,7 +5,6 @@ unitTests:
     - npm install
     - npm test
     - cd ../cp-projects-service
-    - apt-get install python
     - export PYTHON=$(which python)
     - npm install
     - npm test
