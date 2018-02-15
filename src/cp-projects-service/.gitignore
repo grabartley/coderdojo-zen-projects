@@ -1,4 +1,6 @@
 projects/
 node_modules/
 lib/
+test/unit/coverage/
+.nyc_output/
 start

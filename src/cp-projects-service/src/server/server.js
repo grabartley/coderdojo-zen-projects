@@ -7,8 +7,8 @@ import http from 'http';
 import fs from 'file-system';
 import zip from 'adm-zip';
 import moment from 'moment';
-import idService from './id-service';
-import githubService from './github-service';
+import idService from '../services/id-service';
+import githubService from '../services/github-service';
 
 const app = express();
 const server = http.createServer(app);
@@ -27,13 +27,13 @@ app.use(cors());
 
 // listen on the given port
 server.listen(port, () => {
-  console.log('Server listening on port ' + port + '!');
+  console.log('\nServer listening on port ' + port + '!');
 });
 
 // when a client connects
-ioServer.on('connection', function (socket) {
+ioServer.on('connection', (socket) => {
   // when a start event is emited by the frontend
-  socket.on('start', function (projectId) {
+  socket.on('start', (projectId) => {
     // get data for this project id
     let projectData = JSON.parse(fs.readFileSync('./projects/' + projectId + '/project-data.json', 'utf-8'));
     // used to store the name of the runtime script to execute
@@ -42,10 +42,10 @@ ioServer.on('connection', function (socket) {
     // set the runtime script to use based on the project type
     switch (projectData.type) {
       case 'python':
-        runtimeScript = './scripts/runPythonProject';
+        runtimeScript = '../scripts/runPythonProject';
         break;
       case 'javascript':
-        runtimeScript = './scripts/runJavaScriptProject';
+        runtimeScript = '../scripts/runJavaScriptProject';
     }
     
     // spawn a process to create the Docker container and run the project
@@ -54,13 +54,13 @@ ioServer.on('connection', function (socket) {
     });
     
     // when anything is outputted by the process
-    term.on('data', function(data) {
+    term.on('data', (data) => {
       // emit it to the client to display
       socket.emit('output', data);
     });
     
     // when a command is received from the frontend
-    socket.on('command', function (data) {
+    socket.on('command', (data) => {
       // execute it in the running container
       term.write(data);
     });
