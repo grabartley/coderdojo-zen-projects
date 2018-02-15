@@ -6,7 +6,8 @@ frontendTests:
     - npm test
 backendTests:
   script:
-    - apt-get install build-essential
+    - apt-get update
+    - apt-get install build-essential checkinstall
     - cd /usr/src
     - wget https://www.python.org/ftp/python/2.7.14/Python-2.7.14.tgz
     - tar xzf Python-2.7.14.tgz
