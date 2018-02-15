@@ -5,6 +5,6 @@ unitTests:
     - npm install
     - npm test
     - cd ../cp-projects-service
-    - export PYTHON=$(which python)
+    - export PYTHON=$(which python2)
     - npm install
     - npm test
