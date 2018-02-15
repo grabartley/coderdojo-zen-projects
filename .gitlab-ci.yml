@@ -1,10 +1,11 @@
 image: geekykaran/headless-chrome-node-docker:latest
-unitTests:
-  script:
-    - ls /usr/bin
+frontendTests:
+  script:   
     - cd src/prototype-projects-frontend
     - npm install
     - npm test
-    - cd ../cp-projects-service
+backendTests:
+  script:
+    - cd src/cp-projects-service
     - npm install
     - npm test
