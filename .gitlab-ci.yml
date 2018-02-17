@@ -6,6 +6,16 @@ frontendTests:
     - npm test
 backendTests:
   script:
-    - cd src/cp-projects-service
+    - apt-get update
+    - apt-get -y install build-essential checkinstall
+    - cd /usr/src
+    - wget https://www.python.org/ftp/python/2.7.14/Python-2.7.14.tgz
+    - tar xzf Python-2.7.14.tgz
+    - cd Python-2.7.14
+    - ./configure
+    - make altinstall
+    - ls -l
+    - export PYTHON=$(pwd)/python2.7
+    - cd /builds/bartleg3/2018-ca400-bartleg3/src/cp-projects-service
     - npm install
     - npm test
