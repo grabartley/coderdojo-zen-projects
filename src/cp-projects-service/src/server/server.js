@@ -1,4 +1,4 @@
-import pty from 'pty.js';
+const pty = require('node-pty');
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
@@ -42,14 +42,14 @@ ioServer.on('connection', (socket) => {
     // set the runtime script to use based on the project type
     switch (projectData.type) {
       case 'python':
-        runtimeScript = '../scripts/runPythonProject';
+        runtimeScript = './scripts/runPythonProject';
         break;
       case 'javascript':
-        runtimeScript = '../scripts/runJavaScriptProject';
+        runtimeScript = './scripts/runJavaScriptProject';
     }
     
     // spawn a process to create the Docker container and run the project
-    var term = pty.spawn(runtimeScript, [projectId, projectData.name.replace(/ /g,''), projectData.main], {
+    const term = pty.spawn(runtimeScript, [projectId, projectData.name.replace(/ /g,''), projectData.main], {
       name: 'xterm-color'
     });
     
