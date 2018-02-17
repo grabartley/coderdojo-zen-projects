@@ -4,6 +4,22 @@
 
 ****
 
+## GitHub OAuth Complete, Unit Testing & Continuous Integration
+#### 17th February 2018
+
+Users of my prototype can now login and click a link to **Authorize my application to make changes on their GitHub account** using a GitHub OAuth app. The access token I retrieve for each user is stored with their data which will be stored in the database once that is setup. Any GitHub API calls made while logged in as that user are then made using that user's account. In future this will be the account of the Champion user who has authorized use of their GitHub rather than the youth who is logged in.
+
+**GitHub OAuth integration**
+![GitHub OAuth integration](./images/github-oauth-integration.png)
+
+Each time a new project is created, a **GitHub repository is created** for it on that user's account named using the id of the project to ensure that all project names are unique and since the repository does not need a human-readable name. So far I have not set it up to add project files to the repositories but will be doing so soon.
+
+Since finishing the GitHub Oauth integration I have been working on writing **unit tests** for all of my prototype code to ensure that my code has good coverage. I've written unit tests for the frontend and the backend now and have **97% statement coverage** on both. I plan to keep a high level of coverage as I go on in the project by testing alongside writing code in future. Along with these tests I also added a **.gitlab-ci.yml** file to my project in order to have my tests run each time I push new code to GitLab to ensure that my tests are always passing before I merge new code. 
+
+I had a **meeting with the CoderDojo Foundation** last Friday to update them on my progress and they were happy with how the project is coming along. I demonstrated the functionality I have so far and asked them if there was anything that they would like me to address. One thing they mentioned is that I should **replace the file system approach to data storage by using a database** for my prototype. I originally decided not to do this because I thought I would be using the existing Zen database directly during the integration phase. However, they pointed out that Zen actually has multiple databases and so a new database would be created for projects anyway during the integration phase so it may save time in the long run to create one now. I will be working on this next since I have deemed it high priority for the completion of the prototype.
+
+****
+
 ## Python & JavaScript Runtimes Complete, GitHub Integration Started
 #### 7th February 2018
 
