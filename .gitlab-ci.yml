@@ -14,8 +14,7 @@ backendTests:
     - cd Python-2.7.14
     - ./configure
     - make altinstall
-    - ls -l
-    - export PYTHON=$(pwd)/python2.7
+    - export PYTHON=$(pwd)/python
     - cd /builds/bartleg3/2018-ca400-bartleg3/src/cp-projects-service
     - npm install
     - npm test
