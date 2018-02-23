@@ -1,0 +1,58 @@
+<template>
+  <div class="common-header">
+    <div class="common-header__project-list">
+      <router-link :to="{ name: 'ProjectList', params: {} }">Project List</router-link>
+    </div>
+    <div class="common-header__title">
+      CoderDojo Zen
+    </div>
+    <div class="common-header__login">
+      <button @click="logout" v-if="loggedIn">Logout</button>
+      <router-link v-else :to="{ name: 'Login', params: {} }">Login</router-link>
+    </div>
+  </div>
+</template>
+<script>
+  export default {
+    name: 'CommonHeader',
+    data() {
+      return {
+        loggedIn: false,
+      };
+    },
+    methods: {
+      logout() {
+        this.$cookies.remove('loggedIn');
+        this.loggedIn = false;
+      },
+    },
+    created() {
+      // check if logged in
+      this.loggedIn = this.$cookies.get('loggedIn');
+    },
+  }
+</script>
+<style scoped lang="less">
+  .common-header {
+    display: flex;
+    padding: 20px;
+    margin-bottom: 20px;
+    background-color: #d9d9d9;
+    border-bottom: 2px solid #bfbfbf;
+    &__project-list {
+      flex: 2;
+      margin-left: 50px;
+      text-align: left;
+    }
+    &__title {
+      font-size: 1.5em;
+      font-weight: bold;
+      color: #9966ff;
+    }
+    &__login {
+      flex: 2;
+      margin-right: 50px;
+      text-align: right;
+    }
+  }
+</style>

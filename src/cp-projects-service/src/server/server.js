@@ -7,8 +7,13 @@ import http from 'http';
 import fs from 'file-system';
 import zip from 'adm-zip';
 import moment from 'moment';
+import migrations from '../db-migrations';
+import dbService from '../services/db-service';
 import idService from '../services/id-service';
 import githubService from '../services/github-service';
+
+// run database migrations
+migrations.migrate();
 
 const app = express();
 const server = http.createServer(app);
@@ -17,7 +22,7 @@ const ioServer = io(server);
 const githubClientSecret = process.env.GITHUB_CLIENT_SECRET;
 
 // used to parse POST data
-app.use(bodyParser.urlencoded({ 
+app.use(bodyParser.urlencoded({
   extended: false 
 }));
 app.use(bodyParser.json());
@@ -33,9 +38,10 @@ server.listen(port, () => {
 // when a client connects
 ioServer.on('connection', (socket) => {
   // when a start event is emited by the frontend
-  socket.on('start', (projectId) => {
+  socket.on('start', async (projectId) => {
     // get data for this project id
-    let projectData = JSON.parse(fs.readFileSync('./projects/' + projectId + '/project-data.json', 'utf-8'));
+    const projectResponse = await dbService.query('SELECT * FROM projects WHERE project_id=\'' + projectId + '\';');
+    const projectData = projectResponse.rows[0];
     // used to store the name of the runtime script to execute
     let runtimeScript = '';
     
@@ -49,7 +55,7 @@ ioServer.on('connection', (socket) => {
     }
     
     // spawn a process to create the Docker container and run the project
-    const term = pty.spawn(runtimeScript, [projectId, projectData.name.replace(/ /g,''), projectData.main], {
+    const term = pty.spawn(runtimeScript, [projectId, projectData.name.replace(/ /g,''), projectData.entrypoint], {
       name: 'xterm-color'
     });
     
@@ -69,8 +75,22 @@ ioServer.on('connection', (socket) => {
 
 /* API */
 
+// gets the project data for a given project id
+app.get('/api/2.0/projects/project/:projectId', async (req, res) => {
+  // log api call
+  console.log('GET /api/2.0/projects/project/:projectId with ');
+  console.log(req.params);
+  
+  // get the data for this project id
+  const projectResponse = await dbService.query('SELECT * FROM projects WHERE project_id=\'' + req.params.projectId + '\';');
+  const projectData = projectResponse.rows[0];
+  
+  // respond with the data
+  res.send(projectData);
+});
+
 // returns all project data (tmp)
-app.get('/api/2.0/projects/all-project-data', (req, res) => {
+app.get('/api/2.0/projects/all-project-data', async (req, res) => {
   // log api call
   console.log('GET /api/2.0/projects/all-project-data with ');
   console.log(req.body);
@@ -82,19 +102,21 @@ app.get('/api/2.0/projects/all-project-data', (req, res) => {
     html: []
   };
   
-  // for each project that is stored
-  fs.readdirSync('./projects').forEach((projectId) => {
-    let projectData = JSON.parse(fs.readFileSync('./projects/' + projectId + '/project-data.json', 'utf-8'));
-    // store it's information in relation to it's type
-    switch (projectData.type) {
+  // get project data from the database
+  const projectsResponse = await dbService.query('SELECT * FROM projects;');
+  const projectData = projectsResponse.rows;
+  
+  // for each project found, add them to the data structure
+  projectData.forEach((project) => {
+    switch (project.type) {
       case 'python':
-        allProjectData.python.push(projectData);
+        allProjectData.python.push(project);
         break;
       case 'javascript':
-        allProjectData.javascript.push(projectData);
+        allProjectData.javascript.push(project);
         break;
       case 'html':
-        allProjectData.html.push(projectData);
+        allProjectData.html.push(project);
     }
   });
   
@@ -103,22 +125,51 @@ app.get('/api/2.0/projects/all-project-data', (req, res) => {
 });
 
 // returns all user data for a given id (mock of Zen API)
-app.get('/api/2.0/profiles/load-user-profile/:userId', (req, res) => {
+app.get('/api/2.0/profiles/load-user-profile/:userId', async (req, res) => {
   // log api call
   console.log('GET /api/2.0/profiles/load-user-profile/:userId with ');
   console.log(req.params);
   
-  // get all users from store of mock users
-  let allUsers = JSON.parse(fs.readFileSync('./users/users.json'));
-  allUsers = allUsers.users;
-  
-  // find user data for this userId
-  let userData = allUsers.find((user) => {
-    return user.id === req.params.userId;
-  });
+  // get the data for the given user id
+  const userResponse = await dbService.query('SELECT * FROM users WHERE id=\'' + req.params.userId + '\';');
+  const userData = userResponse.rows[0];
   
   // respond with the data
   res.send(userData);
+});
+
+// get Dojo data by id (mock of Zen API)
+app.get('/api/2.0/dojos/:dojoId', async (req, res) => {
+  // log api call
+  console.log('GET /api/2.0/dojos/:dojoId with ');
+  console.log(req.params);
+  
+  // get the dojos for the given user from the database
+  let dojo = await dbService.query('SELECT * from dojos WHERE id=\'' + req.params.dojoId + '\'');
+  
+  // respond
+  res.send(dojo.rows[0]);
+});
+
+// get current logged in user's joined Dojos (mock of Zen API)
+app.get('/api/2.0/dojos/dojos-for-user/:userId', async (req, res) => {
+  // log api call
+  console.log('GET /api/2.0/dojos/dojos-for-user/:userId with ');
+  console.log(req.params);
+  
+  // get the dojo ids for the given user from the database
+  let dojoIdsForUser = await dbService.query('SELECT dojos from users WHERE id=\'' + req.params.userId + '\'');
+  dojoIdsForUser = dojoIdsForUser.rows[0].dojos;
+  let dojosForUser = [];
+  
+  // for each dojo id, get the dojo data
+  for (let i = 0; i < dojoIdsForUser.length; i++) {
+    let dojo = await dbService.query('SELECT * from dojos WHERE id=\'' + dojoIdsForUser[i] + '\'');
+    dojosForUser.push(dojo.rows[0]);
+  }
+  
+  // respond
+  res.send(dojosForUser);
 });
 
 // creates a project
@@ -130,36 +181,21 @@ app.post('/api/2.0/projects/create-project', async (req, res) => {
   // store project data
   let projectData = req.body;
   let filename = projectData.filename;
+  
   // remove header information from file data
   let file = projectData.file.split(',');
   file = file[1];
   
   // generate a new id for this project
+  // TODO: Refactor to use UUID
   let id = idService.generateProjectId();
-  
-  // project data to be saved (empty strings have yet to be implemented)
-  let metadata = {
-    id: id,
-    name: projectData.name,
-    type: projectData.type,
-    main: projectData.main,
-    description: projectData.description,
-    github: '',
-    createdAt: moment().toISOString(),
-    updatedAt: '',
-    author: '',
-    userId: projectData.userId,
-    dojoId: '',
-    githubUserId: projectData.githubUserId,
-    deletedAt: '',
-  };
   
   // save the project archive in the projects folder
   fs.writeFileSync('./projects/' + filename, file, 'base64');
   
   // extract the project files
   let zipFile = new zip('./projects/' + filename);
-  zipFile.extractAllTo('./projects/' + id + '/' + metadata.name.replace(/ /g,''), true);
+  zipFile.extractAllTo('./projects/' + id + '/' + projectData.name.replace(/ /g,''), true);
   
   // remove zip file
   fs.unlink('./projects/' + filename, (err) => {
@@ -168,32 +204,56 @@ app.post('/api/2.0/projects/create-project', async (req, res) => {
     }
   });
   
-  // store project metadata
-  fs.writeFileSync('./projects/' + id + '/project-data.json', JSON.stringify(metadata), 'utf-8');
+  // get the author's name to store in the db
+  const userResponse = await dbService.query('SELECT name FROM users WHERE id=\'' + projectData.userId + '\';');
+  const author = userResponse.rows[0].name;
   
-  const response = await githubService.createRepo(metadata, projectData.githubUserId);
+  // get the github integration id for this project to reference access token
+  const githubIntegrationResponse = await dbService.query('SELECT github_integration_id FROM github_integrations WHERE dojo_id=\'' + projectData.dojoId + '\';');
+  const githubIntegrationId = githubIntegrationResponse.rows[0].github_integration_id;
+  
+  // repository data to be used by GitHub
+  const repoData = {
+    id: id,
+  };
+  
+  // creates the project repository on GitHub
+  const githubResponse = await githubService.createRepo(repoData, projectData.userId);
+  const githubUrl = githubResponse.data.html_url;
+  
+  // project data to be saved to database
+  const metadata = {
+    id: id,
+    name: projectData.name,
+    type: projectData.type,
+    entrypoint: projectData.entrypoint,
+    description: projectData.description,
+    github: githubUrl,
+    createdAt: moment().toISOString(),
+    author: author,
+    userId: projectData.userId,
+    githubIntegrationId: githubIntegrationId,
+  };
+  
+  // add project to the database
+  await dbService.insertInto('projects', ['project_id', 'name', 'type', 'entrypoint', 'description', 'github', 'created_at', 'author', 'user_id', 'github_integration_id'], [metadata.id, metadata.name, metadata.type, metadata.entrypoint, metadata.description, metadata.github, metadata.createdAt, metadata.author, metadata.userId, metadata.githubIntegrationId]);
   
   // respond to client
-  res.send(response);
+  res.send('successful project creation');
 });
 
 // mock of the Zen login API call for my prototype (disregards password since it's just a mock)
-app.post('/api/2.0/users/login', (req, res) => {
+app.post('/api/2.0/users/login', async (req, res) => {
   // log api call
   console.log('POST /api/2.0/users/login with ');
   console.log(req.body);
   
-  // get all users from store of mock users
-  let allUsers = JSON.parse(fs.readFileSync('./users/users.json'));
-  allUsers = allUsers.users;
-  
-  // find the user who is trying to login
-  let currentUser = allUsers.find((user) => {
-    return user.email === req.body.email;
-  });
+  // get the data for the given user id
+  const userResponse = await dbService.query('SELECT * FROM users WHERE email=\'' + req.body.email + '\';');
+  const userData = userResponse.rows[0];
   
   // respond with what was found
-  res.send(currentUser);
+  res.send(userData);
 });
 
 // completes GitHub integration for user with userId
@@ -212,14 +272,16 @@ app.post('/api/2.0/users/:userId/integrations/github', async (req, res) => {
   data = data.split('&');
   const accessToken = ((data[0]).split('='))[1];
   
-  // store access token for this user
-  let allUsers = JSON.parse(fs.readFileSync('./users/users.json'));
-  allUsers.users.forEach((user) => {
-    if (user.id === req.params.userId) {
-      user.githubAccessToken = accessToken
-    }
-  });
-  fs.writeFileSync('./users/users.json', JSON.stringify(allUsers), 'utf-8');
+  // get the dojo ids for the given user from the database
+  let dojoIdsForUser = await dbService.query('SELECT dojos from users WHERE id=\'' + req.params.userId + '\'');
+  dojoIdsForUser = dojoIdsForUser.rows[0].dojos;
+  
+  // store the integration data in the database for each dojo
+  for (let i = 0; i < dojoIdsForUser.length; i++) {
+    // TODO: Refactor to use UUID
+    let githubIntegrationId = idService.generateProjectId();
+    dbService.insertInto('github_integrations', ['github_integration_id', 'user_id', 'dojo_id', 'github_access_token'], [githubIntegrationId, req.params.userId, dojoIdsForUser[i], accessToken]);
+  }
   
   // respond
   res.send('Successful integration');

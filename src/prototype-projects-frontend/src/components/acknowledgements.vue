@@ -28,4 +28,9 @@ export default {
 </script>
 
 <style scoped lang="less">
+  .acknowledgements {
+    &__list {
+      text-align: left;
+    }
+  }
 </style>

@@ -10,6 +10,20 @@ describe('ProjectService', () => {
     sandbox.restore();
   });
   
+  describe('getProjectById', () => {
+    it('should make the correct API call', async () => {
+      // ARRANGE
+      const projectIdMock = '1234-5678';
+      sandbox.stub(Vue.http, 'get');
+      Vue.http.get.withArgs(`${Vue.config.apiServer}/api/2.0/projects/project/${projectIdMock}`).returns(Promise.resolve('expectedResponse'));
+      
+      // ACT
+      let result = await ProjectService.getProjectById(projectIdMock);
+      
+      // ASSERT
+      expect(result).to.equal('expectedResponse');
+    });
+  });
   describe('getAllProjectData', () => {
     it('should make the correct API call', async () => {
       // ARRANGE

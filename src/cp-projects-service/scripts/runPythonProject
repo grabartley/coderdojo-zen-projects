@@ -3,7 +3,7 @@
 # variables
 id=$1
 name=$2
-main=$3
+entrypoint=$3
 
 # create Dockerfile
 echo "creating Dockerfile..."
@@ -11,7 +11,7 @@ rm Dockerfile &> /dev/null
 touch Dockerfile &> /dev/null
 echo "FROM python:3
 ADD ./projects/$id/$name/* /
-CMD [ \"python\", \"./$main\" ]" >> Dockerfile
+CMD [ \"python\", \"./$entrypoint\" ]" >> Dockerfile
 
 # build docker image
 echo "building docker image..."

@@ -40,20 +40,21 @@ describe('ProjectCreationForm', () => {
         };
         window.sessionStorage.setItem('projectName', 'Test Project');
         window.sessionStorage.setItem('projectType', 'python');
-        window.sessionStorage.setItem('projectMain', 'test.py');
+        window.sessionStorage.setItem('projectEntrypoint', 'test.py');
         window.sessionStorage.setItem('projectDescription', 'A test project.');
+        window.sessionStorage.setItem('dojoId', '5678-1234');
         window.sessionStorage.setItem('filename', 'test.zip');
         window.sessionStorage.setItem('projectFiles', 'fileData');
         sandbox.stub(projectCreationForm.$cookies, 'get').withArgs('loggedIn').returns('1234-5678');
         let expectedProjectData = {
           name: 'Test Project',
           type: 'python',
-          main: 'test.py',
+          entrypoint: 'test.py',
           description: 'A test project.',
+          dojoId: '5678-1234',
           filename: 'test.zip',
           file: 'fileData',
           userId: '1234-5678',
-          githubUserId: '1234-5678',
         };
         projectCreationForm.$router = {
           push: () => null

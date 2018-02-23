@@ -12,14 +12,9 @@ describe('GitHubService', () => {
         type: 'python',
         main: 'test.py',
         description: 'A test project.',
-        github: '',
-        createdAt: '',
-        updatedAt: '',
-        author: 'Child One',
-        userId: '1234-5678',
         dojoId: '',
-        githubUserId: '1234-5678',
-        deletedAt: '',
+        createdAt: '',
+        userId: '1234-5678',
       };
       const userIdMock = '1234-5678';
       const repoDataMock = {
@@ -58,15 +53,17 @@ describe('GitHubService', () => {
             };
           },
         },
-        'file-system': {
-          readFileSync: (path) => {
-            return new Buffer(JSON.stringify({
-              users: [
-                {
-                  id: '1234-5678'
-                }
-              ],
-            }));
+        './db-service': {
+          query: async (queryString) => {
+            if (queryString === 'SELECT github_access_token FROM github_integrations WHERE user_id=\'' + userIdMock + '\';') {
+              return Promise.resolve({
+                rows: [
+                  {
+                    github_access_token: '8765-4321',
+                  },
+                ],
+              });
+            }
           },
         },
       };

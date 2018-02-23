@@ -18,27 +18,6 @@ describe('ProjectList', () => {
     sandbox.restore();
   });
   
-  describe('methods', () => {
-    describe('logout', () => {
-      it('should remove the loggedIn cookie and update the loggedIn data property', () => {
-        // ARRANGE
-        let projectList = vueUnitHelper(ProjectList());
-        projectList.$cookies = {
-          remove: () => null
-        };
-        sandbox.spy(projectList.$cookies, 'remove');
-        projectList.loggedIn = false;
-        
-        // ACT
-        projectList.logout();
-        
-        // ASSERT
-        expect(projectList.$cookies.remove).to.have.been.calledWith('loggedIn');
-        expect(projectList.loggedIn).to.equal(false);
-      });
-    });
-  });
-  
   describe('created', () => {
     it('should use the projects service to get all project data and store it as well as check if the user is logged in', async () => {
       // ARRANGE

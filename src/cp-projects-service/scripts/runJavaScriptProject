@@ -3,7 +3,7 @@
 # variables
 id=$1
 name=$2
-main=$3
+entrypoint=$3
 
 # create Dockerfile
 echo "creating Dockerfile..."
@@ -12,7 +12,7 @@ touch Dockerfile &> /dev/null
 echo "FROM node:carbon
 ADD ./projects/$id/$name/* /
 RUN npm install
-CMD [ \"node\", \"./$main\" ]" >> Dockerfile
+CMD [ \"node\", \"./$entrypoint\" ]" >> Dockerfile
 
 # build docker image
 echo "building docker image..."
