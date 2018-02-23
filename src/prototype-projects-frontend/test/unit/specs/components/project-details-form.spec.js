@@ -59,10 +59,7 @@ describe('ProjectDetailsForm', () => {
         projectDetailsForm.projectType = 'python';
         projectDetailsForm.projectEntrypoint = 'test.py';
         projectDetailsForm.projectDescription = 'A test project.';
-        projectDetailsForm.dojo = {
-          id: '1234-5678',
-          name: 'My Local Dojo',
-        };
+        projectDetailsForm.dojoId = '1234-5678';
         sandbox.spy(window.sessionStorage, 'setItem');
         
         // ACT
