@@ -18,52 +18,8 @@ describe('ViewProfile', () => {
     sandbox.restore();
   });
   
-  describe('computed', () => {
-    describe('isGitHubLinked', () => {
-      it('should return true if the current user has a GitHub access token', () => {
-        // ARRANGE
-        let viewProfile = vueUnitHelper(ViewProfile());
-        viewProfile.userData = {
-          githubAccessToken: '1234-5678',
-        };
-        
-        // ACT
-        let result = viewProfile.isGitHubLinked;
-        
-        // ASSERT
-        expect(result).to.equal(true);
-      });
-      it('should return false if the current user does not have a GitHub access token', () => {
-        // ARRANGE
-        let viewProfile = vueUnitHelper(ViewProfile());
-        viewProfile.userData = {
-          githubAccessToken: null,
-        };
-        
-        // ACT
-        let result = viewProfile.isGitHubLinked;
-        
-        // ASSERT
-        expect(result).to.equal(false);
-      });
-    });
-    describe('githubAuthUrl', () => {
-      it('should return the url to redirect the user to the OAuth flow', () => {
-        // ARRANGE
-        let viewProfile = vueUnitHelper(ViewProfile());
-        viewProfile.githubClientId = '1234-5678';
-        
-        // ACT
-        let result = viewProfile.githubAuthUrl;
-        
-        // ASSERT
-        expect(result).to.equal('https://github.com/login/oauth/authorize?scope=public_repo&client_id=1234-5678');
-      });
-    });
-  });
-  
   describe('created', () => {
-    it('should get the user id from the route params and use the user service to get user data', async () => {
+    it('should get user data from route params and check if the user is viewing their own profile', async () => {
       // ARRANGE
       let viewProfile = vueUnitHelper(viewProfileWithMocks);
       viewProfile.$route = {
@@ -73,11 +29,14 @@ describe('ViewProfile', () => {
       };
       userServiceMock.getUserData.withArgs('1234-5678').returns(Promise.resolve({
         body: {
-          githubAccessToken: null,
+          id: '1234-5678',
         },
       }));
       let expectedUserData = {
-        githubAccessToken: null,
+        id: '1234-5678',
+      };
+      viewProfile.$cookies = {
+        get: (cookieName) => '1234-5678',
       };
       
       // ACT
@@ -85,6 +44,7 @@ describe('ViewProfile', () => {
       
       // ASSERT
       expect(viewProfile.userData).to.deep.equal(expectedUserData);
+      expect(viewProfile.currentUser).to.equal('1234-5678');
     });
   });
 });

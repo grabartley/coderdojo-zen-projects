@@ -5,7 +5,7 @@
   "main": "lib/server/server.js",
   "author": "Graham Bartley <graham.bartley3@mail.dcu.ie>",
   "scripts": {
-    "build": "babel src -d lib",
+    "build": "babel src db-migrations.js -d lib",
     "start": "npm run build && node ./lib/server/server.js",
     "unit": "cross-env NODE_ENV=test nyc mocha --require babel-core/register ./test/unit/specs/*/*.spec.js",
     "test": "npm run unit"
@@ -20,6 +20,8 @@
     "moment": "^2.20.1",
     "node-github-graphql": "^0.2.6",
     "node-pty": "^0.7.4",
+    "pg": "^7.4.1",
+    "postgrator": "^3.5.0",
     "socket.io": "^2.0.4"
   },
   "devDependencies": {

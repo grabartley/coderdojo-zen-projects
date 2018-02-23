@@ -1,6 +1,6 @@
 import gitHubGraphQLAPI from 'node-github-graphql';
 import axios from 'axios';
-import fs from 'file-system';
+import dbService from './db-service';
 
 let GITHUB_GRAPHQL_API;
 let GITHUB_REST_API;
@@ -10,11 +10,8 @@ let USER_AGENT;
 // sets up objects to use when making API calls using access token of the given user
 async function setupApiWithAccess(userId) {
   // get the access token for this user
-  let allUsers = JSON.parse(fs.readFileSync('./users/users.json'));
-  let currentUser = allUsers.users.find((user) => {
-    return user.id === userId;
-  });
-  API_TOKEN = currentUser.githubAccessToken;
+  const tokenResponse = await dbService.query('SELECT github_access_token FROM github_integrations WHERE user_id=\'' + userId + '\';');
+  API_TOKEN = tokenResponse.rows[0].github_access_token;
   
   // set up the object for v4 API calls
   GITHUB_GRAPHQL_API = new gitHubGraphQLAPI({

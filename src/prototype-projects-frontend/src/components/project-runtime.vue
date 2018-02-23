@@ -3,19 +3,20 @@
     <div class="project-runtime__overlay" ref="overlay">
       <button id="runtime-overlay-runButton" @click="runProject()">Run Project</button>
     </div>
-    <div class="project-runtime__header">Project Name</div>
+    <div v-if="projectData" class="project-runtime__header">{{ projectData.name }}</div>
     <div class="project-runtime__terminal" ref="terminal"></div>
   </div>
 </template>
 
 <script>
 import Terminal from 'xterm2';
+import projectService from '@/projects/service';
 
 export default {
   name: 'ProjectRuntime',
   data() {
     return {
-      projectId: null,
+      projectData: null,
       term: null,
       projectRunning: false,
     };
@@ -44,12 +45,12 @@ export default {
       
       // open the terminal
       this.term.open(this.$refs.terminal, true);
-
+      
       // a project is now running
       this.projectRunning = true;
       
       // tell the backend to spawn a container for this project
-      this.$socket.emit('start', this.projectId);
+      this.$socket.emit('start', this.projectData.project_id);
       
       // when a command is entered
       this.term.on('data', (data) => {
@@ -58,8 +59,8 @@ export default {
       });
     },
   },
-  created() {
-    this.projectId = this.$route.params.id;
+  async created() {
+    this.projectData = (await projectService.getProjectById(this.$route.params.id)).body;
   },
 }
 </script>

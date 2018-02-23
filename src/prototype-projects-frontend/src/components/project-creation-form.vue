@@ -31,13 +31,12 @@ export default {
         let projectData = {
           name: window.sessionStorage.getItem('projectName'),
           type: window.sessionStorage.getItem('projectType'),
-          main: window.sessionStorage.getItem('projectMain'),
+          entrypoint: window.sessionStorage.getItem('projectEntrypoint'),
           description: window.sessionStorage.getItem('projectDescription'),
+          dojoId: window.sessionStorage.getItem('dojoId'),
           filename: window.sessionStorage.getItem('filename'),
           file: window.sessionStorage.getItem('projectFiles'),
           userId: this.$cookies.get('loggedIn'),
-          // the same as the logged in user for now (will be champion in future)
-          githubUserId: this.$cookies.get('loggedIn'),
         };
         
         // send the project to the backend to save

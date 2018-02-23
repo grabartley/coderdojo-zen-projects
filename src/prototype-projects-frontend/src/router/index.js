@@ -6,6 +6,7 @@ import ProjectRuntime from '@/components/project-runtime';
 import Acknowledgements from '@/components/acknowledgements';
 import Login from '@/components/login';
 import ViewProfile from '@/components/view-profile';
+import EditProfile from '@/components/edit-profile';
 import GitHubCallback from '@/components/github-callback';
 
 Vue.use(Router)
@@ -42,6 +43,11 @@ export default new Router({
       path: '/view-profile/:userId',
       name: 'ViewProfile',
       component: ViewProfile,
+    },
+    {
+      path: '/edit-profile/:userId',
+      name: 'EditProfile',
+      component: EditProfile,
     },
     {
       path: '/users/integrations/github',
