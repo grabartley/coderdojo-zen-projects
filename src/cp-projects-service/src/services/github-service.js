@@ -7,6 +7,7 @@ let GITHUB_REST_API;
 let API_TOKEN;
 let USER_AGENT;
 
+// TODO: Should not use user id anymore to get access token
 // sets up objects to use when making API calls using access token of the given user
 async function setupApiWithAccess(userId) {
   // get the access token for this user
@@ -55,22 +56,40 @@ async function getAccessToken(githubData) {
 }
 
 // creates a repository for the given project data
-async function createRepo(projectMetadata, userId) {
-  await setupApiWithAccess(userId);
+async function createRepo(repoData) {
+  await setupApiWithAccess(repoData.userId);
   
   // data to be used in the API call
-  const repoData = {
-    name: projectMetadata.id,
+  const apiRepoData = {
+    name: repoData.id,
+    description: repoData.description,
   };
   
   // make the call
-  return GITHUB_REST_API.post('/user/repos', repoData).catch((err) => {
-    console.log(err.message);
-  });
+  return GITHUB_REST_API.post('/user/repos', apiRepoData);
+}
+
+// pushes a commit to a repository based on given commit data
+async function commitFileToRepo(commitData) {
+  await setupApiWithAccess(commitData.userId);
+  
+  // endpoint to hit
+  const apiEndpoint = '/repos/' + commitData.owner + '/' + commitData.repo + '/contents/' + commitData.path;
+  
+  // data to be used in the API call
+  const apiCommitData = {
+    path: commitData.path,
+    message: commitData.message,
+    content: commitData.content,
+    branch: commitData.branch
+  };
+  
+  return GITHUB_REST_API.put(apiEndpoint, apiCommitData);
 }
 
 // exported functions
 module.exports = {
   getAccessToken: getAccessToken,
   createRepo: createRepo,
+  commitFileToRepo: commitFileToRepo,
 };
