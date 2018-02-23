@@ -7,9 +7,9 @@ import http from 'http';
 import fs from 'file-system';
 import zip from 'adm-zip';
 import moment from 'moment';
+import uuid from 'uuid/v4';
 import migrations from '../db-migrations';
 import dbService from '../services/db-service';
-import idService from '../services/id-service';
 import githubService from '../services/github-service';
 
 // run database migrations
@@ -187,8 +187,7 @@ app.post('/api/2.0/projects/create-project', async (req, res) => {
   file = file[1];
   
   // generate a new id for this project
-  // TODO: Refactor to use UUID
-  let id = idService.generateProjectId();
+  let id = uuid();
   
   // save the project archive in the projects folder
   fs.writeFileSync('./projects/' + filename, file, 'base64');
@@ -278,8 +277,7 @@ app.post('/api/2.0/users/:userId/integrations/github', async (req, res) => {
   
   // store the integration data in the database for each dojo
   for (let i = 0; i < dojoIdsForUser.length; i++) {
-    // TODO: Refactor to use UUID
-    let githubIntegrationId = idService.generateProjectId();
+    let githubIntegrationId = uuid();
     dbService.insertInto('github_integrations', ['github_integration_id', 'user_id', 'dojo_id', 'github_access_token'], [githubIntegrationId, req.params.userId, dojoIdsForUser[i], accessToken]);
   }
   
