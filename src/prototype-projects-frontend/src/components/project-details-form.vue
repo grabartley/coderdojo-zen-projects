@@ -25,8 +25,8 @@
     <input v-validate.initial="'required'" v-model="projectDescription" name="project description"></input>
     <div class="error-message" v-show="isFormValidated && errors.has('project description')">{{ errors.first('project description') }}</div>
     <label>Dojo</label>
-    <select v-validate.initial="'required'" v-model="dojo" name="Dojo">
-      <option v-for="dojo in usersDojos" :value="dojo.name">{{ dojo.name }}</option>
+    <select v-validate.initial="'required'" v-model="dojoId" name="Dojo">
+      <option v-for="dojo in usersDojos" :value="dojo.id">{{ dojo.name }}</option>
     </select>
     <div class="error-message" v-show="isFormValidated && errors.has('Dojo')">{{ errors.first('Dojo') }}</div>
   </div>
@@ -44,7 +44,7 @@ export default {
       projectType: null,
       projectEntrypoint: null,
       projectDescription: null,
-      dojo: null,
+      dojoId: null,
       isFormValidated: false,
     };
   },
@@ -60,7 +60,7 @@ export default {
       window.sessionStorage.setItem('projectType', this.projectType);
       window.sessionStorage.setItem('projectEntrypoint', this.projectEntrypoint);
       window.sessionStorage.setItem('projectDescription', this.projectDescription);
-      window.sessionStorage.setItem('dojoId', this.dojo.id);
+      window.sessionStorage.setItem('dojoId', this.dojoId);
     },
   },
   async created() {

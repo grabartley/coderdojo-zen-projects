@@ -53,7 +53,7 @@ ioServer.on('connection', (socket) => {
     }
     
     // spawn a process to create the Docker container and run the project
-    const term = pty.spawn(runtimeScript, [projectId, projectData.name.replace(/ /g,''), projectData.entrypoint], {
+    const term = pty.spawn(runtimeScript, [projectId, projectData.github, projectData.entrypoint], {
       name: 'xterm-color'
     });
     
