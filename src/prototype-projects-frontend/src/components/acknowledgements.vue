@@ -6,11 +6,6 @@
     </div>
     <div class="acknowledgements__list">
       <ul>
-        <li><a href="https://www.npmjs.com/package/file-system" target="_blank">file-system package</a></li>
-        Copyright (c) 2004-2010 by Internet Systems Consortium, Inc. ("ISC") 
-        Copyright (c) 1995-2003 by Internet Software Consortium
-
-        Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted, provided that the above copyright notice and this permission notice appear in all copies.
         <li><a href="https://www.npmjs.com/package/http" target="_blank">http package</a></li>
         Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
         Copyright (c) 2014 yuanyan. All rights reserved.

@@ -4,8 +4,6 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import io from 'socket.io';
 import http from 'http';
-import fs from 'file-system';
-import zip from 'adm-zip';
 import moment from 'moment';
 import uuid from 'uuid/v4';
 import migrations from '../db-migrations';
@@ -189,20 +187,6 @@ app.post('/api/2.0/projects/create-project', async (req, res) => {
   // generate a new id for this project
   let id = uuid();
   
-  // save the project archive in the projects folder
-  fs.writeFileSync('./projects/' + filename, file, 'base64');
-  
-  // extract the project files
-  let zipFile = new zip('./projects/' + filename);
-  zipFile.extractAllTo('./projects/' + id + '/' + projectData.name.replace(/ /g,''), true);
-  
-  // remove zip file
-  fs.unlink('./projects/' + filename, (err) => {
-    if (err) {
-      console.log(err);
-    }
-  });
-  
   // get the author's name to store in the db
   const userResponse = await dbService.query('SELECT name FROM users WHERE id=\'' + projectData.userId + '\';');
   const author = userResponse.rows[0].name;
@@ -214,11 +198,28 @@ app.post('/api/2.0/projects/create-project', async (req, res) => {
   // repository data to be used by GitHub
   const repoData = {
     id: id,
+    description: projectData.description,
+    userId: projectData.userId,
   };
   
   // creates the project repository on GitHub
-  const githubResponse = await githubService.createRepo(repoData, projectData.userId);
-  const githubUrl = githubResponse.data.html_url;
+  const repoCreationResponse = await githubService.createRepo(repoData);
+  const githubUrl = repoCreationResponse.data.html_url;
+  const owner = repoCreationResponse.data.owner.login;
+  
+  // commit data to be used by GitHub
+  const commitData = {
+    owner: owner,
+    repo: id,
+    path: filename,
+    message: 'Initial commit',
+    content: file,
+    branch: 'master',
+    userId: projectData.userId
+  };
+  
+  // add project zip file to the GitHub repository
+  const commitResponse = await githubService.commitFileToRepo(commitData);
   
   // project data to be saved to database
   const metadata = {
