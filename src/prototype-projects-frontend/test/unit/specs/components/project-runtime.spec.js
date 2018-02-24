@@ -42,12 +42,7 @@ describe('ProjectRuntime', () => {
         projectRuntime.term = null;
         projectRuntime.projectRunning = false;
         projectRuntime.$refs = {
-          overlay: {
-            style: {
-              visibility: 'visible',
-              opacity: '0.9',
-            }  
-          }, terminal: divMock,
+          terminal: divMock,
         };
         projectRuntime.$socket = {
           emit: () => null,
@@ -58,8 +53,6 @@ describe('ProjectRuntime', () => {
         projectRuntime.runProject();
         
         // ASSERT
-        expect(projectRuntime.$refs.overlay.style.visibility).to.equal('hidden');
-        expect(projectRuntime.$refs.overlay.style.opacity).to.equal('1');
         expect(projectRuntime.projectRunning).to.equal(true);
         expect(projectRuntime.$socket.emit).to.have.been.calledWith('start', projectDataMock.project_id);
       });
@@ -67,13 +60,20 @@ describe('ProjectRuntime', () => {
   });
   
   describe('created', () => {
-    it('should get the project data based on project id', async () => {
+    it('should get the project data based on project id and call runProject()', async () => {
       // ARRANGE
       let projectRuntime = vueUnitHelper(projectRuntimeMock);
+      const divMock = document.createElement('div');
       projectRuntime.$route = {
         params: {
           id: '1234-5678',
         },
+      };
+      projectRuntime.$refs = {
+        terminal: divMock,
+      };
+      projectRuntime.$socket = {
+        emit: () => null,
       };
       const projectDataMock = {
         body: {
@@ -92,12 +92,14 @@ describe('ProjectRuntime', () => {
         },
       };
       projectServiceMock.getProjectById.withArgs('1234-5678').returns(Promise.resolve(projectDataMock));
+      sandbox.spy(projectRuntime, 'runProject');
       
       // ACT
       await projectRuntime.$lifecycleMethods.created();
       
       // ASSERT
       expect(projectRuntime.projectData).to.equal(projectDataMock.body);
+      expect(projectRuntime.runProject).to.have.been.calledOnce;
     });
   });
 });

@@ -11,7 +11,6 @@
 <style scoped lang="less">
   .common-footer {
     padding: 10px;
-    margin-top: 20px;
     font-size: 0.85em;
     background-color: #d9d9d9;
     border-top: 2px solid #bfbfbf;

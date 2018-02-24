@@ -242,6 +242,19 @@ app.post('/api/2.0/projects/create-project', async (req, res) => {
   res.send('successful project creation');
 });
 
+// deletes the project with the given id
+app.post('/api/2.0/projects/delete-project', async (req, res) => {
+  // log api call
+  console.log('POST /api/2.0/projects/delete-project with ');
+  console.log(req.body);
+  
+  // set deleted_at for this project to the current time (soft delete)
+  dbService.query('UPDATE projects SET deleted_at = \'' + moment().toISOString() + '\' WHERE project_id = \'' + req.body.projectId + '\';');
+  
+  // respond
+  res.send('successful project deletion');
+});
+
 // mock of the Zen login API call for my prototype (disregards password since it's just a mock)
 app.post('/api/2.0/users/login', async (req, res) => {
   // log api call
