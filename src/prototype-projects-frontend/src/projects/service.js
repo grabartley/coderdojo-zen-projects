@@ -7,6 +7,8 @@ const projectService = {
   getAllProjectData: () => Vue.http.get(`${Vue.config.apiServer}/api/2.0/projects/all-project-data`),
   // creates a new project
   createProject: fileData => Vue.http.post(`${Vue.config.apiServer}/api/2.0/projects/create-project`, fileData),
+  // deletes a project given it's id
+  deleteProjectById: projectId => Vue.http.post(`${Vue.config.apiServer}/api/2.0/projects/delete-project`, {projectId: projectId}),
 };
 
 export default projectService;

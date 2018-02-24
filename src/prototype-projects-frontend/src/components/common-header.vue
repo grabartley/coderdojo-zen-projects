@@ -36,7 +36,6 @@
   .common-header {
     display: flex;
     padding: 20px;
-    margin-bottom: 20px;
     background-color: #d9d9d9;
     border-bottom: 2px solid #bfbfbf;
     &__project-list {

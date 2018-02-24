@@ -1,8 +1,5 @@
 <template>
   <div class="project-runtime">
-    <div class="project-runtime__overlay" ref="overlay">
-      <button id="runtime-overlay-runButton" @click="runProject()">Run Project</button>
-    </div>
     <div v-if="projectData" class="project-runtime__header">{{ projectData.name }}</div>
     <div class="project-runtime__terminal" ref="terminal"></div>
   </div>
@@ -33,9 +30,6 @@ export default {
   },
   methods: {
     runProject() {
-      this.$refs.overlay.style.visibility = 'hidden';
-      this.$refs.overlay.style.opacity = '1';
-      
       // instansiate the terminal
       this.term = new Terminal({
         cursorBlink: true,
@@ -61,43 +55,13 @@ export default {
   },
   async created() {
     this.projectData = (await projectService.getProjectById(this.$route.params.id)).body;
+    this.runProject();
   },
 }
 </script>
 
 <style scoped lang="less">
   .project-runtime {
-    &__overlay {
-      opacity: 0.9;
-      background-color: black;
-      position: fixed;
-      padding: 0;
-      margin: 0;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 1;
-      text-align: center;
-      transition: opacity 0.5s linear;
-      
-      & button {
-        color: white;
-        margin-top: 460px;
-        border: none;
-        font-size: 2em;
-        font-weight: bold;
-        background-color: #0066cc;
-        padding: 20px 30px;
-        border-radius: 20px;
-        
-        &:hover {
-          background-color: #1a8cff;
-          cursor: pointer;
-        }
-      }
-    }
-    
     &__header {
       font-size: 2em;
       font-weight: 300;
