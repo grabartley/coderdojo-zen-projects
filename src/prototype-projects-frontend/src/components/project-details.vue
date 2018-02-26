@@ -10,7 +10,9 @@
         <div class="project-details__information-sidebar-item">Created at: {{ projectData.created_at }}</div>
       </div>
       <div class="project-details__information-content">
-        <button v-if="currentUser" @click="deleteProject()">Delete Project</button>
+        <div v-if="currentUser" class="project-details__information-content-control">
+          <button class="primary-button" @click="editProject()">Edit Project</button>
+        </div>
         <div>{{ projectData.description }}</div>
         <router-link :to="{ name: 'ProjectRuntime', params: { id: projectData.project_id } }">Run the project</router-link>
       </div>
@@ -29,9 +31,8 @@
       };
     },
     methods: {
-      async deleteProject() {
-        await projectService.deleteProjectById(this.projectData.project_id);
-        this.$router.push('/');
+      editProject() {
+        this.$router.push(`/edit-project/${this.projectData.project_id}`);
       },
     },
     async created() {
@@ -74,17 +75,9 @@
       &-content {
         flex: 6;
         padding: 20px 10px 10px 10px;
-        & button {
+        
+        &-control {
           float: right;
-          padding: 10px;
-          border-radius: 10px;
-          color: white;
-          font-weight: bold;
-          background-color: red;
-          &:hover {
-            cursor: pointer;
-            background-color: #ff5c33;
-          }
         }
       }
     }

@@ -7,11 +7,10 @@ let GITHUB_REST_API;
 let API_TOKEN;
 let USER_AGENT;
 
-// TODO: Should not use user id anymore to get access token
 // sets up objects to use when making API calls using access token of the given user
-async function setupApiWithAccess(userId) {
+async function setupApiWithAccess(dojoId) {
   // get the access token for this user
-  const tokenResponse = await dbService.query('SELECT github_access_token FROM github_integrations WHERE user_id=\'' + userId + '\';');
+  const tokenResponse = await dbService.query('SELECT github_access_token FROM github_integrations WHERE dojo_id=\'' + dojoId + '\';');
   API_TOKEN = tokenResponse.rows[0].github_access_token;
   
   // set up the object for v4 API calls
@@ -57,7 +56,7 @@ async function getAccessToken(githubData) {
 
 // creates a repository for the given project data
 async function createRepo(repoData) {
-  await setupApiWithAccess(repoData.userId);
+  await setupApiWithAccess(repoData.dojoId);
   
   // data to be used in the API call
   const apiRepoData = {
@@ -71,18 +70,36 @@ async function createRepo(repoData) {
 
 // pushes a commit to a repository based on given commit data
 async function commitFileToRepo(commitData) {
-  await setupApiWithAccess(commitData.userId);
+  await setupApiWithAccess(commitData.dojoId);
+  // get the owner of the repo
+  const owner = GITHUB_REST_API.defaults.headers['User-Agent'];
   
   // endpoint to hit
-  const apiEndpoint = '/repos/' + commitData.owner + '/' + commitData.repo + '/contents/' + commitData.path;
+  const apiEndpoint = '/repos/' + owner + '/' + commitData.repo + '/contents/' + commitData.path;
+  let apiCommitData;
   
-  // data to be used in the API call
-  const apiCommitData = {
-    path: commitData.path,
-    message: commitData.message,
-    content: commitData.content,
-    branch: commitData.branch
-  };
+  // if the file already exists
+  const fileResponse = await GITHUB_REST_API.get(apiEndpoint);
+  if (fileResponse.data.sha) {
+    // get sha of the file being updated
+    const sha = fileResponse.data.sha;
+    // data to be used in the API call
+    apiCommitData = {
+      path: commitData.path,
+      message: commitData.message,
+      content: commitData.content,
+      branch: commitData.branch,
+      sha: sha,
+    };
+  } else {
+    // data to be used in the API call
+    apiCommitData = {
+      path: commitData.path,
+      message: commitData.message,
+      content: commitData.content,
+      branch: commitData.branch,
+    };
+  }
   
   return GITHUB_REST_API.put(apiEndpoint, apiCommitData);
 }

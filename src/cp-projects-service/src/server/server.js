@@ -199,7 +199,7 @@ app.post('/api/2.0/projects/create-project', async (req, res) => {
   const repoData = {
     id: id,
     description: projectData.description,
-    userId: projectData.userId,
+    dojoId: projectData.dojoId,
   };
   
   // creates the project repository on GitHub
@@ -209,17 +209,16 @@ app.post('/api/2.0/projects/create-project', async (req, res) => {
   
   // commit data to be used by GitHub
   const commitData = {
-    owner: owner,
     repo: id,
     path: filename,
     message: 'Initial commit',
     content: file,
     branch: 'master',
-    userId: projectData.userId
+    dojoId: projectData.dojoId
   };
   
   // add project zip file to the GitHub repository
-  const commitResponse = await githubService.commitFileToRepo(commitData);
+  await githubService.commitFileToRepo(commitData);
   
   // project data to be saved to database
   const metadata = {
@@ -242,6 +241,65 @@ app.post('/api/2.0/projects/create-project', async (req, res) => {
   res.send('successful project creation');
 });
 
+// updates a project with the given projectData
+app.post('/api/2.0/projects/update-project', async (req, res) => {
+  // log api call
+  console.log('POST /api/2.0/projects/update-project with ');
+  console.log(req.body);
+  
+  // get project data
+  const projectData = req.body;
+  
+  // if updating the database
+  if (projectData.columns) {
+    // construct db query string and values
+    let queryString = 'UPDATE projects SET';
+    let queryValues = projectData.values;
+    
+    // for each column to be updated, add it to the query string
+    for (let i = 0; i < projectData.columns.length; i++) {
+      let columnName = projectData.columns[i];
+      queryString += ' ' + columnName + ' = $' + (i + 1) + ',';
+    }
+    queryString = queryString.substring(0, queryString.length - 1);
+    queryString += ' WHERE project_id = \'' + projectData.projectId + '\';';
+    
+    // construct query object
+    const query = {
+      text: queryString,
+      values: queryValues,
+    };
+    
+    // execute query
+    await dbService.query(query);
+  }
+  
+  // if updating project files
+  if (projectData.file) {
+    // remove header information from file data
+    let content = projectData.file.split(',');
+    content = content[1];
+    
+    const dojoId = (await dbService.query('SELECT dojo_id FROM github_integrations WHERE github_integration_id = \'' + projectData.githubIntegrationId + '\';')).rows[0].dojo_id;
+    
+    // commit data to be used by GitHub
+    const commitData = {
+      repo: projectData.projectId,
+      path: projectData.filename,
+      message: 'Update ' + projectData.filename,
+      content: content,
+      branch: 'master',
+      dojoId: dojoId,
+    };
+    
+    // commit zip file to the GitHub repository
+    await githubService.commitFileToRepo(commitData);
+  }
+  
+  // respond
+  res.send('successful project update');
+});
+
 // deletes the project with the given id
 app.post('/api/2.0/projects/delete-project', async (req, res) => {
   // log api call
@@ -249,7 +307,7 @@ app.post('/api/2.0/projects/delete-project', async (req, res) => {
   console.log(req.body);
   
   // set deleted_at for this project to the current time (soft delete)
-  dbService.query('UPDATE projects SET deleted_at = \'' + moment().toISOString() + '\' WHERE project_id = \'' + req.body.projectId + '\';');
+  await dbService.query('UPDATE projects SET deleted_at = \'' + moment().toISOString() + '\' WHERE project_id = \'' + req.body.projectId + '\';');
   
   // respond
   res.send('successful project deletion');

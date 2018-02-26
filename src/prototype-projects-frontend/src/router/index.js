@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import ProjectList from '@/components/project-list';
 import ProjectDetails from '@/components/project-details';
+import EditProject from '@/components/edit-project';
 import ProjectCreationForm from '@/components/project-creation-form';
 import ProjectRuntime from '@/components/project-runtime';
 import Acknowledgements from '@/components/acknowledgements';
@@ -24,6 +25,11 @@ export default new Router({
       path: '/project/:projectId',
       name: 'ProjectDetails',
       component: ProjectDetails,
+    },
+    {
+      path: '/edit-project/:projectId',
+      name: 'EditProject',
+      component: EditProject,
     },
     {
       path: '/create-project',
