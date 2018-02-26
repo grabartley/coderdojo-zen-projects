@@ -53,6 +53,22 @@ describe('ProjectService', () => {
       expect(result).to.equal('expectedResponse');
     });
   });
+  describe('updateProject', () => {
+    it('should make the correct API call', async () => {
+      // ARRANGE
+      sandbox.stub(Vue.http, 'post');
+      const projectDataMock = {
+        file: 'fileData',
+      };
+      Vue.http.post.withArgs(`${Vue.config.apiServer}/api/2.0/projects/update-project`, projectDataMock).returns(Promise.resolve('expectedResponse'));
+      
+      // ACT
+      let result = await ProjectService.updateProject(projectDataMock);
+      
+      // ASSERT
+      expect(result).to.equal('expectedResponse');
+    });
+  });
   describe('deleteProjectById', () => {
     it('should make the correct API call', async () => {
       // ARRANGE

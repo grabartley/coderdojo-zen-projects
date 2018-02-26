@@ -46,10 +46,4 @@ export default {
 }
 </script>
 
-<style scoped lang="less">
-  .project-list {
-    &__footer {
-      margin-top: 50px;
-    }
-  }
-</style>
+<style scoped lang="less"></style>

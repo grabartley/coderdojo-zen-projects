@@ -9,7 +9,6 @@ describe('ProjectDetails', () => {
     sandbox = sinon.sandbox.create();
     projectServiceMock = {
       getProjectById: sinon.stub(),
-      deleteProjectById: sinon.stub(),
     };
     projectDetailsWithMocks = ProjectDetails({
       '@/projects/service': projectServiceMock,
@@ -19,41 +18,23 @@ describe('ProjectDetails', () => {
     sandbox.restore();
   });
   describe('methods', () => {
-    describe('deleteProject', () => {
-      it('should make the API call to delete the project and then redirect the user', async () => {
+    describe('editProject', () => {
+      it('should redirect the user to edit this project', () => {
         // ARRANGE
-        let projectDetails = vueUnitHelper(projectDetailsWithMocks);
-        const projectIdMock = '1234-5678';
+        let projectDetails = vueUnitHelper(ProjectDetails());
         projectDetails.projectData = {
-          project_id: projectIdMock,
-          name: 'Test Project',
-          type: 'python',
-          entrypoint: 'TestProject.py',
-          description: 'A test project.',
-          github: 'https://github.com/championone/1234-5678',
-          created_at: '2018-02-21T16:02:14.821Z',
-          updated_at: null,
-          author: 'Champion One',
-          user_id: '5678-1234',
-          github_integration_id: '8765-4321',
-          deleted_at: null,
+          project_id: '1234-5678',
         };
         projectDetails.$router = {
-          push: () => null,
+          push: () => null
         };
-        projectServiceMock.deleteProjectById.withArgs(projectIdMock).returns(Promise.resolve({
-          body: {
-            response: 'delete successful',
-          }
-        }));
         sandbox.spy(projectDetails.$router, 'push');
         
         // ACT
-        await projectDetails.deleteProject();
+        projectDetails.editProject();
         
         // ASSERT
-        expect(projectServiceMock.deleteProjectById).to.have.been.calledWith(projectIdMock);
-        expect(projectDetails.$router.push).to.have.been.calledWith('/');
+        expect(projectDetails.$router.push).to.have.been.calledWith('/edit-project/1234-5678');
       });
     });
   });

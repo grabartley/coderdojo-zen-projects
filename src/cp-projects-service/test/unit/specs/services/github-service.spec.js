@@ -38,7 +38,7 @@ describe('GitHubService', () => {
       const repoDataMock = {
         id: '5678-1234',
         description: 'A test project.',
-        userId: '1234-5678',
+        dojoId: '1234-5678',
       };
       const apiRepoDataMock = {
         name: '5678-1234',
@@ -79,7 +79,7 @@ describe('GitHubService', () => {
         },
         './db-service': {
           query: async (queryString) => {
-            if (queryString === 'SELECT github_access_token FROM github_integrations WHERE user_id=\'' + repoDataMock.userId + '\';') {
+            if (queryString === 'SELECT github_access_token FROM github_integrations WHERE dojo_id=\'' + repoDataMock.dojoId + '\';') {
               return Promise.resolve({
                 rows: [
                   {
@@ -101,23 +101,23 @@ describe('GitHubService', () => {
     }).timeout(10000);
   });
   describe('commitFileToRepo', () => {
-    it('should push a commit to a repository based on given commit data', async () => {
+    it('should push a commit to a repository to create a new file', async () => {
       // ARRANGE
+      const ownerMock = 'championone';
       const commitDataMock = {
-        owner: 'championone',
         repo: '5678-1234',
         path: 'TestProject.zip',
         message: 'Initial commit',
         content: 'fileData',
         branch: 'master',
-        userId: '1234-5678'
+        dojoId: '1234-5678'
       };
-      const apiEndpointMock = '/repos/' + commitDataMock.owner + '/' + commitDataMock.repo + '/contents/' + commitDataMock.path;
-      const apiCommitData = {
+      const expectedApiEndpoint = '/repos/' + ownerMock + '/' + commitDataMock.repo + '/contents/' + commitDataMock.path;
+      const expectedApiCommitData = {
         path: commitDataMock.path,
         message: commitDataMock.message,
         content: commitDataMock.content,
-        branch: commitDataMock.branch
+        branch: commitDataMock.branch,
       };
       const dependencyMocks = {
         'node-github-graphql': () => {
@@ -136,8 +136,24 @@ describe('GitHubService', () => {
         'axios': {
           create: (config) => {
             return {
+              defaults: {
+                headers: {
+                  'User-Agent': ownerMock,
+                },
+              },
+              get: (route) => {
+                if (route === expectedApiEndpoint) {
+                  return Promise.resolve({
+                    data: {
+                      message: 'Not Found',
+                    }
+                  });
+                } else {
+                  return Promise.resolve();
+                }
+              },
               put: (route, data) => {
-                if (route === apiEndpointMock && JSON.stringify(data) === JSON.stringify(apiCommitData)) {
+                if (route === expectedApiEndpoint && JSON.stringify(data) === JSON.stringify(expectedApiCommitData)) {
                   return Promise.resolve({
                     catch: () => null,
                     statusCode: '200',
@@ -154,7 +170,98 @@ describe('GitHubService', () => {
         },
         './db-service': {
           query: async (queryString) => {
-            if (queryString === 'SELECT github_access_token FROM github_integrations WHERE user_id=\'' + commitDataMock.userId + '\';') {
+            if (queryString === 'SELECT github_access_token FROM github_integrations WHERE dojo_id=\'' + commitDataMock.dojoId + '\';') {
+              return Promise.resolve({
+                rows: [
+                  {
+                    github_access_token: '8765-4321',
+                  },
+                ],
+              });
+            }
+          },
+        },
+      };
+      const GitHubServiceMock = proxyquire('../../../../src/services/github-service', dependencyMocks);
+      
+      // ACT
+      const response = await GitHubServiceMock.commitFileToRepo(commitDataMock);
+      
+      // ASSERT
+      expect(response.statusCode).to.equal('200');
+    }).timeout(10000);
+    it('should push a commit to a repository to update an existing file', async () => {
+      // ARRANGE
+      const ownerMock = 'championone';
+      const shaMock = '5678-4321';
+      const commitDataMock = {
+        repo: '5678-1234',
+        path: 'TestProject.zip',
+        message: 'Initial commit',
+        content: 'fileData',
+        branch: 'master',
+        dojoId: '1234-5678'
+      };
+      const expectedApiEndpoint = '/repos/' + ownerMock + '/' + commitDataMock.repo + '/contents/' + commitDataMock.path;
+      const expectedApiCommitData = {
+        path: commitDataMock.path,
+        message: commitDataMock.message,
+        content: commitDataMock.content,
+        branch: commitDataMock.branch,
+        sha: shaMock
+      };
+      const dependencyMocks = {
+        'node-github-graphql': () => {
+          return {
+            query: async (graphQlQuery) => {
+              return Promise.resolve({
+                data: {
+                  viewer: {
+                    login: 'championone',
+                  },
+                },
+              });
+            },
+          };
+        },
+        'axios': {
+          create: (config) => {
+            return {
+              defaults: {
+                headers: {
+                  'User-Agent': ownerMock,
+                },
+              },
+              get: (route) => {
+                if (route === expectedApiEndpoint) {
+                  return Promise.resolve({
+                    data: {
+                      sha: shaMock,
+                    }
+                  });
+                } else {
+                  return Promise.resolve();
+                }
+              },
+              put: (route, data) => {
+                if (route === expectedApiEndpoint && JSON.stringify(data) === JSON.stringify(expectedApiCommitData)) {
+                  return Promise.resolve({
+                    catch: () => null,
+                    statusCode: '200',
+                  });
+                } else {
+                  return Promise.resolve({
+                    catch: () => null,
+                    statusCode: '404',
+                  });
+                }
+              },
+            };
+          },
+        },
+        './db-service': {
+          query: async (queryString) => {
+            if (queryString === 'SELECT github_access_token FROM github_integrations WHERE dojo_id=\'' + commitDataMock.dojoId + '\';') {
               return Promise.resolve({
                 rows: [
                   {
