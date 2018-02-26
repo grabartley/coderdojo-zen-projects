@@ -4,6 +4,86 @@
 
 ****
 
+## Database Set Up, Project Update and Deletion & Basic Styling
+#### 26th February 2018
+
+Since my last post I have been working on **setting up a PostgreSQL database** to replace the file system approach to data storage that I was using previously. This involved initialising the database, writing a migration for it, running the migration when the microservice starts, allowing the microservice to interact with the database and replacing all existing file system calls with equivalent or improved database calls. During this process I went through **several iterations** of the migration until settling on one that made the most sense for what I am doing. There are four tables created in this migration which are as follows:
+
+  * **users:** a basic mock of the existing Zen users database main table
+  * **dojos:** a basic mock of the existing Zen dojos database main table
+  * **github_integrations:** a new entity to represent a GitHub integration
+  * **projects:** a new table used to store project data
+
+I have included basic **mocks of users and dojos** because my prototype will need to handle both without access to Zen's databases. A **GitHub integration** here represents a relationship between a user, a dojo and a GitHub access token. This relationship has it's own unique id which I generate and store alongside them. I had to rework a lot of the existing code to work around this since I had been storing the access token as part of the user data before. I believe this new approach will be **much more appropriate** since a single user could potentially be a champion of multiple Dojos and so may be linked to multiple access tokens. The **projects table** stores the project information which was previously being stored in project-data.json per project and also includes a link to the user who owns the project via their user id and the GitHub integration entity it uses via a GitHub integration id. Below is the described migration file.
+
+**001.do.init.sql**
+```sql
+-- tmp table for prototype
+CREATE TABLE IF NOT EXISTS users (
+  id varchar NOT NULL,
+  email varchar,
+  name varchar,
+  dojos varchar[],
+  PRIMARY KEY (id)
+);
+
+-- tmp table for prototype
+CREATE TABLE IF NOT EXISTS dojos (
+  id varchar NOT NULL,
+  name varchar,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS github_integrations (
+  github_integration_id varchar NOT NULL,
+  user_id varchar NOT NULL,
+  dojo_id varchar NOT NULL,
+  github_access_token varchar,
+  PRIMARY KEY (github_integration_id),
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (dojo_id) REFERENCES dojos(id)
+);
+
+CREATE TABLE IF NOT EXISTS projects (
+  project_id varchar NOT NULL,
+  name varchar,
+  type varchar,
+  entrypoint varchar,
+  description varchar,
+  github varchar,
+  created_at timestamp,
+  updated_at timestamp,
+  author varchar,
+  user_id varchar NOT NULL,
+  github_integration_id varchar,
+  deleted_at timestamp,
+  PRIMARY KEY (project_id),
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (github_integration_id) REFERENCES github_integrations(github_integration_id)
+);
+```
+
+Once I had my prototype **"talking"** to my database happily I moved on to the next items on the backlog: **project update and deletion** and further **fleshing out the GitHub integration**. I started by modifying the project creation code so that uploaded **code is now pushed to the automatically created repository** for each project. With this working I was able to then **pull project code** within the runtime scripts in order to run it so that the project code is never actually stored locally on the server itself which allowed me to remove some file-related dependencies (file-system and adm-zip) which I was using for this purpose before. At present the project files are being uploaded to GitHub in their **zipped format** and then unzipped within the runtime scripts. I would prefer to unzip them prior to uploading them to GitHub but the GitHub API seems to allow for committing of one file at a time. I will need to look into this further but I would like to upload all files in the project after they've been unzipped in the future if it seems reasonable.
+
+With this working I was able to move on to updating and deleting projects. For project deletion I went with a **soft delete** approach whereby I simply store a timestamp value with the project data which represents when it was deleted, the frontend then only displays projects which don't contain this value. The advantage to this approach is that the project data still exists for **statistical reasons** and should it ever need to be **restored**. Project update proved to be a lot more challenging. I created a new "Edit Project" page which allows the owner of a project to edit the following properties:
+
+  * name
+  * description
+  * entrypoint
+  * files
+  
+The first three are fairly simple updates to the projects table in the database for that specific project but **updating files is more complicated**. I have given the user the facility to upload another zip file which I then commit to the existing repository for this project. If a zip file with the same name as the one being uploaded exists in the repository then it will be updated, otherwise a new file will be created. This causes some problems though since the runtime scripts unzip all code that they pull from GitHub which **potentially means conflicts** in unzipping two versions of a project which have different zip file names and thus having conflicting files merging/overwriting each other. This is something **I am still working on resolving** but where the zip files have the same name, the update works.
+
+Alongside these changes I made multiple **changes to frontend workflows** including OAuth, project creation and project listing. The "Project List" now displays links to "Project Details" pages which are a new page I created to contain information for any given project. The **runtime links** are now located on these pages and project owners can get to the "Edit Project" page through a **new button** on them. The "Edit Project" page also contains a **button to delete the project**. The project creation form now asks for a **Dojo input** in order to link a project to a particular GitHub integration associated with that Dojo. The list of Dojos offered is generated based on the Dojos that the owner of the project is part of. 
+
+I have also added **common header and footer** components which wrap around all pages of the prototype. These offer links to **login, logout, project list and acknowledgements** which are useful for the prototype. During integration they will be replaced with the existing Zen header and footer. I made a lot of **basic styling changes** to accompany these frontend changes which make the prototype easier and more pleasant to use while giving me an idea of what the styled prototype might look like.
+
+With regard to the **actual designs** for the frontend, I am in the process of seeking **ethical approval** to carry out user evaluations of my User Interface mockups which I hope to carry out with some of the **Ninjas at CoderDojo DCU on the 10th of March**. I have spoken to the organisers of that Dojo where I volunteer as a mentor every Saturday and they have allowed me to carry this out provided I have consent of the Ninjas taking part which I will ask them for once I have ethical approval. I am hoping that getting **user feedback** from these youths who are the **target users** of my project will be very beneficial in learning more about what they would like from it and how suitable my existing mockups are.
+
+As a final note, I have been keeping my eye on news of **Scratch 3** since runtime support for it has been a possible stretch goal of the project since it began. Unfortunately, I recently seen that Scratch 3 is confirmed to be scheduled for an **August 2018** release date which will be far **out of the schedule** of this project and so I will **not** be able to support it. However, another possible stretch goal is Java support which seems **entirely possible** given the work I have already done so I will hopefully be able to support Java provided I finish my prototype in time.
+
+****
+
 ## GitHub OAuth Complete, Unit Testing & Continuous Integration
 #### 17th February 2018
 
