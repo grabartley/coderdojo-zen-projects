@@ -36,17 +36,15 @@
   .common-header {
     display: flex;
     padding: 20px;
-    background-color: #d9d9d9;
-    border-bottom: 2px solid #bfbfbf;
+    background-color: #eee;
     &__project-list {
       flex: 2;
       margin-left: 50px;
       text-align: left;
     }
     &__title {
-      font-size: 1.5em;
+      font-size: 24px;
       font-weight: bold;
-      color: #9966ff;
     }
     &__login {
       flex: 2;

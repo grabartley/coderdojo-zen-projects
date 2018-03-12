@@ -1,11 +1,20 @@
 <template>
   <div class="project-creation-form">
-    <h2>Create a Project</h2>
-    <form>
-      <project-details-form ref="projectDetailsFormRef"></project-details-form>
-      <project-files-form ref="projectFilesFormRef"></project-files-form>
-    </form>
-    <button @click="createProject()">Create Project</button>
+    <div class="project-creation-form__header">
+      <span class="project-creation-form__header-image">
+        <img src="@/assets/cd-logo.png" alt="CoderDojo Logo"></img>
+      </span>
+      <span class="project-creation-form__header-title">
+        New Project
+      </span>
+    </div>
+    <div class="project-creation-form__content">
+      <form>
+        <project-details-form ref="projectDetailsFormRef"></project-details-form>
+        <project-files-form ref="projectFilesFormRef"></project-files-form>
+      </form>
+      <button class="project-creation-form__content-button primary-button" @click="createProject()">Create Project</button>
+    </div>
   </div>
 </template>
 <script>
@@ -50,4 +59,27 @@ export default {
 }
 </script>
 <style scoped lang="less">
+  .project-creation-form {
+    &__header {
+      display: flex;
+      padding: 15px 20px;
+      margin-bottom: 30px;
+      background-color: #73449B;
+      align-items: center;
+      &-image img {
+        width: 65px;
+        height: 65px;
+      }
+      &-title {
+        margin-left: 16px;
+        color: white;
+        font-size: 30px;
+      }
+    }
+    &__content {
+      &-button {
+        margin-top: 20px;
+      }
+    }
+  }
 </style>

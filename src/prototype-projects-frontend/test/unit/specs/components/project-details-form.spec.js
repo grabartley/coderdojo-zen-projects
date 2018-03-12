@@ -57,7 +57,6 @@ describe('ProjectDetailsForm', () => {
         let projectDetailsForm = vueUnitHelper(ProjectDetailsForm());
         projectDetailsForm.projectName = 'Test Project';
         projectDetailsForm.projectType = 'python';
-        projectDetailsForm.projectEntrypoint = 'test.py';
         projectDetailsForm.projectDescription = 'A test project.';
         projectDetailsForm.dojoId = '1234-5678';
         sandbox.spy(window.sessionStorage, 'setItem');
@@ -68,7 +67,6 @@ describe('ProjectDetailsForm', () => {
         // ASSERT
         expect(window.sessionStorage.setItem).to.have.been.calledWith('projectName', 'Test Project');
         expect(window.sessionStorage.setItem).to.have.been.calledWith('projectType', 'python');
-        expect(window.sessionStorage.setItem).to.have.been.calledWith('projectEntrypoint', 'test.py');
         expect(window.sessionStorage.setItem).to.have.been.calledWith('projectDescription', 'A test project.');
         expect(window.sessionStorage.setItem).to.have.been.calledWith('dojoId', '1234-5678');
       });
@@ -101,6 +99,39 @@ describe('ProjectDetailsForm', () => {
       expect(projectDetailsForm.loggedInUser).to.equal('1234-5678');
       expect(dojoServiceMock.getUsersDojos).to.have.been.calledWith('1234-5678');
       expect(projectDetailsForm.usersDojos).to.deep.equal(usersDojosResponseMock.body);
+    });
+  });
+  
+  describe('watch', () => {
+    describe('projectType', () => {
+      it('should update booleans based on selected type', () => {
+        // ARRANGE
+        const projectDetailsForm = vueUnitHelper(ProjectDetailsForm());
+        
+        // ACT
+        projectDetailsForm.$watchers.projectType('python', null);
+        
+        // ASSERT
+        expect(projectDetailsForm.isPythonSelected).to.be.true;
+        expect(projectDetailsForm.isNodeJSSelected).to.be.false;
+        expect(projectDetailsForm.isHTMLSelected).to.be.false;
+        
+        // ACT
+        projectDetailsForm.$watchers.projectType('javascript', null);
+        
+        // ASSERT
+        expect(projectDetailsForm.isPythonSelected).to.be.false;
+        expect(projectDetailsForm.isNodeJSSelected).to.be.true;
+        expect(projectDetailsForm.isHTMLSelected).to.be.false;
+        
+        // ACT
+        projectDetailsForm.$watchers.projectType('html', null);
+        
+        // ASSERT
+        expect(projectDetailsForm.isPythonSelected).to.be.false;
+        expect(projectDetailsForm.isNodeJSSelected).to.be.false;
+        expect(projectDetailsForm.isHTMLSelected).to.be.true;
+      });
     });
   });
 });

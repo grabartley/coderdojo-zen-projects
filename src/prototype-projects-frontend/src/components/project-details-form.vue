@@ -1,34 +1,85 @@
 <template>
   <div class="project-details-form">
-    <h3>Enter Project Information</h3>
-    <label>Project name</label>
-    <input v-validate.initial="'required'" v-model="projectName" name="project name"></input>
-    <div class="error-message" v-show="isFormValidated && errors.has('project name')">{{ errors.first('project name') }}</div>
-    <label>Project type</label>
-    <label>
-      <input v-validate.initial="'required'" v-model="projectType" name="project type" type="radio" value="python"></input>
-      Python
-    </label>
-    <label>
-      <input v-model="projectType" name="project type" type="radio" value="javascript"></input>
-      JavaScript
-    </label>
-    <label>
-      <input v-model="projectType" name="project type" type="radio" value="html"></input>
-      HTML/CSS/JavaScript
-    </label>
-    <div class="error-message" v-show="isFormValidated && errors.has('project type')">{{ errors.first('project type') }}</div>
-    <label>Project entrypoint</label>
-    <input v-validate.initial="{ required: true, regex: /^([a-zA-Z0-9\-\_])+\.([a-zA-Z])+$/ }" v-model="projectEntrypoint" name="project entrypoint"></input>
-    <div class="error-message" v-show="isFormValidated && errors.has('project entrypoint')">{{ errors.first('project entrypoint') }}</div>
-    <label>Project description</label>
-    <input v-validate.initial="'required'" v-model="projectDescription" name="project description"></input>
-    <div class="error-message" v-show="isFormValidated && errors.has('project description')">{{ errors.first('project description') }}</div>
-    <label>Dojo</label>
-    <select v-validate.initial="'required'" v-model="dojoId" name="Dojo">
-      <option v-for="dojo in usersDojos" :value="dojo.id">{{ dojo.name }}</option>
-    </select>
-    <div class="error-message" v-show="isFormValidated && errors.has('Dojo')">{{ errors.first('Dojo') }}</div>
+    <div class="project-details-form__section">
+      <div class="project-details-form__section-title">
+        Project Information
+      </div>
+      <div class="project-details-form__section-subtitle">
+        Tell us what your project is about!
+      </div>
+      <div class="project-details-form__section-content">
+        <div class="project-details-form__section-content-input">
+          <div class="project-details-form__section-content-input-name">
+            <label>Project Name</label>
+          </div>
+          <div class="project-details-form__section-content-input-field">
+            <input v-validate.initial="'required'" v-model="projectName" name="project name"></input>
+          </div>
+        </div>
+        <div class="project-details-form__section-content-error">
+          <div class="error-message" v-show="isFormValidated && errors.has('project name')">{{ errors.first('project name') }}</div>
+        </div>
+        <div class="project-details-form__section-content-input">
+          <div class="project-details-form__section-content-input-name">
+            <label>Project Type</label>
+          </div>
+          <div class="project-details-form__section-content-input-field">
+            <label>
+              <input v-validate.initial="'required'" v-model="projectType" name="project type" type="radio" value="python"></input>
+              <div class="project-details-form__section-content-input-field-bubble">
+                <img src="@/assets/python-logo.png" alt="Python Logo" class="project-details-form__section-content-input-field-bubble-image" v-bind:class="{ 'project-details-form__section-content-input-field-bubble-image-selected': isPythonSelected }"></img>
+                <label class="project-details-form__section-content-input-field-bubble-text">Python 3</label>
+              </div>
+            </label>
+            <label>
+              <input v-model="projectType" name="project type" type="radio" value="javascript"></input>
+              <div class="project-details-form__section-content-input-field-bubble">
+                <img src="@/assets/nodejs-logo.png" alt="NodeJS Logo" class="project-details-form__section-content-input-field-bubble-image" v-bind:class="{ 'project-details-form__section-content-input-field-bubble-image-selected': isNodeJSSelected }"></img>
+                <label class="project-details-form__section-content-input-field-bubble-text">NodeJS</label>
+              </div>
+            </label>
+            <label>
+              <input v-model="projectType" name="project type" type="radio" value="html"></input>
+              <div class="project-details-form__section-content-input-field-bubble">
+                <img src="@/assets/html5-logo.png" alt="HTML5 Logo" class="project-details-form__section-content-input-field-bubble-image" v-bind:class="{ 'project-details-form__section-content-input-field-bubble-image-selected': isHTMLSelected }"></img>
+                <label class="project-details-form__section-content-input-field-bubble-text">HTML5</label>
+              </div>
+            </label>
+          </div>
+        </div>
+        <div class="project-details-form__section-content-error">
+          <div class="error-message" v-show="isFormValidated && errors.has('project type')">{{ errors.first('project type') }}</div>
+        </div>
+        <div class="project-details-form__section-content-input">
+          <div class="project-details-form__section-content-input-name">
+            <label>Project Description</label>
+          </div>
+          <div class="project-details-form__section-content-input-field">
+            <input v-validate.initial="'required'" v-model="projectDescription" name="project description"></input>
+          </div>
+        </div>
+        <div class="project-details-form__section-content-error">
+          <div class="error-message" v-show="isFormValidated && errors.has('project description')">{{ errors.first('project description') }}</div>
+        </div>
+        <div class="project-details-form__section-content-input">
+          <div class="project-details-form__section-content-input-name">
+            <label>Dojo</label>
+          </div>
+          <div class="project-details-form__section-content-input-field">
+            <label v-for="dojo in usersDojos">
+              <input v-validate.initial="'required'" v-model="dojoId" name="Dojo" type="radio" :value="dojo.id"></input>
+              <div class="project-details-form__section-content-input-field-bubble">
+                <img src="@/assets/cd-logo.png" alt="Dojo Logo" class="project-details-form__section-content-input-field-bubble-image" v-bind:class="{ 'project-details-form__section-content-input-field-bubble-image-selected': dojo.id === dojoId }"></img>
+                <label class="project-details-form__section-content-input-field-bubble-text">{{ dojo.name }}</label>
+              </div>
+            </label>
+          </div>
+        </div>
+        <div class="project-details-form__section-content-error">
+          <div class="error-message" v-show="isFormValidated && errors.has('Dojo')">{{ errors.first('Dojo') }}</div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -42,10 +93,12 @@ export default {
       usersDojos: null,
       projectName: null,
       projectType: null,
-      projectEntrypoint: null,
       projectDescription: null,
       dojoId: null,
       isFormValidated: false,
+      isPythonSelected: false,
+      isNodeJSSelected: false,
+      isHTMLSelected: false,
     };
   },
   methods: {
@@ -58,7 +111,6 @@ export default {
     submitForm() {
       window.sessionStorage.setItem('projectName', this.projectName);
       window.sessionStorage.setItem('projectType', this.projectType);
-      window.sessionStorage.setItem('projectEntrypoint', this.projectEntrypoint);
       window.sessionStorage.setItem('projectDescription', this.projectDescription);
       window.sessionStorage.setItem('dojoId', this.dojoId);
     },
@@ -70,7 +122,103 @@ export default {
       this.usersDojos = (await dojoService.getUsersDojos(this.loggedInUser)).body;
     }
   },
+  watch: {
+    projectType: {
+      handler(newProjectType, prevProjectType) {
+        this.isPythonSelected = false;
+        this.isNodeJSSelected = false;
+        this.isHTMLSelected = false;
+        switch (newProjectType) {
+          case 'python':
+            this.isPythonSelected = true;
+            break;
+          case 'javascript':
+            this.isNodeJSSelected = true;
+            break;
+          case 'html':
+            this.isHTMLSelected = true;
+        }
+      },
+    },
+  },
 }
 </script>
 <style scoped lang="less">
+  .project-details-form {
+    margin: 0 32px;
+    text-align: left;
+    &__section {
+      margin-bottom: 40px;
+      &-title {
+        font-size: 24px;
+        color: #0093D5;
+        border-bottom: 1px solid #99999F;
+      }
+      &-subtitle {
+        margin-top: 8px;
+        font-size: 14px;
+        color: #99999F;
+      }
+      &-content {
+        margin-top: 20px;
+        &-input {
+          display: flex;
+          margin: 30px 0;
+          justify-content: center;
+          align-items: center;
+          &-name {
+            flex: 2;
+            text-align: right;
+            margin-right: 20px;
+          }
+          &-field {
+            flex: 4;
+            text-align: left;
+            margin-right: 10px;
+            &-bubble {
+              display: inline-flex;
+              flex-direction: column;
+              align-items: center;
+              &-image {
+                width: 75px;
+                height: 75px;
+                border: solid 7px white;
+                border-radius: 70px;
+                &:hover {
+                  background-color: #73449B;
+                  border: solid 7px #73449B;
+                  border-radius: 70px;
+                  cursor: pointer;
+                  transition: border 0.3s;
+                }
+                &-selected {
+                  background-color: #73449B;
+                  border: solid 7px #73449B;
+                  border-radius: 70px;
+                }
+              }
+              &-text {
+                padding-top: 5px;
+              }
+            }
+            & input {
+              width: 60%;
+            }
+            & label {
+              margin: 0 10px;
+              & input {
+                width: 10px;
+                position: absolute;
+                z-index: -1;
+                visibility: hidden;
+              }
+            }
+          }
+        }
+        &-error {
+          text-align: center;
+        }
+      }
+    }
+  }
 </style>

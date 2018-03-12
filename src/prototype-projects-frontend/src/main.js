@@ -7,6 +7,8 @@ import VeeValidate from 'vee-validate';
 import VueCookies from 'vue-cookies';
 import App from './App'
 import router from './router'
+// include free-for-use font awesome styling
+import './assets/font-awesome/css/fontawesome-all.min.css';
 
 Vue.config.productionTip = false;
 Vue.config.apiServer = process.env.API_SERVER;

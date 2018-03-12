@@ -16,8 +16,9 @@ describe('ProjectFilesForm', () => {
         // ARRANGE
         let projectFilesForm = vueUnitHelper(ProjectFilesForm);
         projectFilesForm.isFormValidated = false;
+        projectFilesForm.isFileUploaded = true;
         projectFilesForm.errors = {
-          any: () => true
+          any: () => false
         };
         
         // ACT
@@ -25,12 +26,13 @@ describe('ProjectFilesForm', () => {
         
         // ASSERT
         expect(projectFilesForm.isFormValidated).to.equal(true);
-        expect(result).to.equal(false);
+        expect(result).to.equal(true);
       });
       it('should return false if there are form errors', () => {
         // ARRANGE
         let projectFilesForm = vueUnitHelper(ProjectFilesForm);
         projectFilesForm.isFormValidated = false;
+        projectFilesForm.isFileUploaded = true;
         projectFilesForm.errors = {
           any: () => true
         };
@@ -47,6 +49,7 @@ describe('ProjectFilesForm', () => {
       it('should save form data to session storage', () => {
         // ARRANGE
         let projectFilesForm = vueUnitHelper(ProjectFilesForm);
+        projectFilesForm.projectEntrypoint = 'test.py';
         projectFilesForm.filename = 'test.zip';
         projectFilesForm.uploadedFile = 'fileData';
         sandbox.spy(window.sessionStorage, 'setItem');
@@ -55,6 +58,7 @@ describe('ProjectFilesForm', () => {
         projectFilesForm.submitForm();
         
         // ASSERT
+        expect(window.sessionStorage.setItem).to.have.been.calledWith('projectEntrypoint', 'test.py');
         expect(window.sessionStorage.setItem).to.have.been.calledWith('filename', 'test.zip');
         expect(window.sessionStorage.setItem).to.have.been.calledWith('projectFiles', 'fileData');
       });
@@ -107,7 +111,7 @@ describe('ProjectFilesForm', () => {
         // ASSERT
         expect(projectFilesForm.isZip).to.equal(false);
         expect(projectFilesForm.isFileUploaded).to.equal(false);
-        expect(projectFilesForm.filename).to.equal(null);
+        expect(projectFilesForm.filename).to.equal('test.py');
         expect(projectFilesForm.uploadedFile).to.equal(null);
       });
       it('should do nothing if no files are present', () => {
