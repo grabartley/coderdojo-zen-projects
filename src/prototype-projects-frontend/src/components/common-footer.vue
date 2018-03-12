@@ -10,9 +10,14 @@
 </script>
 <style scoped lang="less">
   .common-footer {
-    padding: 10px;
+    padding: 20px;
+    margin-top: 50px;
     font-size: 0.85em;
-    background-color: #d9d9d9;
-    border-top: 2px solid #bfbfbf;
+    color: white;
+    background-color: #303030;
+    & a {
+      color: white;
+      text-decoration: none;
+    }
   }
 </style>
