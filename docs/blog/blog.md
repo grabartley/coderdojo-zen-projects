@@ -4,6 +4,32 @@
 
 ****
 
+## Results of User Evaluation & Styling
+#### 13th March 2018
+
+On Saturday 10th March I carried out a **user evaluation session** with some of the **Ninjas at CoderDojo DCU**. The purpose of this session was to **gather feedback** from them on my proposed User Interface designs which I had created in the form of mockup images. I created a **feedback form** which I printed several copies of alongside the **mockups** themselves, the **informed assent and consent forms** and the **plain language statements**. I stapled these together logically and gave one stapled group to each of the participants during the session. I explained my project and what I was expecting of them. Once I had consent of the participant and the parent/guardian of the participant I asked them to look at images of my mockups and give their **written feedback** on their feedback form.
+
+At the end of the session I distributed some **CoderDojo stickers and badges** to the Ninjas who took part. When the Dojo was over I scanned in the feedback forms which are now **available in my project GitLab repository** in the **docs/testing/user-evaluation/ninjas** directory and are anonymized. I read through the feedback and created a **conclusions document** so I could clearly see the results of the session. This document is **also available** in the same directory. In general, the results were as follows:
+
+  * **Create Project Page**
+    * Requests for additional programming languages to be supported (Lua & Scratch)
+  * **Project Information Page**
+    * More bright colours could be added
+    * Link to project creator needed
+    * Request for a counter of project interactions
+    * Request for a comments system
+  * **Running Project Page**
+    * Design not visually appealing enough
+  * **Project List**
+    * Requests for additional categories & filtering by genres
+    * Design not visually appealing enough (possibly?)
+
+Based on this feedback I have been **modifying** my User Interface for these pages to include any of the points that I feel I can include within the scope of the project. Once a design is complete I will **implement the styling** for it. I have already implemented the styling for the Create Project page since adding additional programming languages is more of a functional issue than a design issue.
+
+Once all of the styling has been done I will resume working on **update of projects with versioning** since there are still issues with this at the moment.
+
+****
+
 ## Database Set Up, Project Update and Deletion & Basic Styling
 #### 26th February 2018
 
