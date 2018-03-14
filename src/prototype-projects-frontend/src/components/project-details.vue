@@ -60,7 +60,7 @@
           <div class="project-details__information-content-section-content">
             Click the button below to try out {{ projectData.name }}!
             <div class="project-details__information-content-section-content-run">
-              <router-link class="primary-button" :to="{ name: 'ProjectRuntime', params: { id: projectData.project_id } }"><span class="project-details__information-content-section-content-run-icon fas fa-play"></span>Play</router-link>
+              <router-link class="primary-button" :to="{ name: 'ProjectRuntime', params: { projectId: projectData.project_id } }"><span class="project-details__information-content-section-content-run-icon fas fa-play"></span>Play</router-link>
             </div>
           </div>
         </div>

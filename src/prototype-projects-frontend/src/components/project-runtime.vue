@@ -1,10 +1,21 @@
 <template>
   <div class="project-runtime">
-    <div v-if="projectData" class="project-runtime__header">{{ projectData.name }}</div>
-    <div class="project-runtime__terminal" ref="terminal"></div>
+    <div v-if="projectData" class="project-runtime__header">
+      <img class="project-runtime__header-image" src="@/assets/cd-logo.png" alt="Project Image"></img>
+      <span class="project-runtime__header-title">{{ projectData.name }}</span>
+      <span class="project-runtime__header-author">by {{ projectData.author }}</span>
+    </div>
+    <div class="project-runtime__content">
+      <div v-if="projectData" class="project-runtime__content-link">
+        <span class="project-runtime__content-link-icon fas fa-angle-left"></span>
+        <span class="project-runtime__content-link-text">
+          <router-link :to="{ name: 'ProjectDetails', params: { projectId: projectData.project_id } }">Back to Project</router-link>
+        </span>
+      </div>
+      <div class="project-runtime__content-terminal" ref="terminal"></div>
+    </div>
   </div>
 </template>
-
 <script>
 import Terminal from 'xterm2';
 import projectService from '@/projects/service';
@@ -34,7 +45,7 @@ export default {
       this.term = new Terminal({
         cursorBlink: true,
         cols: 120,
-        rows: 50
+        rows: 35
       });
       
       // open the terminal
@@ -54,30 +65,58 @@ export default {
     },
   },
   async created() {
-    this.projectData = (await projectService.getProjectById(this.$route.params.id)).body;
+    this.projectData = (await projectService.getProjectById(this.$route.params.projectId)).body;
     this.runProject();
   },
 }
 </script>
-
 <style scoped lang="less">
   .project-runtime {
     &__header {
-      font-size: 2em;
-      font-weight: 300;
-      padding: 20px;
-      text-align: center;
+      display: flex;
+      align-items: center;
+      padding: 15px 20px;
+      color: white;
+      background-color: #73449B;
+      &-image {
+        width: 65px;
+        height: 65px;
+      }
+      &-title {
+        flex: 2;
+        margin-left: 16px;
+        text-align: left;
+        font-size: 30px;
+      }
+      &-author {
+        flex: 2;
+        text-align: right;
+        font-size: 18px;
+      }
     }
-    
-    &__terminal {
-      background-color: black;
-      padding: 10px 10px 10px 10px;
-      margin: 0 40px;
-      min-height: 600px;
+    &__content {
+      margin: 40px 40px;
+      &-link {
+        margin-bottom: 10px;
+        text-align: left;
+        font-size: 20px;
+        color: #0093D5;
+        &-text {
+          & a {
+            text-decoration: none;
+            color: #0093D5;
+            &:hover {
+              text-decoration: underline;
+              color: #005e89;
+            }
+          }
+        }
+      }
+      &-terminal {
+        padding: 10px 10px 10px 10px;
+        background-color: black;
+        min-height: 600px;
+      }
     }
-  }
-  body {
-    margin: 0;
-    background-color: #bfbfbf;
   }
 </style>
