@@ -64,7 +64,7 @@
     padding: 10px 15px;
     font-size: 18px;
     border: none;
-    border-radius: 10px;
+    border-radius: 5px;
     color: white;
     background-color: red;
     &:hover {

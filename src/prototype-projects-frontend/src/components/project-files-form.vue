@@ -153,7 +153,7 @@ export default {
                 transition: background-color 0.3s;
               }
             }
-            &-hidden {
+            & input {
               width: 10px;
               position: absolute;
               z-index: -1;

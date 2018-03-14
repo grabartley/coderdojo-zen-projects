@@ -27,6 +27,23 @@ describe('DojoService', () => {
       expect(dojo).to.equal(dojoMock);
     });
   });
+  describe('getDojoByGitHubId', () => {
+    it('should return the dojo data for the given GitHub integration id', async () => {
+      // ARRANGE
+      const githubIdMock = '5678-1234';
+      const dojoMock = {
+        id: '1234-5678',
+        name: 'My Local Dojo',
+      };
+      sandbox.stub(Vue.http, 'get').withArgs(`${Vue.config.apiServer}/api/2.0/dojos/dojo-by-github-integration/${githubIdMock}`).returns(Promise.resolve(dojoMock));
+      
+      // ACT
+      const dojo = await DojoService.getDojoByGitHubId(githubIdMock);
+      
+      // ASSERT
+      expect(dojo).to.equal(dojoMock);
+    });
+  });
   describe('getUsersDojos', () => {
     it('should return the dojo ids of the Dojos the user has joined', async () => {
       // ARRANGE
