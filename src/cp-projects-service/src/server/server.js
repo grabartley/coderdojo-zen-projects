@@ -149,6 +149,21 @@ app.get('/api/2.0/dojos/:dojoId', async (req, res) => {
   res.send(dojo.rows[0]);
 });
 
+// get Dojo by GitHub integration id
+app.get('/api/2.0/dojos/dojo-by-github-integration/:githubId', async (req, res) => {
+  // log api call
+  console.log('GET /api/2.0/dojos/dojo-by-github-integration/:githubId with ');
+  console.log(req.params);
+  
+  // get the dojo data from the database
+  let dojoId = await dbService.query('SELECT dojo_id from github_integrations WHERE github_integration_id=\'' + req.params.githubId + '\';');
+  dojoId = dojoId.rows[0].dojo_id;
+  let dojo = await dbService.query('SELECT * from dojos WHERE id=\'' + dojoId + '\';');
+  
+  // respond
+  res.send(dojo.rows[0]);
+});
+
 // get current logged in user's joined Dojos (mock of Zen API)
 app.get('/api/2.0/dojos/dojos-for-user/:userId', async (req, res) => {
   // log api call
