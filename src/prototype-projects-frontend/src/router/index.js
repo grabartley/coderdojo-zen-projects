@@ -37,7 +37,7 @@ export default new Router({
       component: ProjectCreationForm,
     },
     {
-      path: '/run',
+      path: '/run-project/:projectId',
       name: 'ProjectRuntime',
       component: ProjectRuntime,
     },

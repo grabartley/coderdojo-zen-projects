@@ -66,7 +66,7 @@ describe('ProjectRuntime', () => {
       const divMock = document.createElement('div');
       projectRuntime.$route = {
         params: {
-          id: '1234-5678',
+          projectId: '1234-5678',
         },
       };
       projectRuntime.$refs = {
