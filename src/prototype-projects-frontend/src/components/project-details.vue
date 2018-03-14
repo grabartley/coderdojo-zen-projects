@@ -58,8 +58,9 @@
             Try it out!
           </div>
           <div class="project-details__information-content-section-content">
+            Click the button below to try out {{ projectData.name }}!
             <div class="project-details__information-content-section-content-run">
-              <router-link class="primary-button" :to="{ name: 'ProjectRuntime', params: { id: projectData.project_id } }">Run the project</router-link>
+              <router-link class="primary-button" :to="{ name: 'ProjectRuntime', params: { id: projectData.project_id } }"><span class="project-details__information-content-section-content-run-icon fas fa-play"></span>Play</router-link>
             </div>
           </div>
         </div>
@@ -68,7 +69,7 @@
             Description
           </div>
           <div class="project-details__information-content-section-content">
-            <div>{{ projectData.description }}</div>
+            {{ projectData.description }}
           </div>
         </div>
         <div class="project-details__information-content-section">
@@ -221,6 +222,9 @@
             &-run {
               margin: 75px 0;
               text-align: center;
+              &-icon {
+                margin-right: 8px;
+              }
               & a {
                 text-decoration: none;
               }
