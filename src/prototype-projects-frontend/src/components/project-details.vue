@@ -9,7 +9,7 @@
       <div class="project-details__information-sidebar">
         <div class="project-details__information-sidebar-item">
           <div class="project-details__information-sidebar-item-header">
-            <span class="project-details__information-sidebar-item-header-icon fa fa-code"></span>
+            <span class="project-details__information-sidebar-item-header-icon fas fa-wrench"></span>
             <label class="project-details__information-sidebar-item-header-name">technology</label>
           </div>
           <div class="project-details__information-sidebar-item-data" style="text-align: center;">
@@ -49,6 +49,17 @@
           </div>
           <div class="project-details__information-sidebar-item-data">
             <label>Last updated at <strong>{{ lastUpdatedTime }}</strong> on the <strong>{{ lastUpdatedDate }}</strong></label>
+          </div>
+        </div>
+        <div class="project-details__information-sidebar-item">
+          <div class="project-details__information-sidebar-item-header">
+            <span class="project-details__information-sidebar-item-header-icon fa fa-code"></span>
+            <label class="project-details__information-sidebar-item-header-name">source code</label>
+          </div>
+          <div class="project-details__information-sidebar-item-data">
+            <div class="project-details__information-sidebar-item-data-link">
+              <a :href="projectData.github" target="_blank">View source code</a>
+            </div>
           </div>
         </div>
       </div>
