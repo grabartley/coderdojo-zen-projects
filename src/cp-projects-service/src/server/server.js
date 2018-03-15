@@ -193,7 +193,6 @@ app.post('/api/2.0/projects/create-project', async (req, res) => {
   
   // store project data
   let projectData = req.body;
-  let filename = projectData.filename;
   
   // remove header information from file data
   let file = projectData.file.split(',');
@@ -225,7 +224,7 @@ app.post('/api/2.0/projects/create-project', async (req, res) => {
   // commit data to be used by GitHub
   const commitData = {
     repo: id,
-    path: filename,
+    path: 'source-code.zip',
     message: 'Initial commit',
     content: file,
     branch: 'master',
@@ -300,8 +299,8 @@ app.post('/api/2.0/projects/update-project', async (req, res) => {
     // commit data to be used by GitHub
     const commitData = {
       repo: projectData.projectId,
-      path: projectData.filename,
-      message: 'Update ' + projectData.filename,
+      path: 'source-code.zip',
+      message: 'Update source-code.zip',
       content: content,
       branch: 'master',
       dojoId: dojoId,

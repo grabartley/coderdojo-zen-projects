@@ -3,3 +3,4 @@ lib/
 test/unit/coverage/
 .nyc_output/
 start
+testdata
