@@ -64,6 +64,14 @@
         </div>
       </div>
       <div class="project-details__information-content">
+        <div class="project-details__information-content-actions">
+          <button class="project-details__information-content-actions-button" @click="">
+            <span class="fas fa-share-alt"></span>
+          </button>
+          <button v-if="currentUser" class="project-details__information-content-actions-button" @click="editProject()">
+            <span class="fas fa-edit"></span>
+          </button>
+        </div>
         <div class="project-details__information-content-section">
           <div class="project-details__information-content-section-title">
             Try it out!
@@ -90,9 +98,6 @@
           <div class="project-details__information-content-section-content">
             Badges have not been integrated yet!
           </div>
-        </div>
-        <div v-if="currentUser" class="project-details__information-content-control">
-          <button class="primary-button" @click="editProject()">Edit Project</button>
         </div>
       </div>
     </div>
@@ -221,6 +226,24 @@
       &-content {
         flex: 6;
         padding: 20px 30px 10px 30px;
+        &-actions {
+          text-align: right;
+          &-button {
+            width: 50px;
+            height: 30px;
+            margin-left: 4px;
+            font-size: 16px;
+            color: #73449B;
+            background-color: #FFFFFF;
+            border: solid 1px #73449B;
+            border-radius: 4px;
+            &:hover {
+              cursor: pointer;
+              color: #FFFFFF;
+              background-color: #73449B;
+            }
+          }
+        }
         &-section {
           margin-bottom: 40px;
           &-title {
