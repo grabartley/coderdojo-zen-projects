@@ -33,7 +33,8 @@
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    padding: 5px 10px;
+    padding: 8px 10px;
+    font-size: 16px;
     color: #2c3e50;
     border-style: solid;
     border-radius: 2px;

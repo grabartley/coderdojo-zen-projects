@@ -1,11 +1,20 @@
 <template>
   <div class="login">
-    <input class="login__email" v-model="email" v-validate.initial="'required|email'" name="email" type="email"></input>
-    <div class="error-message" v-show="isFormValidated && errors.has('email')">{{ errors.first('email') }}</div>
-    <input class="login__password" v-model="password" v-validate.initial="'required'" name="password" type="password"></input>
-    <div class="error-message" v-show="isFormValidated && errors.has('password')">{{ errors.first('password') }}</div>
-    <button @click="login()">Login</button>
-    <div class="error-message" v-show="loginFailed">Login was unsuccessful</div>
+    <div class="login__title">
+      <label>Log in to Zen</label>
+    </div>
+    <div class="login__form">
+      <div class="login__form-input">
+        <input class="login__form-input-field" v-model="email" v-validate.initial="'required|email'" name="email" type="email" placeholder="Email"></input>
+        <div class="login__form-error error-message" v-show="isFormValidated && errors.has('email')">{{ errors.first('email') }}</div>
+      </div>
+      <div class="login__form-input">
+        <input class="login__form-input-field" v-model="password" v-validate.initial="'required'" name="password" type="password" placeholder="Password"></input>
+        <div class="login__form-error error-message" v-show="isFormValidated && errors.has('password')">{{ errors.first('password') }}</div>
+      </div>
+      <button class="login__form-button primary-button" @click="login()">Login</button>
+      <div class="login__form-error error-message" v-show="loginFailed">Login was unsuccessful</div>
+    </div>
   </div>
 </template>
 <script>
@@ -48,4 +57,24 @@
   }
 </script>
 <style scoped lang="less">
+  .login {
+    &__title {
+      margin: 30px 0;
+      font-size: 24px;
+    }
+    &__form {
+      &-input {
+        margin: 20px 0;
+        &-field {
+          width: 500px;
+        }
+      }
+      &-button {
+        margin: 30px 0;
+      }
+      &-error {
+        margin: 10px 0;
+      }
+    }
+  }
 </style>
