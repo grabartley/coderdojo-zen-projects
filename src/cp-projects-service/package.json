@@ -8,7 +8,8 @@
     "build": "babel src db-migrations.js -d lib",
     "start": "npm run build && node ./lib/server/server.js",
     "unit": "cross-env NODE_ENV=test nyc mocha --require babel-core/register ./test/unit/specs/*/*.spec.js",
-    "test": "npm run unit"
+    "test": "npm run unit",
+    "testdata": "babel db/test-data.js -d lib && node ./lib/db/test-data.js"
   },
   "dependencies": {
     "axios": "^0.17.1",

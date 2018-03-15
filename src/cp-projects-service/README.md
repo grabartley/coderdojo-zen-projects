@@ -35,3 +35,14 @@ In order for the database and GitHub OAuth to work you will need to pass the fol
   PGPORT: The port you local PostgreSQL database is running on
   GITHUB_CLIENT_SECRET: The client secret of your GitHub OAuth app
 ```
+
+### Loading test data
+
+Test data for the database can be loaded using the **npm run testdata** command which will require the database environment variables:
+
+```
+  PGUSER: A username of your local PostgreSQL database
+  PGPASSWORD: The password associated with the above username
+  PGDATABASE: The name of your local PostgreSQL database
+  PGPORT: The port you local PostgreSQL database is running on
+```
