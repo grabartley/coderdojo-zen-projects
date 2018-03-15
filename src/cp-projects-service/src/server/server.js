@@ -311,6 +311,9 @@ app.post('/api/2.0/projects/update-project', async (req, res) => {
     await githubService.commitFileToRepo(commitData);
   }
   
+  // set updated time
+  await dbService.query('UPDATE projects SET updated_at=\'' + moment().toISOString() + '\';');
+  
   // respond
   res.send('successful project update');
 });

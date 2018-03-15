@@ -143,11 +143,9 @@ describe('GitHubService', () => {
               },
               get: (route) => {
                 if (route === expectedApiEndpoint) {
-                  return Promise.resolve({
-                    data: {
-                      message: 'Not Found',
-                    }
-                  });
+                  throw {
+                    message: 'error',
+                  };
                 } else {
                   return Promise.resolve();
                 }
