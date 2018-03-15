@@ -79,19 +79,17 @@ async function commitFileToRepo(commitData) {
   let apiCommitData;
   
   // if the file already exists
-  const fileResponse = await GITHUB_REST_API.get(apiEndpoint);
-  if (fileResponse.data.sha) {
-    // get sha of the file being updated
-    const sha = fileResponse.data.sha;
+  try {
+    const fileResponse = await GITHUB_REST_API.get(apiEndpoint);
     // data to be used in the API call
     apiCommitData = {
       path: commitData.path,
       message: commitData.message,
       content: commitData.content,
       branch: commitData.branch,
-      sha: sha,
+      sha: fileResponse.data.sha,
     };
-  } else {
+  } catch (e) {
     // data to be used in the API call
     apiCommitData = {
       path: commitData.path,
