@@ -52,4 +52,15 @@
       text-align: right;
     }
   }
+  button, a {
+    border: none;
+    text-decoration: none;
+    color: #99999F;
+    background-color: #eee;
+    font-size: 16px;
+    &:hover {
+      cursor: pointer;
+      color: #73449B;
+    }
+  }
 </style>

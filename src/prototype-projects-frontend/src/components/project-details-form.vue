@@ -55,7 +55,7 @@
             <label>Project Description</label>
           </div>
           <div class="project-details-form__section-content-input-field">
-            <input v-validate.initial="'required'" v-model="projectDescription" name="project description"></input>
+            <textarea v-validate.initial="'required'" v-model="projectDescription" name="project description"></textarea>
           </div>
         </div>
         <div class="project-details-form__section-content-error">
@@ -189,7 +189,7 @@ export default {
                   border: solid 7px #73449B;
                   border-radius: 70px;
                   cursor: pointer;
-                  transition: border 0.3s;
+                  transition: border 0.3s ease-out;
                 }
                 &-selected {
                   background-color: #73449B;
@@ -201,7 +201,7 @@ export default {
                 padding-top: 5px;
               }
             }
-            & input {
+            & input, textarea {
               width: 60%;
             }
             & label {

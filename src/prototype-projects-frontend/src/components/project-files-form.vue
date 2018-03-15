@@ -150,7 +150,7 @@ export default {
                 color: #FFFFFF;
                 background-color: #99999F;
                 transition: color 0.3s;
-                transition: background-color 0.3s;
+                transition: background-color 0.3s ease-out;
               }
             }
             & input {
