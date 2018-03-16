@@ -75,6 +75,9 @@ describe('ProjectRuntime', () => {
       projectRuntime.$socket = {
         emit: () => null,
       };
+      projectRuntime.$router = {
+        push: () => null,
+      };
       const projectDataMock = {
         body: {
           project_id: '5678-1234',
@@ -93,6 +96,7 @@ describe('ProjectRuntime', () => {
       };
       projectServiceMock.getProjectById.withArgs('1234-5678').returns(Promise.resolve(projectDataMock));
       sandbox.spy(projectRuntime, 'runProject');
+      sandbox.spy(projectRuntime.$router, 'push');
       
       // ACT
       await projectRuntime.$lifecycleMethods.created();
@@ -100,6 +104,53 @@ describe('ProjectRuntime', () => {
       // ASSERT
       expect(projectRuntime.projectData).to.equal(projectDataMock.body);
       expect(projectRuntime.runProject).to.have.been.calledOnce;
+      expect(projectRuntime.$router.push).to.not.have.been.called;
+    });
+    it('should not call runProject() for HTML5 projects', async () => {
+      // ARRANGE
+      let projectRuntime = vueUnitHelper(projectRuntimeMock);
+      const divMock = document.createElement('div');
+      projectRuntime.$route = {
+        params: {
+          projectId: '1234-5678',
+        },
+      };
+      projectRuntime.$refs = {
+        terminal: divMock,
+      };
+      projectRuntime.$socket = {
+        emit: () => null,
+      };
+      projectRuntime.$router = {
+        push: () => null,
+      };
+      const projectDataMock = {
+        body: {
+          project_id: '5678-1234',
+          name: 'Test Project',
+          type: 'html',
+          entrypoint: 'index.html',
+          description: 'A project for testing.',
+          github: null,
+          created_at: '2018-02-21T16:02:14.821Z',
+          updated_at: null,
+          author: null,
+          user_id: '1234-5678',
+          github_integration_id: '8765-4321',
+          deleted_at: null
+        },
+      };
+      projectServiceMock.getProjectById.withArgs('1234-5678').returns(Promise.resolve(projectDataMock));
+      sandbox.spy(projectRuntime, 'runProject');
+      sandbox.spy(projectRuntime.$router, 'push');
+      
+      // ACT
+      await projectRuntime.$lifecycleMethods.created();
+      
+      // ASSERT
+      expect(projectRuntime.projectData).to.equal(projectDataMock.body);
+      expect(projectRuntime.runProject).to.not.have.been.called;
+      expect(projectRuntime.$router.push).to.have.been.calledWith('/');
     });
   });
 });

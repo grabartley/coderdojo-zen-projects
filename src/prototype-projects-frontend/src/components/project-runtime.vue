@@ -66,7 +66,12 @@ export default {
   },
   async created() {
     this.projectData = (await projectService.getProjectById(this.$route.params.projectId)).body;
-    this.runProject();
+    // don't attempt to run HTML5 projects, redirect back to project list
+    if (this.projectData.type === 'html') {
+      this.$router.push('/');
+    } else {
+      this.runProject();
+    }
   },
 }
 </script>

@@ -243,13 +243,19 @@ app.post('/api/2.0/projects/create-project', async (req, res) => {
   const githubUrl = repoCreationResponse.data.html_url;
   const owner = repoCreationResponse.data.owner.login;
   
+  // set the branch to use based on project type since HTML projects use GitHub pages
+  let branch = 'master';
+  if (projectData.type === 'html') {
+    branch = 'gh-pages'
+  }
+  
   // commit data to be used by GitHub
   const commitData = {
     repo: id,
     path: 'README.md',
     message: 'Initial commit',
     content: Buffer.from(projectData.description).toString('base64'),
-    branch: 'master',
+    branch: branch,
     dojoId: projectData.dojoId
   };
   
@@ -261,6 +267,7 @@ app.post('/api/2.0/projects/create-project', async (req, res) => {
     repo: id,
     dojoId: projectData.dojoId,
     files: projectFiles,
+    branch: branch,
   };
   
   // push tree of files to the repo
@@ -348,11 +355,18 @@ app.post('/api/2.0/projects/update-project', async (req, res) => {
     // get the dojoId for this project from the db
     const dojoId = (await dbService.query('SELECT dojo_id FROM github_integrations WHERE github_integration_id = \'' + projectData.githubIntegrationId + '\';')).rows[0].dojo_id;
     
+    // set the branch to use based on project type since HTML projects use GitHub pages
+    let branch = 'master';
+    if (projectData.type === 'html') {
+      branch = 'gh-pages'
+    }
+    
     // create tree data object to pass to GitHub service
     const treeData = {
       repo: projectData.projectId,
       dojoId: dojoId,
       files: projectFiles,
+      branch: branch,
     };
     
     // push tree of files to the repo

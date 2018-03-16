@@ -48,13 +48,14 @@
       async updateDetails() {
         await projectService.updateProject({
           projectId: this.projectData.project_id,
+          type: this.projectData.type,
           columns: ['name', 'description', 'entrypoint'],
           values: [this.name, this.description, this.entrypoint],
         });
       },
       // when a file is chosen for upload
       onFileUpload(e) {
-        let files = e.target.files || e.dataTransfer.files;
+        let files = e.target.files;
         
         // if files exist
         if (files.length) {
@@ -88,6 +89,7 @@
         if (this.isFileUploaded) {
           await projectService.updateProject({
             projectId: this.projectData.project_id,
+            type: this.projectData.type,
             githubIntegrationId: this.projectData.github_integration_id,
             filename: this.filename,
             file: this.uploadedFile,
