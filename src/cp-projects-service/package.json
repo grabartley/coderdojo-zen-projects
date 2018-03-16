@@ -12,9 +12,11 @@
     "testdata": "babel db/test-data.js -d lib && node ./lib/db/test-data.js"
   },
   "dependencies": {
+    "adm-zip": "^0.4.7",
     "axios": "^0.17.1",
     "cors": "^2.8.4",
     "express": "^4.16.2",
+    "file-system": "^2.2.2",
     "http": "0.0.0",
     "moment": "^2.20.1",
     "node-github-graphql": "^0.2.6",

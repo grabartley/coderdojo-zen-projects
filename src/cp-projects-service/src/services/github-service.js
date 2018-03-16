@@ -102,9 +102,72 @@ async function commitFileToRepo(commitData) {
   return GITHUB_REST_API.put(apiEndpoint, apiCommitData);
 }
 
+// pushes a tree of files to a repo
+async function pushTreeToRepo(treeData) {
+  await setupApiWithAccess(treeData.dojoId);
+  
+  // get the owner of the repo
+  const owner = GITHUB_REST_API.defaults.headers['User-Agent'];
+  
+  // endpoints to hit
+  const apiBlobEndpoint = '/repos/' + owner + '/' + treeData.repo + '/git/blobs';
+  const apiTreeEndpoint = '/repos/' + owner + '/' + treeData.repo + '/git/trees';
+  const apiBranchEndpoint = '/repos/' + owner + '/' + treeData.repo + '/branches/master';
+  const apiCommitEndpoint = '/repos/' + owner + '/' + treeData.repo + '/git/commits';
+  const apiMergeEndpoint = '/repos/' + owner + '/' + treeData.repo + '/merges';
+  
+  // create blobs and tree array to send to GitHub API
+  let tree = [];
+  for (let i = 0; i < treeData.files.length; i++) {
+    const file = treeData.files[i];
+    const blob = await GITHUB_REST_API.post(apiBlobEndpoint, {
+      content: file.content,
+      encoding: 'base64',
+    });
+    tree.push({
+      sha: blob.data.sha,
+      path: file.path,
+      mode: '100644',
+      type: 'blob',
+    });
+  }
+  
+  // data to POST to tree endpoint
+  const apiTreeData = {
+    tree: tree,
+  };
+  
+  // create the tree
+  const treeResponse = await GITHUB_REST_API.post(apiTreeEndpoint, apiTreeData);
+  
+  // get current master
+  const masterBranchResponse = await GITHUB_REST_API.get(apiBranchEndpoint);
+  
+  // data to POST to commit endpoint
+  const apiCommitData = {
+    message: 'update',
+    tree: treeResponse.data.sha,
+    parents: [masterBranchResponse.data.commit.sha],
+  };
+  
+  // commit the tree
+  const commitResponse = await GITHUB_REST_API.post(apiCommitEndpoint, apiCommitData);
+  
+  // data to POST to merge endpoint
+  const apiMergeData = {
+    base: 'master',
+    head: commitResponse.data.sha,
+    commit_message: 'update',
+  };
+  
+  // merge the tree into master
+  return GITHUB_REST_API.post(apiMergeEndpoint, apiMergeData);
+}
+
 // exported functions
 module.exports = {
   getAccessToken: getAccessToken,
   createRepo: createRepo,
   commitFileToRepo: commitFileToRepo,
+  pushTreeToRepo: pushTreeToRepo,
 };
