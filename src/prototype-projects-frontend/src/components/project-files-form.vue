@@ -69,7 +69,7 @@ export default {
     },
     // when a file is chosen for upload
     onFileUpload(e) {
-      let files = e.target.files || e.dataTransfer.files;
+      let files = e.target.files;
       
       // if files exist
       if (files.length) {

@@ -26,12 +26,14 @@ describe('EditProject', () => {
         let editProject = vueUnitHelper(editProjectWithMocks);
         editProject.projectData = {
           project_id: '1234-5678',
+          type: 'python',
         };
         editProject.name = 'Test Project';
         editProject.description = 'A test project.';
         editProject.entrypoint = 'TestProject.py';
         const expectedProjectData = {
           projectId: editProject.projectData.project_id,
+          type: editProject.projectData.type,
           columns: ['name', 'description', 'entrypoint'],
           values: [editProject.name, editProject.description, editProject.entrypoint],
         };
@@ -123,6 +125,7 @@ describe('EditProject', () => {
         let editProject = vueUnitHelper(editProjectWithMocks);
         editProject.projectData = {
           project_id: '1234-5678',
+          type: 'python',
           github_integration_id: '5678-1234',
         };
         editProject.filename = 'TestProject.zip'
@@ -130,6 +133,7 @@ describe('EditProject', () => {
         editProject.isFileUploaded = true;
         const expectedProjectData = {
           projectId: editProject.projectData.project_id,
+          type: editProject.projectData.type,
           githubIntegrationId: editProject.projectData.github_integration_id,
           filename: editProject.filename,
           file: editProject.uploadedFile,

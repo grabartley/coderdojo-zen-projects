@@ -77,9 +77,20 @@
             Try it out!
           </div>
           <div class="project-details__information-content-section-content">
-            Click the button below to try out {{ projectData.name }}!
-            <div class="project-details__information-content-section-content-run">
-              <router-link class="primary-button" :to="{ name: 'ProjectRuntime', params: { projectId: projectData.project_id } }"><span class="project-details__information-content-section-content-run-icon fas fa-play"></span>Play</router-link>
+            <div v-if="projectData.type === 'html'" class="project-details__information-content-section-content-webpage">
+              <span class="project-details__information-content-section-content-webpage-link">
+                <a :href="githubPagesLink" target="_blank">
+                  <span class="project-details__information-content-section-content-webpage-link-text">Visit the website</span>
+                  <span class="project-details__information-content-section-content-webpage-link-icon fas fa-angle-right"></span>
+                </a>
+              </span>
+              <iframe class="project-details__information-content-section-content-webpage-window" :src="githubPagesLink"></iframe>
+            </div>
+            <div v-else>
+              <label>Click the button below to try out {{ projectData.name }}!</label>
+              <div class="project-details__information-content-section-content-run">
+                <router-link class="primary-button" :to="{ name: 'ProjectRuntime', params: { projectId: projectData.project_id } }"><span class="project-details__information-content-section-content-run-icon fas fa-play"></span>Play</router-link>
+              </div>
             </div>
           </div>
         </div>
@@ -147,7 +158,12 @@
       },
       lastUpdatedDate() {
         return moment(this.projectData.updated_at || this.projectData.created_at).format('Do of MMMM YYYY');
-      }
+      },
+      githubPagesLink() {
+        let githubAccount = this.projectData.github.split('/');
+        githubAccount = githubAccount[githubAccount.length - 2]
+        return `https://${githubAccount}.github.io/${this.projectData.project_id}`;
+      },
     },
     methods: {
       editProject() {
@@ -253,6 +269,26 @@
           }
           &-content {
             margin-top: 14px;
+            &-webpage {
+              margin: 10px 0;
+              text-align: right;
+              &-link {
+                color: #0093D5;
+                & a {
+                  text-decoration: none;
+                  color: #0093D5;
+                  &:hover {
+                    text-decoration: underline;
+                    color: #005e89;
+                  }
+                }
+              }
+              &-window {
+                margin-top: 10px;
+                width: 100%;
+                height: 600px;
+              }
+            }
             &-run {
               margin: 75px 0;
               text-align: center;

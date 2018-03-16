@@ -144,6 +144,20 @@ describe('ProjectDetails', () => {
         expect(projectDetails.lastUpdatedDate).to.equal('2nd of March 2018');
       });
     });
+    describe('githubPagesLink', () => {
+      it('should return the link to the html project on GitHub Pages', () => {
+        // ARRANGE
+        let projectDetails = vueUnitHelper(ProjectDetails());
+        projectDetails.projectData = {
+          project_id: '1234-5678',
+          github: 'https://github.com/championone/1234-5678',
+        };
+        const expectedLink = 'https://championone.github.io/1234-5678';
+        
+        // ACT & ASSERT
+        expect(projectDetails.githubPagesLink).to.equal(expectedLink);
+      });
+    });
   });
   describe('methods', () => {
     describe('editProject', () => {

@@ -120,6 +120,8 @@ export default {
     this.loggedInUser = this.$cookies.get('loggedIn');
     if (this.loggedInUser) {
       this.usersDojos = (await dojoService.getUsersDojos(this.loggedInUser)).body;
+    } else {
+      this.$router.push('/');
     }
   },
   watch: {

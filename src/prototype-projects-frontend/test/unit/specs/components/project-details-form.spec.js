@@ -82,6 +82,9 @@ describe('ProjectDetailsForm', () => {
       projectDetailsForm.$cookies = {
         get: (cookieName) => '1234-5678',
       };
+      projectDetailsForm.$router = {
+        push: () => null,
+      };
       const usersDojosResponseMock = {
         body: [
           {
@@ -91,6 +94,7 @@ describe('ProjectDetailsForm', () => {
         ]
       };
       dojoServiceMock.getUsersDojos.withArgs('1234-5678').returns(Promise.resolve(usersDojosResponseMock));
+      sandbox.spy(projectDetailsForm.$router, 'push');
       
       // ACT
       await projectDetailsForm.$lifecycleMethods.created();
@@ -99,6 +103,29 @@ describe('ProjectDetailsForm', () => {
       expect(projectDetailsForm.loggedInUser).to.equal('1234-5678');
       expect(dojoServiceMock.getUsersDojos).to.have.been.calledWith('1234-5678');
       expect(projectDetailsForm.usersDojos).to.deep.equal(usersDojosResponseMock.body);
+      expect(projectDetailsForm.$router.push).to.not.have.been.called;
+    });
+    it('should redirect back to project list if not logged in', async () => {
+      // ARRANGE
+      const projectDetailsForm = vueUnitHelper(ProjectDetailsForm());
+      projectDetailsForm.usersDojos = null;
+      projectDetailsForm.loggedInUser = null;
+      projectDetailsForm.$cookies = {
+        get: (cookieName) => null,
+      };
+      projectDetailsForm.$router = {
+        push: () => null,
+      };
+      sandbox.spy(projectDetailsForm.$router, 'push');
+      
+      // ACT
+      await projectDetailsForm.$lifecycleMethods.created();
+      
+      // ASSERT
+      expect(projectDetailsForm.loggedInUser).to.equal(null);
+      expect(dojoServiceMock.getUsersDojos).to.not.have.been.called;
+      expect(projectDetailsForm.usersDojos).to.equal(null);
+      expect(projectDetailsForm.$router.push).to.have.been.calledWith('/');
     });
   });
   

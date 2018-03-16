@@ -112,7 +112,7 @@ async function pushTreeToRepo(treeData) {
   // endpoints to hit
   const apiBlobEndpoint = '/repos/' + owner + '/' + treeData.repo + '/git/blobs';
   const apiTreeEndpoint = '/repos/' + owner + '/' + treeData.repo + '/git/trees';
-  const apiBranchEndpoint = '/repos/' + owner + '/' + treeData.repo + '/branches/master';
+  const apiBranchEndpoint = '/repos/' + owner + '/' + treeData.repo + '/branches/' + treeData.branch;
   const apiCommitEndpoint = '/repos/' + owner + '/' + treeData.repo + '/git/commits';
   const apiMergeEndpoint = '/repos/' + owner + '/' + treeData.repo + '/merges';
   
@@ -140,14 +140,14 @@ async function pushTreeToRepo(treeData) {
   // create the tree
   const treeResponse = await GITHUB_REST_API.post(apiTreeEndpoint, apiTreeData);
   
-  // get current master
-  const masterBranchResponse = await GITHUB_REST_API.get(apiBranchEndpoint);
+  // get current status of branch
+  const branchResponse = await GITHUB_REST_API.get(apiBranchEndpoint);
   
   // data to POST to commit endpoint
   const apiCommitData = {
     message: 'update',
     tree: treeResponse.data.sha,
-    parents: [masterBranchResponse.data.commit.sha],
+    parents: [branchResponse.data.commit.sha],
   };
   
   // commit the tree
@@ -155,12 +155,12 @@ async function pushTreeToRepo(treeData) {
   
   // data to POST to merge endpoint
   const apiMergeData = {
-    base: 'master',
+    base: treeData.branch,
     head: commitResponse.data.sha,
     commit_message: 'update',
   };
   
-  // merge the tree into master
+  // merge the tree into the branch
   return GITHUB_REST_API.post(apiMergeEndpoint, apiMergeData);
 }
 

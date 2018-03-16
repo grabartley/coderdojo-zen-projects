@@ -294,6 +294,7 @@ describe('GitHubService', () => {
             content: 'anotherHelperContent',
           },
         ],
+        branch: 'master',
       };
       const ownerMock = 'championone';
       const expectedApiBlobEndpoint = '/repos/championone/1234-5678/git/blobs';
