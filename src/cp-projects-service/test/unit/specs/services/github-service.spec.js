@@ -64,12 +64,10 @@ describe('GitHubService', () => {
               post: (route, data) => {
                 if (route === '/user/repos' && JSON.stringify(data) === JSON.stringify(apiRepoDataMock)) {
                   return Promise.resolve({
-                    catch: () => null,
                     statusCode: '200',
                   });
                 } else {
                   return Promise.resolve({
-                    catch: () => null,
                     statusCode: '404',
                   });
                 }
@@ -153,12 +151,10 @@ describe('GitHubService', () => {
               put: (route, data) => {
                 if (route === expectedApiEndpoint && JSON.stringify(data) === JSON.stringify(expectedApiCommitData)) {
                   return Promise.resolve({
-                    catch: () => null,
                     statusCode: '200',
                   });
                 } else {
                   return Promise.resolve({
-                    catch: () => null,
                     statusCode: '404',
                   });
                 }
@@ -244,12 +240,10 @@ describe('GitHubService', () => {
               put: (route, data) => {
                 if (route === expectedApiEndpoint && JSON.stringify(data) === JSON.stringify(expectedApiCommitData)) {
                   return Promise.resolve({
-                    catch: () => null,
                     statusCode: '200',
                   });
                 } else {
                   return Promise.resolve({
-                    catch: () => null,
                     statusCode: '404',
                   });
                 }
@@ -275,6 +269,126 @@ describe('GitHubService', () => {
       
       // ACT
       const response = await GitHubServiceMock.commitFileToRepo(commitDataMock);
+      
+      // ASSERT
+      expect(response.statusCode).to.equal('200');
+    }).timeout(10000);
+  });
+  describe('pushTreeToRepo', () => {
+    it('should push the given tree data as a tree of files to the repo', async () => {
+      // ARRANGE
+      const treeDataMock = {
+        repo: '1234-5678',
+        dojoId: '5678-1234',
+        files: [
+          {
+            path: 'test.py',
+            content: 'testContent',
+          },
+          {
+            path: 'helper.py',
+            content: 'helperContent',
+          },
+          {
+            path: 'subFolder/anotherHelper.py',
+            content: 'anotherHelperContent',
+          },
+        ],
+      };
+      const ownerMock = 'championone';
+      const expectedApiBlobEndpoint = '/repos/championone/1234-5678/git/blobs';
+      const expectedApiTreeEndpoint = '/repos/championone/1234-5678/git/trees';
+      const expectedApiBranchEndpoint = '/repos/championone/1234-5678/branches/master';
+      const expectedApiCommitEndpoint = '/repos/championone/1234-5678/git/commits';
+      const expectedApiMergeEndpoint = '/repos/championone/1234-5678/merges';
+      const expectedApiMergeData = {
+        base: 'master',
+        head: '4321-8765',
+        commit_message: 'update',
+      };
+      const dependencyMocks = {
+        'node-github-graphql': () => {
+          return {
+            query: async (graphQlQuery) => {
+              return Promise.resolve({
+                data: {
+                  viewer: {
+                    login: 'championone',
+                  },
+                },
+              });
+            },
+          };
+        },
+        'axios': {
+          create: (config) => {
+            return {
+              defaults: {
+                headers: {
+                  'User-Agent': ownerMock,
+                },
+              },
+              get: (route) => {
+                if (route === expectedApiBranchEndpoint) {
+                  return Promise.resolve({
+                    data: {
+                      commit: {
+                        sha: '8765-1234'
+                      }
+                    }
+                  });
+                }
+              },
+              post: (route, data) => {
+                if (route === expectedApiBlobEndpoint) {
+                  return Promise.resolve({
+                    data: {
+                      sha: '8765-1234',
+                    }
+                  });
+                } else if (route === expectedApiTreeEndpoint) {
+                  return Promise.resolve({
+                    data: {
+                      sha: '8765-1234',
+                    }
+                  });
+                } else if (route === expectedApiCommitEndpoint) {
+                  return Promise.resolve({
+                    data: {
+                      sha: '4321-8765',
+                    }
+                  });
+                } else if (route === expectedApiMergeEndpoint && JSON.stringify(data) === JSON.stringify(expectedApiMergeData)) {
+                  return Promise.resolve({
+                    statusCode: '200',
+                  });
+                } else {
+                  return Promise.resolve({
+                    statusCode: '404',
+                  });
+                }
+              },
+            };
+          },
+        },
+        './db-service': {
+          query: async (queryString) => {
+            if (queryString === 'SELECT github_access_token FROM github_integrations WHERE dojo_id=\'' + treeDataMock.dojoId + '\';') {
+              return Promise.resolve({
+                rows: [
+                  {
+                    github_access_token: '8765-4321',
+                  },
+                ],
+              });
+            }
+          },
+        },
+      };
+      const GitHubServiceMock = proxyquire('../../../../src/services/github-service', dependencyMocks);
+      
+      // ACT
+      const response = await GitHubServiceMock.pushTreeToRepo(treeDataMock);
       
       // ASSERT
       expect(response.statusCode).to.equal('200');
