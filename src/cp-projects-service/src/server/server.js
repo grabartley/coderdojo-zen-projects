@@ -6,8 +6,11 @@ import io from 'socket.io';
 import http from 'http';
 import moment from 'moment';
 import uuid from 'uuid/v4';
+import fs from 'file-system';
+import zip from 'adm-zip';
 import migrations from '../db-migrations';
 import dbService from '../services/db-service';
+import fileSystemService from '../services/file-system-service';
 import githubService from '../services/github-service';
 
 // run database migrations
@@ -198,6 +201,25 @@ app.post('/api/2.0/projects/create-project', async (req, res) => {
   let file = projectData.file.split(',');
   file = file[1];
   
+  // extract project files
+  let folderName = 'projectFiles';
+  fs.writeFileSync('./' + projectData.filename, file, 'base64');
+  const projectZip = new zip('./' + projectData.filename);
+  projectZip.extractAllTo('./' + folderName, true);
+  
+  // get project file paths and data from extracted zip
+  let projectFiles = fileSystemService.recursiveListSync('./' + folderName + '/');
+  
+  // remove zip and created directory
+  fs.unlinkSync('./' + projectData.filename);
+  fs.rmdirSync('./' + folderName);
+  
+  // fix project file paths
+  let charsToCut = ('./' + folderName + '/').length;
+  projectFiles.forEach((file) => {
+    file.path = file.path.substring(charsToCut);
+  });
+  
   // generate a new id for this project
   let id = uuid();
   
@@ -216,7 +238,7 @@ app.post('/api/2.0/projects/create-project', async (req, res) => {
     dojoId: projectData.dojoId,
   };
   
-  // creates the project repository on GitHub
+  // create the project repository on GitHub
   const repoCreationResponse = await githubService.createRepo(repoData);
   const githubUrl = repoCreationResponse.data.html_url;
   const owner = repoCreationResponse.data.owner.login;
@@ -224,15 +246,25 @@ app.post('/api/2.0/projects/create-project', async (req, res) => {
   // commit data to be used by GitHub
   const commitData = {
     repo: id,
-    path: 'source-code.zip',
+    path: 'README.md',
     message: 'Initial commit',
-    content: file,
+    content: Buffer.from(projectData.description).toString('base64'),
     branch: 'master',
     dojoId: projectData.dojoId
   };
   
   // add project zip file to the GitHub repository
   await githubService.commitFileToRepo(commitData);
+  
+  // create tree data object to pass to GitHub service
+  const treeData = {
+    repo: id,
+    dojoId: projectData.dojoId,
+    files: projectFiles,
+  };
+  
+  // push tree of files to the repo
+  await githubService.pushTreeToRepo(treeData);
   
   // project data to be saved to database
   const metadata = {
@@ -291,23 +323,40 @@ app.post('/api/2.0/projects/update-project', async (req, res) => {
   // if updating project files
   if (projectData.file) {
     // remove header information from file data
-    let content = projectData.file.split(',');
-    content = content[1];
+    let file = projectData.file.split(',');
+    file = file[1];
     
+    // extract project files
+    let folderName = 'projectFiles';
+    fs.writeFileSync('./' + projectData.filename, file, 'base64');
+    const projectZip = new zip('./' + projectData.filename);
+    projectZip.extractAllTo('./' + folderName, true);
+    
+    // get project file paths and data from extracted zip
+    let projectFiles = fileSystemService.recursiveListSync('./' + folderName + '/');
+    
+    // remove zip and created directory
+    fs.unlinkSync('./' + projectData.filename);
+    fs.rmdirSync('./' + folderName);
+    
+    // fix project file paths
+    let charsToCut = ('./' + folderName + '/').length;
+    projectFiles.forEach((file) => {
+      file.path = file.path.substring(charsToCut);
+    });
+    
+    // get the dojoId for this project from the db
     const dojoId = (await dbService.query('SELECT dojo_id FROM github_integrations WHERE github_integration_id = \'' + projectData.githubIntegrationId + '\';')).rows[0].dojo_id;
     
-    // commit data to be used by GitHub
-    const commitData = {
+    // create tree data object to pass to GitHub service
+    const treeData = {
       repo: projectData.projectId,
-      path: 'source-code.zip',
-      message: 'Update source-code.zip',
-      content: content,
-      branch: 'master',
       dojoId: dojoId,
+      files: projectFiles,
     };
     
-    // commit zip file to the GitHub repository
-    await githubService.commitFileToRepo(commitData);
+    // push tree of files to the repo
+    await githubService.pushTreeToRepo(treeData);
   }
   
   // set updated time

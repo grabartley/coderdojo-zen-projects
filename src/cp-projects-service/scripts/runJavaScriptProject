@@ -10,11 +10,8 @@ echo "creating Dockerfile..."
 rm Dockerfile &> /dev/null
 touch Dockerfile &> /dev/null
 echo "FROM node:carbon
-RUN apt-get update && apt-get install unzip
 RUN git clone $github
 WORKDIR /$id
-RUN unzip *.zip -d projectFiles
-WORKDIR /$id/projectFiles
 RUN npm install
 CMD [ \"node\", \"./$entrypoint\" ]" >> Dockerfile
 
