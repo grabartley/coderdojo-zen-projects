@@ -43,20 +43,20 @@ ioServer.on('connection', (socket) => {
     // get data for this project id
     const projectResponse = await dbService.query('SELECT * FROM projects WHERE project_id=\'' + projectId + '\';');
     const projectData = projectResponse.rows[0];
-    // used to store the name of the runtime script to execute
-    let runtimeScript = '';
+    // used to store the tag of the image to pull
+    let imageTag = '';
     
-    // set the runtime script to use based on the project type
+    // set the image tag to use based on the project type
     switch (projectData.type) {
       case 'python':
-        runtimeScript = './scripts/runPythonProject';
+        imageTag = 'python3';
         break;
       case 'javascript':
-        runtimeScript = './scripts/runJavaScriptProject';
+        imageTag = 'nodejs';
     }
     
-    // spawn a process to create the Docker container and run the project
-    const term = pty.spawn(runtimeScript, [projectId, projectData.github, projectData.entrypoint], {
+    // spawn a process to run the project
+    const term = pty.spawn('./scripts/run-project', [projectData.github, projectData.entrypoint, imageTag], {
       name: 'xterm-color'
     });
     
