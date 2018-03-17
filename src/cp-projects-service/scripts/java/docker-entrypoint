@@ -1,0 +1,6 @@
+#!/bin/bash
+
+git clone $GITHUB_URL /usr/src/app &> /dev/null
+javac $ENTRYPOINT &> /dev/null
+MAIN_CLASS=`echo $ENTRYPOINT | cut -d'.' -f 1`
+java $MAIN_CLASS

@@ -142,6 +142,7 @@ describe('ProjectDetailsForm', () => {
         expect(projectDetailsForm.isPythonSelected).to.be.true;
         expect(projectDetailsForm.isNodeJSSelected).to.be.false;
         expect(projectDetailsForm.isHTMLSelected).to.be.false;
+        expect(projectDetailsForm.isJavaSelected).to.be.false;
         
         // ACT
         projectDetailsForm.$watchers.projectType('javascript', null);
@@ -150,6 +151,7 @@ describe('ProjectDetailsForm', () => {
         expect(projectDetailsForm.isPythonSelected).to.be.false;
         expect(projectDetailsForm.isNodeJSSelected).to.be.true;
         expect(projectDetailsForm.isHTMLSelected).to.be.false;
+        expect(projectDetailsForm.isJavaSelected).to.be.false;
         
         // ACT
         projectDetailsForm.$watchers.projectType('html', null);
@@ -158,6 +160,16 @@ describe('ProjectDetailsForm', () => {
         expect(projectDetailsForm.isPythonSelected).to.be.false;
         expect(projectDetailsForm.isNodeJSSelected).to.be.false;
         expect(projectDetailsForm.isHTMLSelected).to.be.true;
+        expect(projectDetailsForm.isJavaSelected).to.be.false;
+        
+        // ACT
+        projectDetailsForm.$watchers.projectType('java', null);
+        
+        // ASSERT
+        expect(projectDetailsForm.isPythonSelected).to.be.false;
+        expect(projectDetailsForm.isNodeJSSelected).to.be.false;
+        expect(projectDetailsForm.isHTMLSelected).to.be.false;
+        expect(projectDetailsForm.isJavaSelected).to.be.true;
       });
     });
   });

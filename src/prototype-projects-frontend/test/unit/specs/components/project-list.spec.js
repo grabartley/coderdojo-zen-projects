@@ -22,7 +22,7 @@ describe('ProjectList', () => {
     it('should use the projects service to get all project data and store it as well as check if the user is logged in', async () => {
       // ARRANGE
       let projectList = vueUnitHelper(projectListWithMocks);
-      let allProjectDataMock = {
+      const allProjectDataMock = {
         body: {
           python: [
             {
@@ -42,23 +42,30 @@ describe('ProjectList', () => {
               name: 'Test Project 3',
             }
           ],
+          java: [
+            {
+              id: '1236-5678',
+              name: 'Test Project 4',
+            }
+          ],
         }
       };
-      let expectedPythonProjectData = [{
+      const expectedPythonProjectData = [{
         id: '1234-5678',
         name: 'Test Project 1',
       }];
-      let expectedJavascriptProjectData = [{
+      const expectedJavascriptProjectData = [{
         id: '1235-5678',
         name: 'Test Project 2',
       }];
-      let expectedHtmlnProjectData = [{
+      const expectedHtmlProjectData = [{
         id: '1236-5678',
         name: 'Test Project 3',
       }];
-      projectList.pythonProjectData = null;
-      projectList.javascriptProjectData = null;
-      projectList.htmlProjectData = null;
+      const expectedJavaProjectData = [{
+        id: '1236-5678',
+        name: 'Test Project 4',
+      }];
       projectServiceMock.getAllProjectData.returns(Promise.resolve(allProjectDataMock));
       projectList.$cookies = {
         get: () => '2234-5678'
@@ -72,7 +79,8 @@ describe('ProjectList', () => {
       expect(projectServiceMock.getAllProjectData).to.have.been.calledOnce;
       expect(projectList.pythonProjectData).to.deep.equal(expectedPythonProjectData);
       expect(projectList.javascriptProjectData).to.deep.equal(expectedJavascriptProjectData);
-      expect(projectList.htmlProjectData).to.deep.equal(expectedHtmlnProjectData);
+      expect(projectList.htmlProjectData).to.deep.equal(expectedHtmlProjectData);
+      expect(projectList.javaProjectData).to.deep.equal(expectedJavaProjectData);
       expect(projectList.loggedIn).to.equal('2234-5678');
     });
   });

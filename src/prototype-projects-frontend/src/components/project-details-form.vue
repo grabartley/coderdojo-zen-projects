@@ -45,6 +45,13 @@
                 <label class="project-details-form__section-content-input-field-bubble-text">HTML5</label>
               </div>
             </label>
+            <label>
+              <input v-model="projectType" name="project type" type="radio" value="java"></input>
+              <div class="project-details-form__section-content-input-field-bubble">
+                <img src="@/assets/java-logo.png" alt="Java Logo" class="project-details-form__section-content-input-field-bubble-image" v-bind:class="{ 'project-details-form__section-content-input-field-bubble-image-selected': isJavaSelected }"></img>
+                <label class="project-details-form__section-content-input-field-bubble-text">Java</label>
+              </div>
+            </label>
           </div>
         </div>
         <div class="project-details-form__section-content-error">
@@ -99,6 +106,7 @@ export default {
       isPythonSelected: false,
       isNodeJSSelected: false,
       isHTMLSelected: false,
+      isJavaSelected: false,
     };
   },
   methods: {
@@ -130,6 +138,7 @@ export default {
         this.isPythonSelected = false;
         this.isNodeJSSelected = false;
         this.isHTMLSelected = false;
+        this.isJavaSelected = false;
         switch (newProjectType) {
           case 'python':
             this.isPythonSelected = true;
@@ -139,6 +148,9 @@ export default {
             break;
           case 'html':
             this.isHTMLSelected = true;
+            break;
+          case 'java':
+            this.isJavaSelected = true;
         }
       },
     },
@@ -205,6 +217,7 @@ export default {
             }
             & input, textarea {
               width: 60%;
+              max-width: 600px;
             }
             & label {
               margin: 0 10px;
