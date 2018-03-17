@@ -20,6 +20,7 @@ describe('ProjectDetails', () => {
       '@/assets/python-logo.png': 'pathToPythonLogo',
       '@/assets/nodejs-logo.png': 'pathToNodeJSLogo',
       '@/assets/html5-logo.png': 'pathToHtml5Logo',
+      '@/assets/java-logo.png': 'pathToJavaLogo',
     });
   });
   afterEach(() => {
@@ -55,6 +56,14 @@ describe('ProjectDetails', () => {
         
         // ARRANGE
         projectDetails.projectData = {
+          type: 'java',
+        };
+        
+        // ACT & ASSERT
+        expect(projectDetails.projectTypeImage).to.equal('pathToJavaLogo');
+        
+        // ARRANGE
+        projectDetails.projectData = {
           type: 'unknown',
         };
         
@@ -71,7 +80,7 @@ describe('ProjectDetails', () => {
         };
         
         // ACT & ASSERT
-        expect(projectDetails.projectType).to.equal('Python');
+        expect(projectDetails.projectType).to.equal('Python 3');
         
         // ARRANGE
         projectDetails.projectData = {
@@ -88,6 +97,14 @@ describe('ProjectDetails', () => {
         
         // ACT & ASSERT
         expect(projectDetails.projectType).to.equal('HTML5');
+        
+        // ARRANGE
+        projectDetails.projectData = {
+          type: 'java',
+        };
+        
+        // ACT & ASSERT
+        expect(projectDetails.projectType).to.equal('Java');
         
         // ARRANGE
         projectDetails.projectData = {

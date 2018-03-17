@@ -137,6 +137,8 @@
             return require('@/assets/nodejs-logo.png');
           case ('html'):
             return require('@/assets/html5-logo.png');
+          case ('java'):
+            return require('@/assets/java-logo.png');
           default:
             return '';
         }
@@ -144,11 +146,13 @@
       projectType() {
         switch (this.projectData.type) {
           case ('python'):
-            return 'Python';
+            return 'Python 3';
           case ('javascript'):
             return 'NodeJS';
           case ('html'):
             return 'HTML5'
+          case ('java'):
+            return 'Java';
           default:
             return '';
         }

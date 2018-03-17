@@ -53,6 +53,9 @@ ioServer.on('connection', (socket) => {
         break;
       case 'javascript':
         imageTag = 'nodejs';
+        break;
+      case 'java':
+        imageTag = 'java';
     }
     
     // spawn a process to run the project
@@ -100,7 +103,8 @@ app.get('/api/2.0/projects/all-project-data', async (req, res) => {
   let allProjectData = {
     python: [],
     javascript: [],
-    html: []
+    html: [],
+    java: [],
   };
   
   // get project data from the database
@@ -118,6 +122,9 @@ app.get('/api/2.0/projects/all-project-data', async (req, res) => {
         break;
       case 'html':
         allProjectData.html.push(project);
+        break;
+      case 'java':
+        allProjectData.java.push(project);
     }
   });
   
