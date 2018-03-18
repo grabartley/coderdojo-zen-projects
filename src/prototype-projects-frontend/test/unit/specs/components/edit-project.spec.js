@@ -20,29 +20,111 @@ describe('EditProject', () => {
     sandbox.restore();
   });
   describe('methods', () => {
-    describe('updateDetails', () => {
-      it('should make the API call to update the project', async () => {
+    describe('isValid', () => {
+      it('should return true if there are no form errors', async () => {
+        // ARRANGE
+        let editProject = vueUnitHelper(EditProject());
+        editProject.errors = {
+          any: () => false,
+        };
+        
+        // ACT
+        const result = editProject.isValid();
+        
+        // ASSERT
+        expect(editProject.isFormValidated).to.be.true;
+        expect(result).to.be.true;
+      });
+      it('should return false if there are form errors', async () => {
+        // ARRANGE
+        let editProject = vueUnitHelper(EditProject());
+        editProject.errors = {
+          any: () => true,
+        };
+        
+        // ACT
+        const result = editProject.isValid();
+        
+        // ASSERT
+        expect(editProject.isFormValidated).to.be.true;
+        expect(result).to.be.false;
+      });
+    });
+    describe('updateProject', () => {
+      it('should make the API call to update the project if form data is valid', async () => {
         // ARRANGE
         let editProject = vueUnitHelper(editProjectWithMocks);
         editProject.projectData = {
           project_id: '1234-5678',
           type: 'python',
+          github_integration_id: '8765-4321',
         };
         editProject.name = 'Test Project';
         editProject.description = 'A test project.';
-        editProject.entrypoint = 'TestProject.py';
-        const expectedProjectData = {
-          projectId: editProject.projectData.project_id,
-          type: editProject.projectData.type,
-          columns: ['name', 'description', 'entrypoint'],
-          values: [editProject.name, editProject.description, editProject.entrypoint],
+        editProject.entrypoint = 'test.py';
+        editProject.filename = 'TestProject.zip';
+        editProject.uploadedFile = 'fileData';
+        editProject.$router = {
+          push: () => null,
         };
+        const expectedUpdatePayload = {
+          projectId: '1234-5678',
+          type: 'python',
+          columns: ['name', 'description', 'entrypoint'],
+          values: ['Test Project', 'A test project.', 'test.py'],
+          githubIntegrationId: '8765-4321',
+          filename: 'TestProject.zip',
+          file: 'fileData',
+        };
+        sandbox.stub(editProject, 'isValid').returns(true);
+        sandbox.spy(editProject.$router, 'push');
+        projectServiceMock.updateProject.withArgs(expectedUpdatePayload).returns(Promise.resolve('successful update'));
         
         // ACT
-        await editProject.updateDetails();
+        await editProject.updateProject();
         
         // ASSERT
-        expect(projectServiceMock.updateProject).to.have.been.calledWith(expectedProjectData);
+        expect(editProject.isValid).to.have.been.calledOnce;
+        expect(editProject.updatingProject).to.be.true;
+        expect(projectServiceMock.updateProject).to.have.been.calledWith(expectedUpdatePayload);
+        expect(editProject.$router.push).to.have.been.calledWith('/project/1234-5678');
+      });
+      it('should not make the API call to update the project if form data is invalid', async () => {
+        // ARRANGE
+        let editProject = vueUnitHelper(editProjectWithMocks);
+        editProject.$router = {
+          push: () => null,
+        };
+        sandbox.stub(editProject, 'isValid').returns(false);
+        sandbox.spy(editProject.$router, 'push');
+        
+        // ACT
+        await editProject.updateProject();
+        
+        // ASSERT
+        expect(editProject.isValid).to.have.been.calledOnce;
+        expect(editProject.updatingProject).to.be.false;
+        expect(projectServiceMock.updateProject).to.not.have.been.called;
+        expect(editProject.$router.push).to.not.have.been.called;
+      });
+      it('should not make the API call to update the project if already updating the project', async () => {
+        // ARRANGE
+        let editProject = vueUnitHelper(editProjectWithMocks);
+        editProject.updatingProject = true;
+        editProject.$router = {
+          push: () => null,
+        };
+        sandbox.stub(editProject, 'isValid').returns(true);
+        sandbox.spy(editProject.$router, 'push');
+        
+        // ACT
+        await editProject.updateProject();
+        
+        // ASSERT
+        expect(editProject.isValid).to.have.been.calledOnce;
+        expect(editProject.updatingProject).to.be.true;
+        expect(projectServiceMock.updateProject).to.not.have.been.called;
+        expect(editProject.$router.push).to.not.have.been.called;
       });
     });
     describe('onFileUpload', () => {
@@ -119,45 +201,6 @@ describe('EditProject', () => {
         expect(editProject.uploadedFile).to.equal(null);
       });
     });
-    describe('updateFiles', () => {
-      it('should make the API call to update the project if a file has been uploaded', async () => {
-        // ARRANGE
-        let editProject = vueUnitHelper(editProjectWithMocks);
-        editProject.projectData = {
-          project_id: '1234-5678',
-          type: 'python',
-          github_integration_id: '5678-1234',
-        };
-        editProject.filename = 'TestProject.zip'
-        editProject.uploadedFile = 'fileData';
-        editProject.isFileUploaded = true;
-        const expectedProjectData = {
-          projectId: editProject.projectData.project_id,
-          type: editProject.projectData.type,
-          githubIntegrationId: editProject.projectData.github_integration_id,
-          filename: editProject.filename,
-          file: editProject.uploadedFile,
-        };
-        
-        // ACT
-        await editProject.updateFiles();
-        
-        // ASSERT
-        expect(projectServiceMock.updateProject).to.have.been.calledWith(expectedProjectData);
-      });
-      it('should not make the API call to update the project if no file has been uploaded', async () => {
-        // ARRANGE
-        let editProject = vueUnitHelper(editProjectWithMocks);
-        editProject.isFileUploaded = false;
-        editProject.uploadedFile = null;
-        
-        // ACT
-        await editProject.updateFiles();
-        
-        // ASSERT
-        expect(projectServiceMock.updateProject).to.not.have.been.called;
-      });
-    });
     describe('deleteProject', () => {
       it('should make the API call to delete the project and then redirect the user', async () => {
         // ARRANGE
@@ -191,8 +234,26 @@ describe('EditProject', () => {
         await editProject.deleteProject();
         
         // ASSERT
+        expect(editProject.deletingProject).to.be.true;
         expect(projectServiceMock.deleteProjectById).to.have.been.calledWith(projectIdMock);
         expect(editProject.$router.push).to.have.been.calledWith('/');
+      });
+      it('shouldn\'t do anything if the project is already being deleted', async () => {
+        // ARRANGE
+        let editProject = vueUnitHelper(editProjectWithMocks);
+        editProject.deletingProject = true;
+        editProject.$router = {
+          push: () => null,
+        };
+        sandbox.spy(editProject.$router, 'push');
+        
+        // ACT
+        await editProject.deleteProject();
+        
+        // ASSERT
+        expect(editProject.deletingProject).to.be.true;
+        expect(projectServiceMock.deleteProjectById).to.not.have.been.called;
+        expect(editProject.$router.push).to.not.have.been.called;
       });
     });
   });
