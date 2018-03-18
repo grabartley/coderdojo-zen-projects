@@ -22,7 +22,7 @@ describe('ProjectCreationForm', () => {
 
   describe('methods', () => {
     describe('createProject', () => {
-      it('should use the project service to create a project with valid project data', () => {
+      it('should use the project service to create a project with valid project data', async () => {
         // ARRANGE
         let projectCreationForm = vueUnitHelper(projectCreationFormWithMocks);
         projectCreationForm.$refs = {
@@ -59,16 +59,21 @@ describe('ProjectCreationForm', () => {
         projectCreationForm.$router = {
           push: () => null
         };
+        sandbox.spy(projectCreationForm.$refs.projectDetailsFormRef, 'submitForm');
+        sandbox.spy(projectCreationForm.$refs.projectFilesFormRef, 'submitForm');
         sandbox.spy(projectCreationForm.$router, 'push');
 
         // ACT
-        projectCreationForm.createProject();
+        await projectCreationForm.createProject();
         
         // ASSERT
+        expect(projectCreationForm.creatingProject).to.be.true;
+        expect(projectCreationForm.$refs.projectDetailsFormRef.submitForm).to.have.been.calledOnce;
+        expect(projectCreationForm.$refs.projectFilesFormRef.submitForm).to.have.been.calledOnce;
         expect(projectServiceMock.createProject).to.have.been.calledWith(expectedProjectData);
         expect(projectCreationForm.$router.push).to.have.been.calledWith('/');
       });
-      it('should not create a project with invalid project data', () => {
+      it('should not create a project with invalid project data', async () => {
         // ARRANGE
         let projectCreationForm = vueUnitHelper(projectCreationFormWithMocks);
         projectCreationForm.$refs = {
@@ -84,12 +89,48 @@ describe('ProjectCreationForm', () => {
         projectCreationForm.$router = {
           push: () => null
         };
+        sandbox.spy(projectCreationForm.$refs.projectDetailsFormRef, 'submitForm');
+        sandbox.spy(projectCreationForm.$refs.projectFilesFormRef, 'submitForm');
         sandbox.spy(projectCreationForm.$router, 'push');
 
         // ACT
-        projectCreationForm.createProject();
+        await projectCreationForm.createProject();
         
         // ASSERT
+        expect(projectCreationForm.$refs.projectDetailsFormRef.submitForm).to.not.have.been.called;
+        expect(projectCreationForm.$refs.projectFilesFormRef.submitForm).to.not.have.been.called;
+        expect(projectCreationForm.creatingProject).to.be.false;
+        expect(projectServiceMock.createProject).to.not.have.been.called;
+        expect(projectCreationForm.$router.push).to.not.have.been.called;
+      });
+      it('should not create a project if already creating it', async () => {
+        // ARRANGE
+        let projectCreationForm = vueUnitHelper(projectCreationFormWithMocks);
+        projectCreationForm.creatingProject = true;
+        projectCreationForm.$refs = {
+          projectDetailsFormRef: {
+            isValid: () => true,
+            submitForm: () => null,
+          },
+          projectFilesFormRef: {
+            isValid: () => true,
+            submitForm: () => null,
+          },
+        };
+        projectCreationForm.$router = {
+          push: () => null
+        };
+        sandbox.spy(projectCreationForm.$refs.projectDetailsFormRef, 'submitForm');
+        sandbox.spy(projectCreationForm.$refs.projectFilesFormRef, 'submitForm');
+        sandbox.spy(projectCreationForm.$router, 'push');
+
+        // ACT
+        await projectCreationForm.createProject();
+        
+        // ASSERT
+        expect(projectCreationForm.$refs.projectDetailsFormRef.submitForm).to.not.have.been.called;
+        expect(projectCreationForm.$refs.projectFilesFormRef.submitForm).to.not.have.been.called;
+        expect(projectCreationForm.creatingProject).to.be.true;
         expect(projectServiceMock.createProject).to.not.have.been.called;
         expect(projectCreationForm.$router.push).to.not.have.been.called;
       });

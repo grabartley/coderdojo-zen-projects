@@ -13,7 +13,10 @@
         <project-details-form ref="projectDetailsFormRef"></project-details-form>
         <project-files-form ref="projectFilesFormRef"></project-files-form>
       </form>
-      <button class="project-creation-form__content-button primary-button" @click="createProject()">Create Project</button>
+      <button class="project-creation-form__content-button primary-button" v-bind:class="{'project-creation-form__content-button-spinning': creatingProject}" @click="createProject()">
+        <span v-if="creatingProject" class="fa fa-spinner fa-spin"></span>
+        <span v-else>Create Project</span>
+      </button>
     </div>
   </div>
 </template>
@@ -24,14 +27,21 @@ import projectService from '@/projects/service';
 
 export default {
   name: 'ProjectCreationForm',
+  data() {
+    return {
+      creatingProject: false,
+    };
+  },
   components: {
     ProjectDetailsForm,
     ProjectFilesForm,
   },
   methods: {
-    // if all form data is valid, send project data to the backend
-    createProject() {
-      if (this.$refs.projectDetailsFormRef.isValid() && this.$refs.projectFilesFormRef.isValid()) {
+    // if all form data is valid and we're not already creating a project, create the project
+    async createProject() {
+      if (this.$refs.projectDetailsFormRef.isValid() && this.$refs.projectFilesFormRef.isValid() && !this.creatingProject) {
+        // a project is being created
+        this.creatingProject = true;
         // store information from the form inputs
         this.$refs.projectDetailsFormRef.submitForm();
         this.$refs.projectFilesFormRef.submitForm();
@@ -49,7 +59,7 @@ export default {
         };
         
         // send the project to the backend to save
-        projectService.createProject(projectData);
+        await projectService.createProject(projectData);
         
         // send the user back to the projects list for now
         this.$router.push('/');
@@ -79,6 +89,11 @@ export default {
     &__content {
       &-button {
         margin: 20px 0;
+        &-spinning {
+          font-size: 16px;
+          width: 50px;
+          transition: 0.3s;
+        }
       }
     }
   }

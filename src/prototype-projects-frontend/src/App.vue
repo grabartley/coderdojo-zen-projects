@@ -25,7 +25,7 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: #2c3e50;
-    background-color: white;
+    background-color: #FFFFFF;
     text-align: center;
     margin: 0 18%;
   }
@@ -45,32 +45,33 @@
     outline: none;
   }
   .error-message {
-    color: red;
+    color: #9B1C20;
     font-size: 14px;
     font-style: italic;
   }
-  .primary-button {
+  .primary-button, .danger-button {
     padding: 10px 15px;
+    width: 160px;
+    height: 40px;
     font-size: 18px;
-    border: solid 1px #008bcc;
     border-radius: 5px;
-    color: white;
-    background-color: #0093D5;
+    color: #FFFFFF;
     &:hover {
       cursor: pointer;
+    }
+  }
+  .primary-button {
+    border: solid 1px #008bcc;
+    background-color: #0093D5;
+    &:hover {
       background-color: #00aeff;
     }
   }
   .danger-button {
-    padding: 10px 15px;
-    font-size: 18px;
-    border: none;
-    border-radius: 5px;
-    color: white;
-    background-color: red;
+    border: solid 1px #9B1C20;
+    background-color: #9B1C20;
     &:hover {
-      cursor: pointer;
-      background-color: #ff5c33;
+      background-color: #d7282d;
     }
   }
 </style>

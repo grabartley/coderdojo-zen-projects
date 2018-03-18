@@ -219,6 +219,9 @@ export default {
               width: 60%;
               max-width: 600px;
             }
+            & textarea {
+              height: 150px;
+            }
             & label {
               margin: 0 10px;
               & input {
