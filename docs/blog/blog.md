@@ -4,6 +4,78 @@
 
 ****
 
+## Implementing Mockups & Further Refining Runtime and Version Control Functionality
+#### 22nd March 2018
+
+Since my last blog post I have been hard at work **implementing my designs** into my Vue components. I've implemented styling for the following pages so far:
+
+  * Project Creation
+  * Project Information
+  * Project Runtime
+  * Edit Project
+  * Mock Login
+  
+I have yet to style the **Project List** page and am aiming to do that in the coming days but it is arguably the most difficult of my mockups to implement due to the **pagination of list contents** and also because not all of the functionality behind it has been **implemented yet** (I do not yet have statistics tracking for project runtimes or a search system for projects). I will likely only complete these features after styling the page. Screenshots of the pages I have listed above are given here:
+
+**Styled Project Creation Page**
+![Project Creation Page](./images/project-creation-styled.png)
+
+**Styled Project Information Page**
+![Project Creation Page](./images/nodejs-project-page-styled.png)
+
+**Styled HTML5 Project Information Page**
+![Project Creation Page](./images/html-project-page-styled.png)
+
+**Styled Project Runtime Page**
+![Project Creation Page](./images/project-runtime-styled-running.png)
+
+**Styled Edit Project Page**
+![Project Creation Page](./images/edit-project-styled.png)
+
+**Styled Mock Login Page**
+![Project Creation Page](./images/login-page-styled.png)
+
+Another issue I wanted to address from the last blog post was **version control integration with relation to creating and updating projects**. I have **completely reworked** how I add files to the project GitHub repositories using the **[Git Data API](https://developer.github.com/v3/git/)** which allows for much more specific requests but is quite technical compared to the normal API calls so it took some time to understand and was certainly a **learning curve** for me.
+
+However, I spent time **learning how it works** and was able to use it to commit, push and merge unzipped project files to their respective repositories and remove existing files in the process which **fixes my project update issue**! This way of handling version control is also **much better** for the following reasons:
+
+  * Repositories now contain the source code for the project whch can be viewed in the repository rather than just a zip file to be downloaded which facilitates **reading of project code**
+  * Runtime containers now have less work to do since they don't have to unzip project archives after cloning them from GitHub, they can just **run them directly** instead
+  * Having project files directly in the top level of the repository allows for **HTML5 projects to be viewed** using GitHub pages
+  
+Once I had made these changes to the version control integration I decided to add the **HTML5 project support** that I had been waiting to add since it could not be done until the project files were properly versioned. In order to do this I push files for HTML5 projects to the **gh-pages branch** of their repository rather than master. This activates GitHub pages so that the HTML5 project can be viewed at the **GitHub pages URL** for that repository. I then added an iframe to the Project Information page instead of the run button when viewing a HTML5 project so that you can **see and interact with the project directly on it's page** (this can be seen in the HTML5 project screenshot above). I also added a link to view it externally so that it can be viewed in fullscreen.
+
+Leading on from this, I decided to work on **improving the speed and efficiency of my runtimes** since they were slower than I would like and there was certainly room for improvement. The process I had each time a project was run was:
+
+  * Create Dockerfile specific to project being run
+  * Build image from Dockerfile
+  * Run a container of the image until stopped
+  * Remove the image
+  * Remove the Dockerfile
+  
+Rather than building an image specific to the project each time and removing it afterwards which can take a lot of time, it makes more sense to create **generalised images** for each project type being run, build these once and store them somewhere to be used each time a project of that type is run. The information specific to the project being run can be passed as **environment variables** to the generalised image.
+
+In order to do this I created a Dockerfile for each project type and used them to build images which set up an environment around a base image and call a **docker-entrypoint** script. The docker-entrypoint script then contains commands that the container will execute to clone the project repoisitory, install dependencies and run the project. Only **two environment variables** are needed when running a container of the images:
+
+  * The URL of the project's GitHub repository
+  * The name of the entrypoint file for the project
+  
+For storage of the generalised images I used **[DockerHub](https://hub.docker.com/r/coderdojo/project-runtime/)** which stores **repositories of images** and allows them to be pulled using docker commands. I contacted the CoderDojo Foundation (CDF) in order to get permission to **create a repository under the coderdojo organisation** on DockerHub since this is where all of the other Zen docker images are kept. Once I had permission I created a repository called **coderdojo/project-runtime** which can be seen in the screenshot below. It's one repository which contains multiple images for different project types which can be specified when pulling it using **tags**.
+
+**Project Runtime Image on DockerHub**
+![Project Runtime Image on DockerHub](./images/dockerhub-runtime-image.png)
+
+So, with all of this having been done the **new process** for running projects is as follows:
+
+  * Pull the image for this project type from DockerHub (**this will only happen once**, the image will be stored on the server after this)
+  * Run a container of the image (with environment variables for the project being run) until stopped
+  
+Much simpler! It is also **a lot faster** in practice especially since the image for each project type **only needs to be pulled once** from DockerHub and then it will be available on the server for any other project of that type to use.
+
+Following on from this, I decided to add support for creating, displaying and running **Java projects** since Java was one of the languages I wanted to support as a stretch goal. I am happy to say that it was **not very time-consuming or difficult to add support for** since everything around it is already built. I basically had to build an image for Java projects and push it to DockerHub and then add to the frontend to allow java projects to be created and displayed and that was it. This is good because I want my system to be **easily extendible** when it comes to adding support for other languages in the future and I believe I have achieved that now.
+
+****
+
 ## Results of User Evaluation & Styling
 #### 13th March 2018
 
