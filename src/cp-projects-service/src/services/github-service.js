@@ -10,7 +10,7 @@ let USER_AGENT;
 // sets up objects to use when making API calls using access token of the given user
 async function setupApiWithAccess(dojoId) {
   // get the access token for this user
-  const tokenResponse = await dbService.query('SELECT github_access_token FROM github_integrations WHERE dojo_id=\'' + dojoId + '\';');
+  const tokenResponse = await dbService.query(`SELECT github_access_token FROM github_integrations WHERE dojo_id='${dojoId}';`);
   API_TOKEN = tokenResponse.rows[0].github_access_token;
   
   // set up the object for v4 API calls
@@ -35,7 +35,7 @@ async function setupApiWithAccess(dojoId) {
     headers: {
       'Content-Type': 'application/json',
       'User-Agent': USER_AGENT,
-      'Authorization': 'token ' + API_TOKEN,
+      'Authorization': `token ${API_TOKEN}`,
     }
   });
 }
@@ -75,7 +75,7 @@ async function commitFileToRepo(commitData) {
   const owner = GITHUB_REST_API.defaults.headers['User-Agent'];
   
   // endpoint to hit
-  const apiEndpoint = '/repos/' + owner + '/' + commitData.repo + '/contents/' + commitData.path;
+  const apiEndpoint = `/repos/${owner}/${commitData.repo}/contents/${commitData.path}`;
   let apiCommitData;
   
   // if the file already exists
@@ -110,11 +110,11 @@ async function pushTreeToRepo(treeData) {
   const owner = GITHUB_REST_API.defaults.headers['User-Agent'];
   
   // endpoints to hit
-  const apiBlobEndpoint = '/repos/' + owner + '/' + treeData.repo + '/git/blobs';
-  const apiTreeEndpoint = '/repos/' + owner + '/' + treeData.repo + '/git/trees';
-  const apiBranchEndpoint = '/repos/' + owner + '/' + treeData.repo + '/branches/' + treeData.branch;
-  const apiCommitEndpoint = '/repos/' + owner + '/' + treeData.repo + '/git/commits';
-  const apiMergeEndpoint = '/repos/' + owner + '/' + treeData.repo + '/merges';
+  const apiBlobEndpoint = `/repos/${owner}/${treeData.repo}/git/blobs`;
+  const apiTreeEndpoint = `/repos/${owner}/${treeData.repo}/git/trees`;
+  const apiBranchEndpoint = `/repos/${owner}/${treeData.repo}/branches/${treeData.branch}`;
+  const apiCommitEndpoint = `/repos/${owner}/${treeData.repo}/git/commits`;
+  const apiMergeEndpoint = `/repos/${owner}/${treeData.repo}/merges`;
   
   // create blobs and tree array to send to GitHub API
   let tree = [];

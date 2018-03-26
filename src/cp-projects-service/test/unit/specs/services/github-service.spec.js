@@ -77,7 +77,7 @@ describe('GitHubService', () => {
         },
         './db-service': {
           query: async (queryString) => {
-            if (queryString === 'SELECT github_access_token FROM github_integrations WHERE dojo_id=\'' + repoDataMock.dojoId + '\';') {
+            if (queryString === 'SELECT github_access_token FROM github_integrations WHERE dojo_id=\'1234-5678\';') {
               return Promise.resolve({
                 rows: [
                   {
@@ -110,7 +110,7 @@ describe('GitHubService', () => {
         branch: 'master',
         dojoId: '1234-5678'
       };
-      const expectedApiEndpoint = '/repos/' + ownerMock + '/' + commitDataMock.repo + '/contents/' + commitDataMock.path;
+      const expectedApiEndpoint = '/repos/championone/5678-1234/contents/TestProject.zip';
       const expectedApiCommitData = {
         path: commitDataMock.path,
         message: commitDataMock.message,
@@ -164,7 +164,7 @@ describe('GitHubService', () => {
         },
         './db-service': {
           query: async (queryString) => {
-            if (queryString === 'SELECT github_access_token FROM github_integrations WHERE dojo_id=\'' + commitDataMock.dojoId + '\';') {
+            if (queryString === 'SELECT github_access_token FROM github_integrations WHERE dojo_id=\'1234-5678\';') {
               return Promise.resolve({
                 rows: [
                   {
@@ -196,7 +196,7 @@ describe('GitHubService', () => {
         branch: 'master',
         dojoId: '1234-5678'
       };
-      const expectedApiEndpoint = '/repos/' + ownerMock + '/' + commitDataMock.repo + '/contents/' + commitDataMock.path;
+      const expectedApiEndpoint = '/repos/championone/5678-1234/contents/TestProject.zip';
       const expectedApiCommitData = {
         path: commitDataMock.path,
         message: commitDataMock.message,
@@ -253,7 +253,7 @@ describe('GitHubService', () => {
         },
         './db-service': {
           query: async (queryString) => {
-            if (queryString === 'SELECT github_access_token FROM github_integrations WHERE dojo_id=\'' + commitDataMock.dojoId + '\';') {
+            if (queryString === 'SELECT github_access_token FROM github_integrations WHERE dojo_id=\'1234-5678\';') {
               return Promise.resolve({
                 rows: [
                   {
@@ -374,7 +374,7 @@ describe('GitHubService', () => {
         },
         './db-service': {
           query: async (queryString) => {
-            if (queryString === 'SELECT github_access_token FROM github_integrations WHERE dojo_id=\'' + treeDataMock.dojoId + '\';') {
+            if (queryString === 'SELECT github_access_token FROM github_integrations WHERE dojo_id=\'5678-1234\';') {
               return Promise.resolve({
                 rows: [
                   {

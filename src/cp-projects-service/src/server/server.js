@@ -33,7 +33,7 @@ app.use(cors());
 
 // listen on the given port
 server.listen(port, () => {
-  console.log('\nServer listening on port ' + port + '!');
+  console.log(`\nServer listening on port ${port}!`);
 });
 
 // when a client connects
@@ -41,7 +41,7 @@ ioServer.on('connection', (socket) => {
   // when a start event is emited by the frontend
   socket.on('start', async (projectId) => {
     // get data for this project id
-    const projectResponse = await dbService.query('SELECT * FROM projects WHERE project_id=\'' + projectId + '\';');
+    const projectResponse = await dbService.query(`SELECT * FROM projects WHERE project_id='${projectId}';`);
     const projectData = projectResponse.rows[0];
     // used to store the tag of the image to pull
     let imageTag = '';
@@ -86,7 +86,7 @@ app.get('/api/2.0/projects/project/:projectId', async (req, res) => {
   console.log(req.params);
   
   // get the data for this project id
-  const projectResponse = await dbService.query('SELECT * FROM projects WHERE project_id=\'' + req.params.projectId + '\';');
+  const projectResponse = await dbService.query(`SELECT * FROM projects WHERE project_id='${req.params.projectId}';`);
   const projectData = projectResponse.rows[0];
   
   // respond with the data
@@ -139,7 +139,7 @@ app.get('/api/2.0/profiles/load-user-profile/:userId', async (req, res) => {
   console.log(req.params);
   
   // get the data for the given user id
-  const userResponse = await dbService.query('SELECT * FROM users WHERE id=\'' + req.params.userId + '\';');
+  const userResponse = await dbService.query(`SELECT * FROM users WHERE id='${req.params.userId}';`);
   const userData = userResponse.rows[0];
   
   // respond with the data
@@ -153,7 +153,7 @@ app.get('/api/2.0/dojos/:dojoId', async (req, res) => {
   console.log(req.params);
   
   // get the dojos for the given user from the database
-  const dojo = await dbService.query('SELECT * from dojos WHERE id=\'' + req.params.dojoId + '\'');
+  const dojo = await dbService.query(`SELECT * from dojos WHERE id='${req.params.dojoId}';`);
   
   // respond
   res.send(dojo.rows[0]);
@@ -166,9 +166,9 @@ app.get('/api/2.0/dojos/dojo-by-github-integration/:githubId', async (req, res) 
   console.log(req.params);
   
   // get the dojo data from the database
-  let dojoId = await dbService.query('SELECT dojo_id from github_integrations WHERE github_integration_id=\'' + req.params.githubId + '\';');
+  let dojoId = await dbService.query(`SELECT dojo_id from github_integrations WHERE github_integration_id='${req.params.githubId}';`);
   dojoId = dojoId.rows[0].dojo_id;
-  let dojo = await dbService.query('SELECT * from dojos WHERE id=\'' + dojoId + '\';');
+  let dojo = await dbService.query(`SELECT * from dojos WHERE id='${dojoId}';`);
   
   // respond
   res.send(dojo.rows[0]);
@@ -181,13 +181,13 @@ app.get('/api/2.0/dojos/dojos-for-user/:userId', async (req, res) => {
   console.log(req.params);
   
   // get the dojo ids for the given user from the database
-  let dojoIdsForUser = await dbService.query('SELECT dojos from users WHERE id=\'' + req.params.userId + '\'');
+  let dojoIdsForUser = await dbService.query(`SELECT dojos from users WHERE id='${req.params.userId}';`);
   dojoIdsForUser = dojoIdsForUser.rows[0].dojos;
   let dojosForUser = [];
   
   // for each dojo id, get the dojo data
   for (let i = 0; i < dojoIdsForUser.length; i++) {
-    let dojo = await dbService.query('SELECT * from dojos WHERE id=\'' + dojoIdsForUser[i] + '\'');
+    let dojo = await dbService.query(`SELECT * from dojos WHERE id='${dojoIdsForUser[i]}';`);
     dojosForUser.push(dojo.rows[0]);
   }
   
@@ -210,19 +210,19 @@ app.post('/api/2.0/projects/create-project', async (req, res) => {
   
   // extract project files
   let folderName = 'projectFiles';
-  fs.writeFileSync('./' + projectData.filename, file, 'base64');
-  const projectZip = new zip('./' + projectData.filename);
-  projectZip.extractAllTo('./' + folderName, true);
+  fs.writeFileSync(`./${projectData.filename}`, file, 'base64');
+  const projectZip = new zip(`./${projectData.filename}`);
+  projectZip.extractAllTo(`./${folderName}`, true);
   
   // get project file paths and data from extracted zip
-  let projectFiles = fileSystemService.recursiveListSync('./' + folderName + '/');
+  let projectFiles = fileSystemService.recursiveListSync(`./${folderName}/`);
   
   // remove zip and created directory
-  fs.unlinkSync('./' + projectData.filename);
-  fs.rmdirSync('./' + folderName);
+  fs.unlinkSync(`./${projectData.filename}`);
+  fs.rmdirSync(`./${folderName}`);
   
   // fix project file paths
-  let charsToCut = ('./' + folderName + '/').length;
+  let charsToCut = (`./${folderName}/`).length;
   projectFiles.forEach((file) => {
     file.path = file.path.substring(charsToCut);
   });
@@ -231,11 +231,11 @@ app.post('/api/2.0/projects/create-project', async (req, res) => {
   let id = uuid();
   
   // get the author's name to store in the db
-  const userResponse = await dbService.query('SELECT name FROM users WHERE id=\'' + projectData.userId + '\';');
+  const userResponse = await dbService.query(`SELECT name FROM users WHERE id='${projectData.userId}';`);
   const author = userResponse.rows[0].name;
   
   // get the github integration id for this project to reference access token
-  const githubIntegrationResponse = await dbService.query('SELECT github_integration_id FROM github_integrations WHERE dojo_id=\'' + projectData.dojoId + '\';');
+  const githubIntegrationResponse = await dbService.query(`SELECT github_integration_id FROM github_integrations WHERE dojo_id='${projectData.dojoId}';`);
   const githubIntegrationId = githubIntegrationResponse.rows[0].github_integration_id;
   
   // repository data to be used by GitHub
@@ -319,10 +319,10 @@ app.post('/api/2.0/projects/update-project', async (req, res) => {
     // for each column to be updated, add it to the query string
     for (let i = 0; i < projectData.columns.length; i++) {
       let columnName = projectData.columns[i];
-      queryString += ' ' + columnName + ' = $' + (i + 1) + ',';
+      queryString += ` ${columnName}=\$${i + 1},`;
     }
     queryString = queryString.substring(0, queryString.length - 1);
-    queryString += ' WHERE project_id = \'' + projectData.projectId + '\';';
+    queryString += ` WHERE project_id='${projectData.projectId}';`;
     
     // construct query object
     const query = {
@@ -342,25 +342,25 @@ app.post('/api/2.0/projects/update-project', async (req, res) => {
     
     // extract project files
     let folderName = 'projectFiles';
-    fs.writeFileSync('./' + projectData.filename, file, 'base64');
-    const projectZip = new zip('./' + projectData.filename);
-    projectZip.extractAllTo('./' + folderName, true);
+    fs.writeFileSync(`./${projectData.filename}`, file, 'base64');
+    const projectZip = new zip(`./${projectData.filename}`);
+    projectZip.extractAllTo(`./${folderName}`, true);
     
     // get project file paths and data from extracted zip
-    let projectFiles = fileSystemService.recursiveListSync('./' + folderName + '/');
+    let projectFiles = fileSystemService.recursiveListSync(`./${folderName}/`);
     
     // remove zip and created directory
-    fs.unlinkSync('./' + projectData.filename);
-    fs.rmdirSync('./' + folderName);
+    fs.unlinkSync(`./${projectData.filename}`);
+    fs.rmdirSync(`./${folderName}`);
     
     // fix project file paths
-    let charsToCut = ('./' + folderName + '/').length;
+    let charsToCut = (`./${folderName}/`).length;
     projectFiles.forEach((file) => {
       file.path = file.path.substring(charsToCut);
     });
     
     // get the dojoId for this project from the db
-    const dojoId = (await dbService.query('SELECT dojo_id FROM github_integrations WHERE github_integration_id = \'' + projectData.githubIntegrationId + '\';')).rows[0].dojo_id;
+    const dojoId = (await dbService.query(`SELECT dojo_id FROM github_integrations WHERE github_integration_id='${projectData.githubIntegrationId}';`)).rows[0].dojo_id;
     
     // set the branch to use based on project type since HTML projects use GitHub pages
     let branch = 'master';
@@ -381,7 +381,7 @@ app.post('/api/2.0/projects/update-project', async (req, res) => {
   }
   
   // set updated time
-  await dbService.query('UPDATE projects SET updated_at=\'' + moment().toISOString() + '\';');
+  await dbService.query(`UPDATE projects SET updated_at='${moment().toISOString()}' WHERE project_id='${projectData.projectId}';`);
   
   // respond
   res.send('successful project update');
@@ -394,7 +394,7 @@ app.post('/api/2.0/projects/delete-project', async (req, res) => {
   console.log(req.body);
   
   // set deleted_at for this project to the current time (soft delete)
-  await dbService.query('UPDATE projects SET deleted_at = \'' + moment().toISOString() + '\' WHERE project_id = \'' + req.body.projectId + '\';');
+  await dbService.query(`UPDATE projects SET deleted_at='${moment().toISOString()}' WHERE project_id='${req.body.projectId}';`);
   
   // respond
   res.send('successful project deletion');
@@ -407,7 +407,7 @@ app.post('/api/2.0/users/login', async (req, res) => {
   console.log(req.body);
   
   // get the data for the given user id
-  const userResponse = await dbService.query('SELECT * FROM users WHERE email=\'' + req.body.email + '\';');
+  const userResponse = await dbService.query(`SELECT * FROM users WHERE email='${req.body.email}';`);
   const userData = userResponse.rows[0];
   
   // respond with what was found
@@ -431,7 +431,7 @@ app.post('/api/2.0/users/:userId/integrations/github', async (req, res) => {
   const accessToken = ((data[0]).split('='))[1];
   
   // get the dojo ids for the given user from the database
-  let dojoIdsForUser = await dbService.query('SELECT dojos from users WHERE id=\'' + req.params.userId + '\'');
+  let dojoIdsForUser = await dbService.query(`SELECT dojos from users WHERE id='${req.params.userId}';`);
   dojoIdsForUser = dojoIdsForUser.rows[0].dojos;
   
   // store the integration data in the database for each dojo
