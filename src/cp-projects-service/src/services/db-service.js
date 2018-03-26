@@ -10,19 +10,19 @@ async function query(queryString) {
 // constructs and executes an SQL query to insert given values into given tableName columnNames
 async function insertInto(tableName, columnNames, values) {
   // construct query String
-  let queryString = 'INSERT INTO ' + tableName + '(';
+  let queryString = `INSERT INTO ${tableName}(`;
   
   columnNames.forEach((column) => {
-    queryString += column + ', ';
+    queryString += `${column}, `;
   });
   
-  queryString = queryString.substring(0, queryString.length - 2) + ') VALUES (';
+  queryString = `${queryString.substring(0, queryString.length - 2)}) VALUES (`;
   
   for (let i = 1; i <= values.length; i++) {
-    queryString += '$' + i + ', '
+    queryString += `\$${i}, `;
   }
   
-  queryString = queryString.substring(0, queryString.length - 2) + ')';
+  queryString = `${queryString.substring(0, queryString.length - 2)})`;
   
   // create query object with String and values array
   const query = {
