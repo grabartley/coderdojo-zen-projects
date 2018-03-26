@@ -153,7 +153,7 @@ app.get('/api/2.0/dojos/:dojoId', async (req, res) => {
   console.log(req.params);
   
   // get the dojos for the given user from the database
-  let dojo = await dbService.query('SELECT * from dojos WHERE id=\'' + req.params.dojoId + '\'');
+  const dojo = await dbService.query('SELECT * from dojos WHERE id=\'' + req.params.dojoId + '\'');
   
   // respond
   res.send(dojo.rows[0]);
