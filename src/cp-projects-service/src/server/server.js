@@ -74,6 +74,12 @@ ioServer.on('connection', (socket) => {
       // execute it in the running container
       term.write(data);
     });
+    
+    // when a stop event is emitted by the frontend
+    socket.on('stop', () => {
+      // kill the running process
+      term.destroy();
+    });
   });
 });
 
