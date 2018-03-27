@@ -153,4 +153,21 @@ describe('ProjectRuntime', () => {
       expect(projectRuntime.$router.push).to.have.been.calledWith('/');
     });
   });
+  
+  describe('destroyed', () => {
+    it('should emit a stop event to the server', () => {
+      // ARRANGE
+      let projectRuntime = vueUnitHelper(ProjectRuntime());
+      projectRuntime.$socket = {
+        emit: () => null,
+      };
+      sandbox.spy(projectRuntime.$socket, 'emit');
+      
+      // ACT
+      projectRuntime.$lifecycleMethods.destroyed();
+      
+      // ASSERT
+      expect(projectRuntime.$socket.emit).to.have.been.calledWith('stop');
+    });
+  });
 });

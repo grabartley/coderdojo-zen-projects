@@ -73,6 +73,10 @@ export default {
       this.runProject();
     }
   },
+  destroyed() {
+    // tell the server to stop the running container
+    this.$socket.emit('stop');
+  },
 }
 </script>
 <style scoped lang="less">
