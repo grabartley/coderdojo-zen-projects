@@ -1,9 +1,9 @@
 <template>
   <div class="project-runtime">
-    <div v-if="projectData" class="project-runtime__header">
-      <img class="project-runtime__header-image" src="@/assets/cd-logo.png" alt="Project Image"></img>
-      <span class="project-runtime__header-title">{{ projectData.name }}</span>
-      <span class="project-runtime__header-author">by {{ projectData.author }}</span>
+    <div v-if="projectData" class="project-runtime__banner">
+      <img class="project-runtime__banner-image" src="@/assets/cd-logo.png" alt="Project Image"></img>
+      <span class="project-runtime__banner-title">{{ projectData.name }}</span>
+      <span class="project-runtime__banner-author">by {{ projectData.author }}</span>
     </div>
     <div class="project-runtime__content">
       <div v-if="projectData" class="project-runtime__content-link">
@@ -81,7 +81,7 @@ export default {
 </script>
 <style scoped lang="less">
   .project-runtime {
-    &__header {
+    &__banner {
       display: flex;
       align-items: center;
       padding: 15px 20px;

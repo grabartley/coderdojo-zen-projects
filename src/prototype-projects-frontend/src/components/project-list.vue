@@ -1,5 +1,8 @@
 <template>
   <div class="project-list">
+    <div class="project-list__banner">
+      <span class="project-list__banner-title">Projects</span>
+    </div>
     <h2>All Projects</h2>
     <h3>Python 3</h3>
     <div v-for="project in pythonProjectData">
