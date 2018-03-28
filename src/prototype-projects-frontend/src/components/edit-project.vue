@@ -1,9 +1,9 @@
 <template>
   <div v-if="projectData" class="edit-project">
-    <div class="edit-project__header">
-      <img class="edit-project__header-image" src="@/assets/cd-logo.png" alt="Project Image"></img>
-      <span class="edit-project__header-title">{{ projectData.name }}</span>
-      <span class="edit-project__header-author">by {{ projectData.author }}</span>
+    <div class="edit-project__banner">
+      <img class="edit-project__banner-image" src="@/assets/cd-logo.png" alt="Project Image"></img>
+      <span class="edit-project__banner-title">{{ projectData.name }}</span>
+      <span class="edit-project__banner-author">by {{ projectData.author }}</span>
     </div>
     <div class="edit-project__information">
       <div class="edit-project__information-title">
@@ -170,7 +170,7 @@
 </script>
 <style scoped lang="less">
   .edit-project {
-    &__header {
+    &__banner {
       display: flex;
       align-items: center;
       margin-bottom: 30px;

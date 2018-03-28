@@ -1,9 +1,9 @@
 <template>
   <div v-if="projectData && !projectData.deleted_at" class="project-details">
-    <div class="project-details__header">
-      <img class="project-details__header-image" src="@/assets/cd-logo.png" alt="Project Image"></img>
-      <span class="project-details__header-title">{{ projectData.name }}</span>
-      <span class="project-details__header-author">by {{ projectData.author }}</span>
+    <div class="project-details__banner">
+      <img class="project-details__banner-image" src="@/assets/cd-logo.png" alt="Project Image"></img>
+      <span class="project-details__banner-title">{{ projectData.name }}</span>
+      <span class="project-details__banner-author">by {{ projectData.author }}</span>
     </div>
     <div class="project-details__information">
       <div class="project-details__information-sidebar">
@@ -189,7 +189,7 @@
 </script>
 <style scoped lang="less">
   .project-details {
-    &__header {
+    &__banner {
       display: flex;
       align-items: center;
       padding: 15px 20px;

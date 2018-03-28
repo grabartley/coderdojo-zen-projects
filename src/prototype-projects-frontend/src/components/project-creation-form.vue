@@ -1,12 +1,10 @@
 <template>
   <div class="project-creation-form">
-    <div class="project-creation-form__header">
-      <span class="project-creation-form__header-image">
+    <div class="project-creation-form__banner">
+      <span class="project-creation-form__banner-image">
         <img src="@/assets/cd-logo.png" alt="CoderDojo Logo"></img>
       </span>
-      <span class="project-creation-form__header-title">
-        New Project
-      </span>
+      <span class="project-creation-form__banner-title">New Project</span>
     </div>
     <div class="project-creation-form__content">
       <form>
@@ -70,7 +68,7 @@ export default {
 </script>
 <style scoped lang="less">
   .project-creation-form {
-    &__header {
+    &__banner {
       display: flex;
       padding: 15px 20px;
       margin-bottom: 30px;
