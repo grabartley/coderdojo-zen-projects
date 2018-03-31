@@ -5,7 +5,6 @@
     <common-footer></common-footer>
   </div>
 </template>
-
 <script>
   import commonHeader from '@/components/common-header';
   import commonFooter from '@/components/common-footer';
@@ -18,8 +17,9 @@
     },
   }
 </script>
-
 <style lang="less">
+  @import "~bootstrap/less/bootstrap.less";
+
   #app {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -28,6 +28,8 @@
     background-color: #FFFFFF;
     text-align: center;
     margin: 0 18%;
+    font-size: 16px;
+    line-height: normal;
   }
   input, textarea {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
@@ -40,6 +42,9 @@
     border-radius: 2px;
     border-color: #99999F;
     border-width: 0.5px;
+  }
+  label {
+    font-weight: normal;
   }
   button:focus {
     outline: none;
@@ -57,6 +62,7 @@
     border-radius: 5px;
     color: #FFFFFF;
     &:hover {
+      color: #FFFFFF;
       cursor: pointer;
     }
   }

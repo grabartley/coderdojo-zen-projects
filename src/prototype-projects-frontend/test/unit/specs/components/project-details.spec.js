@@ -167,7 +167,7 @@ describe('ProjectDetails', () => {
         let projectDetails = vueUnitHelper(ProjectDetails());
         projectDetails.projectData = {
           project_id: '1234-5678',
-          github: 'https://github.com/championone/1234-5678',
+          github_url: 'https://github.com/championone/1234-5678',
         };
         const expectedLink = 'https://championone.github.io/1234-5678';
         

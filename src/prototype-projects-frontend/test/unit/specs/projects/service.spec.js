@@ -18,20 +18,24 @@ describe('ProjectService', () => {
       Vue.http.get.withArgs(`${Vue.config.apiServer}/api/2.0/projects/project/${projectIdMock}`).returns(Promise.resolve('expectedResponse'));
       
       // ACT
-      let result = await ProjectService.getProjectById(projectIdMock);
+      const result = await ProjectService.getProjectById(projectIdMock);
       
       // ASSERT
       expect(result).to.equal('expectedResponse');
     });
   });
-  describe('getAllProjectData', () => {
+  describe('getProjectData', () => {
     it('should make the correct API call', async () => {
       // ARRANGE
+      const deletedMock = false;
+      const sortedByMock = 'plays';
+      const sortOrderMock = 'desc';
+      const limitMock = 5;
       sandbox.stub(Vue.http, 'get');
-      Vue.http.get.withArgs(`${Vue.config.apiServer}/api/2.0/projects/all-project-data`).returns(Promise.resolve('expectedResponse'));
+      Vue.http.get.withArgs(`${Vue.config.apiServer}/api/2.0/projects/project-data?deleted=${deletedMock}&sortedBy=${sortedByMock}&sortOrder=${sortOrderMock}&limit=${limitMock}`).returns(Promise.resolve('expectedResponse'));
       
       // ACT
-      let result = await ProjectService.getAllProjectData();
+      const result = await ProjectService.getProjectData(deletedMock, sortedByMock, sortOrderMock, limitMock);
       
       // ASSERT
       expect(result).to.equal('expectedResponse');
@@ -41,13 +45,13 @@ describe('ProjectService', () => {
     it('should make the correct API call', async () => {
       // ARRANGE
       sandbox.stub(Vue.http, 'post');
-      let fileDataMock = {
+      const fileDataMock = {
         filename: 'test.zip',
       };
       Vue.http.post.withArgs(`${Vue.config.apiServer}/api/2.0/projects/create-project`, fileDataMock).returns(Promise.resolve('expectedResponse'));
       
       // ACT
-      let result = await ProjectService.createProject(fileDataMock);
+      const result = await ProjectService.createProject(fileDataMock);
       
       // ASSERT
       expect(result).to.equal('expectedResponse');
@@ -63,7 +67,7 @@ describe('ProjectService', () => {
       Vue.http.post.withArgs(`${Vue.config.apiServer}/api/2.0/projects/update-project`, projectDataMock).returns(Promise.resolve('expectedResponse'));
       
       // ACT
-      let result = await ProjectService.updateProject(projectDataMock);
+      const result = await ProjectService.updateProject(projectDataMock);
       
       // ASSERT
       expect(result).to.equal('expectedResponse');
@@ -77,7 +81,7 @@ describe('ProjectService', () => {
       Vue.http.post.withArgs(`${Vue.config.apiServer}/api/2.0/projects/delete-project`, {projectId: projectIdMock}).returns(Promise.resolve('expectedResponse'));
       
       // ACT
-      let result = await ProjectService.deleteProjectById(projectIdMock);
+      const result = await ProjectService.deleteProjectById(projectIdMock);
       
       // ASSERT
       expect(result).to.equal('expectedResponse');

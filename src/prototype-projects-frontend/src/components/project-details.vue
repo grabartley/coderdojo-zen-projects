@@ -10,19 +10,19 @@
         <div class="project-details__information-sidebar-item">
           <div class="project-details__information-sidebar-item-header">
             <span class="project-details__information-sidebar-item-header-icon fas fa-wrench"></span>
-            <label class="project-details__information-sidebar-item-header-name">technology</label>
+            <span class="project-details__information-sidebar-item-header-name">technology</span>
           </div>
           <div class="project-details__information-sidebar-item-data" style="text-align: center;">
             <div class="project-details__bubble">
               <img :src="projectTypeImage" alt="Technology Logo" class="project-details__bubble-image"></img>
-              <label class="project-details__bubble-text">{{ projectType }}</label>
+              <span class="project-details__bubble-text">{{ projectType }}</span>
             </div>
           </div>
         </div>
         <div class="project-details__information-sidebar-item">
           <div class="project-details__information-sidebar-item-header">
             <span class="project-details__information-sidebar-item-header-icon fas fa-user-circle"></span>
-            <label class="project-details__information-sidebar-item-header-name">author</label>
+            <span class="project-details__information-sidebar-item-header-name">author</span>
           </div>
           <div class="project-details__information-sidebar-item-data">
             <div class="project-details__information-sidebar-item-data-link">
@@ -33,28 +33,28 @@
         <div v-if="dojoData" class="project-details__information-sidebar-item">
           <div class="project-details__information-sidebar-item-header">
             <span class="project-details__information-sidebar-item-header-icon fas fa-users"></span>
-            <label class="project-details__information-sidebar-item-header-name">dojo</label>
+            <span class="project-details__information-sidebar-item-header-name">dojo</span>
           </div>
           <div class="project-details__information-sidebar-item-data" style="text-align: center;">
             <div class="project-details__bubble">
               <img src="@/assets/cd-logo.png" alt="Python Logo" class="project-details__bubble-image"></img>
-              <label class="project-details__bubble-text">{{ dojoData.name }}</label>
+              <span class="project-details__bubble-text">{{ dojoData.name }}</span>
             </div>
           </div>
         </div>
         <div class="project-details__information-sidebar-item">
           <div class="project-details__information-sidebar-item-header">
             <span class="project-details__information-sidebar-item-header-icon far fa-clock"></span>
-            <label class="project-details__information-sidebar-item-header-name">last updated</label>
+            <span class="project-details__information-sidebar-item-header-name">last updated</span>
           </div>
           <div class="project-details__information-sidebar-item-data">
-            <label>Last updated at <strong>{{ lastUpdatedTime }}</strong> on the <strong>{{ lastUpdatedDate }}</strong></label>
+            <span>Last updated at <strong>{{ lastUpdatedTime }}</strong> on the <strong>{{ lastUpdatedDate }}</strong></span>
           </div>
         </div>
         <div class="project-details__information-sidebar-item">
           <div class="project-details__information-sidebar-item-header">
             <span class="project-details__information-sidebar-item-header-icon fa fa-code"></span>
-            <label class="project-details__information-sidebar-item-header-name">source code</label>
+            <span class="project-details__information-sidebar-item-header-name">source code</span>
           </div>
           <div class="project-details__information-sidebar-item-data">
             <div class="project-details__information-sidebar-item-data-link">
@@ -87,7 +87,7 @@
               <iframe class="project-details__information-content-section-content-webpage-window" :src="githubPagesLink"></iframe>
             </div>
             <div v-else>
-              <label>Click the button below to try out {{ projectData.name }}!</label>
+              <span>Click the button below to try out {{ projectData.name }}!</span>
               <div class="project-details__information-content-section-content-run">
                 <router-link class="primary-button" :to="{ name: 'ProjectRuntime', params: { projectId: projectData.project_id } }"><span class="project-details__information-content-section-content-run-icon fas fa-play"></span>Play</router-link>
               </div>
@@ -164,7 +164,7 @@
         return moment(this.projectData.updated_at || this.projectData.created_at).format('Do of MMMM YYYY');
       },
       githubPagesLink() {
-        let githubAccount = this.projectData.github.split('/');
+        let githubAccount = this.projectData.github_url.split('/');
         githubAccount = githubAccount[githubAccount.length - 2]
         return `https://${githubAccount}.github.io/${this.projectData.project_id}`;
       },
