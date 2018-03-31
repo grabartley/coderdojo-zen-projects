@@ -58,7 +58,10 @@
           </div>
           <div class="project-details__information-sidebar-item-data">
             <div class="project-details__information-sidebar-item-data-link">
-              <a :href="projectData.github_url" target="_blank">View source code</a>
+              <a :href="projectData.github_url" target="_blank">
+                <span class="project-details__information-sidebar-item-data-link-text">View source code</span>
+                <span class="project-details__information-sidebar-item-data-link-icon fas fa-external-link-alt"></span>
+              </a>
             </div>
           </div>
         </div>
@@ -81,7 +84,7 @@
               <span class="project-details__information-content-section-content-webpage-link">
                 <a :href="githubPagesLink" target="_blank">
                   <span class="project-details__information-content-section-content-webpage-link-text">Visit the website</span>
-                  <span class="project-details__information-content-section-content-webpage-link-icon fas fa-angle-right"></span>
+                  <span class="project-details__information-content-section-content-webpage-link-icon fas fa-external-link-alt"></span>
                 </a>
               </span>
               <iframe class="project-details__information-content-section-content-webpage-window" :src="githubPagesLink"></iframe>
