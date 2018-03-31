@@ -59,7 +59,7 @@ ioServer.on('connection', (socket) => {
     }
     
     // spawn a process to run the project
-    const term = pty.spawn('./scripts/run-project', [projectData.github, projectData.entrypoint, imageTag], {
+    const term = pty.spawn('./scripts/run-project', [projectData.github_url, projectData.entrypoint, imageTag], {
       name: 'xterm-color'
     });
     
@@ -233,8 +233,9 @@ app.post('/api/2.0/projects/create-project', async (req, res) => {
     file.path = file.path.substring(charsToCut);
   });
   
-  // generate a new id for this project
-  let id = uuid();
+  // generate a new id for this project and it's statistics entry
+  const id = uuid();
+  const statisticsId = uuid();
   
   // get the author's name to store in the db
   const userResponse = await dbService.query(`SELECT name FROM users WHERE id='${projectData.userId}';`);
@@ -301,7 +302,10 @@ app.post('/api/2.0/projects/create-project', async (req, res) => {
   };
   
   // add project to the database
-  await dbService.insertInto('projects', ['project_id', 'name', 'type', 'entrypoint', 'description', 'github', 'created_at', 'author', 'user_id', 'github_integration_id'], [metadata.id, metadata.name, metadata.type, metadata.entrypoint, metadata.description, metadata.github, metadata.createdAt, metadata.author, metadata.userId, metadata.githubIntegrationId]);
+  await dbService.insertInto('projects', ['project_id', 'name', 'type', 'entrypoint', 'description', 'github_url', 'created_at', 'author', 'user_id', 'github_integration_id'], [metadata.id, metadata.name, metadata.type, metadata.entrypoint, metadata.description, metadata.github, metadata.createdAt, metadata.author, metadata.userId, metadata.githubIntegrationId]);
+  
+  // add statistics entry for project to the database
+  await dbService.insertInto('project_statistics', ['project_statistics_id', 'project_id'], [statisticsId, id]);
   
   // respond to client
   res.send('successful project creation');
