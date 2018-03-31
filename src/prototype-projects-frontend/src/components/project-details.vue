@@ -58,7 +58,7 @@
           </div>
           <div class="project-details__information-sidebar-item-data">
             <div class="project-details__information-sidebar-item-data-link">
-              <a :href="projectData.github" target="_blank">View source code</a>
+              <a :href="projectData.github_url" target="_blank">View source code</a>
             </div>
           </div>
         </div>
