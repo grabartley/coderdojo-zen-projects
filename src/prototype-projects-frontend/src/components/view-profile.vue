@@ -1,30 +1,74 @@
 <template>
-  <div class="view-profile">
-    <div class="view-profile__header">
-      <router-link v-if="currentUser" :to="{ name: 'EditProfile', params: {userId: userData.id} }">Edit Profile</router-link>
+  <div v-if="userData" class="view-profile">
+    <div class="view-profile__banner">
+      <span class="view-profile__banner-title">{{ userData.name }}</span>
     </div>
-    <h2 v-if="userData">{{ userData.name }}</h2>
-    <h3>Basic Information</h3>
-    <div v-if="userData" class="view-profile__basic">
-      Email: {{ userData.email }}
+    <div class="view-profile__information">
+      <div class="view-profile__information-sidebar">
+        <div class="view-profile__information-sidebar-item">
+          <div class="view-profile__information-sidebar-item-header">
+            <span class="fas fa-envelope"></span>
+            <span>email</span>
+          </div>
+          <div class="view-profile__information-sidebar-item-data">
+            <span>{{ userData.email }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="view-profile__information-content">
+        <div class="view-profile__information-content-actions">
+          <button v-if="currentUser" class="view-profile__information-content-actions-button" @click="editProfile">
+            <span class="fas fa-edit"></span>
+          </button>
+        </div>
+        <div class="view-profile__information-content-section">
+          <div class="view-profile__information-content-section-title">
+            Projects
+          </div>
+          <div class="view-profile__information-content-section-content">
+            Project information will go here!
+          </div>
+        </div>
+        <div class="view-profile__information-content-section">
+          <div class="view-profile__information-content-section-title">
+            Dojos
+          </div>
+          <div class="view-profile__information-content-section-content" style="text-align: center;">
+            <div v-for="dojo in usersDojos" class="view-profile__bubble">
+              <img src="@/assets/cd-logo.png" alt="Dojo Logo" class="view-profile__bubble-image"></img>
+              <span class="view-profile__bubble-text">{{ dojo.name }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 <script>
   import userService from '@/users/service';
+  import dojoService from '@/dojos/service';
 
   export default {
     name: 'ViewProfile',
     data() {
       return {
         userData: null,
+        usersDojos: null,
         currentUser: null,
       };
     },
+    methods: {
+      // redirects the user to their edit profile page
+      editProfile() {
+        this.$router.push(`/edit-profile/${this.userData.id}`);
+      },
+    },
     async created() {
       const userId = this.$route.params.userId;
-      this.userData = await userService.getUserData(userId);
-      this.userData = this.userData.body;
+      
+      // get user and dojo data
+      this.userData = (await userService.getUserData(userId)).body;
+      this.usersDojos = (await dojoService.getUsersDojos(userId)).body;
       
       const loggedInUserId = this.$cookies.get('loggedIn');
       if (this.userData.id === loggedInUserId) {
@@ -35,9 +79,80 @@
 </script>
 <style scoped lang="less">
   .view-profile {
-    &__header {
-      margin-right: 50px;
-      text-align: right;
+    &__banner {
+      padding: 25px 20px;
+      color: white;
+      background-color: #73449B;
+      &-title {
+        margin-left: 16px;
+        font-size: 30px;
+      }
+    }
+    &__information {
+      display: flex;
+      text-align: left;
+      &-sidebar {
+        flex: 1.75;
+        padding: 20px 25px;
+        font-size: 16px;
+        background-color: #f8f8f8;
+        &-item {
+          margin-bottom: 30px;
+          &-header {
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #73449B;
+          }
+          &-data {
+            margin-top: 4px;
+          }
+        }
+      }
+      &-content {
+        flex: 6;
+        padding: 20px 30px 10px 30px;
+        &-actions {
+          text-align: right;
+          &-button {
+            width: 50px;
+            height: 30px;
+            font-size: 16px;
+            color: #73449B;
+            background-color: #FFFFFF;
+            border: solid 1px #73449B;
+            border-radius: 4px;
+            &:hover {
+              cursor: pointer;
+              color: #FFFFFF;
+              background-color: #73449B;
+            }
+          }
+        }
+        &-section {
+          margin-bottom: 40px;
+          &-title {
+            font-size: 20px;
+            color: #0093D5;
+            border-bottom: 1px solid #99999F;
+          }
+          &-content {
+            margin-top: 14px;
+          }
+        }
+      }
+    }
+    &__bubble {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 10px;
+      &-image {
+        width: 85px;
+        height: 85px;
+      }
+      &-text {
+        padding-top: 8px;
+      }
     }
   }
 </style>
