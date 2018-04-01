@@ -37,7 +37,7 @@
           </div>
           <div class="project-details__information-sidebar-item-data" style="text-align: center;">
             <div class="project-details__bubble">
-              <img src="@/assets/cd-logo.png" alt="Python Logo" class="project-details__bubble-image"></img>
+              <img src="@/assets/cd-logo.png" alt="Dojo Logo" class="project-details__bubble-image"></img>
               <span class="project-details__bubble-text">{{ dojoData.name }}</span>
             </div>
           </div>
