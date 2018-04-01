@@ -158,7 +158,7 @@ export default {
             }
             &-title {
               margin-left: 16px;
-              font-size: 20px;
+              font-size: 19px;
               font-weight: bold;
             }
           }
@@ -166,7 +166,6 @@ export default {
             margin-top: 16px;
             &-item {
               margin: 4px 0;
-              font-size: 18px;
               & a {
                 margin-left: 8px;
                 color: #0093D5;

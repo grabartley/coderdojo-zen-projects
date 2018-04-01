@@ -5,6 +5,7 @@ import VueResource from 'vue-resource';
 import VueSocketIO from 'vue-socket.io';
 import VeeValidate from 'vee-validate';
 import VueCookies from 'vue-cookies';
+import VueClipboard from 'vue-clipboard2'
 import App from './App'
 import router from './router'
 // include free-for-use font awesome styling
@@ -21,6 +22,8 @@ Vue.use(VueSocketIO, 'http://localhost:3000');
 Vue.use(VeeValidate);
 // used to store and get browser cookies
 Vue.use(VueCookies);
+// used to copy data to the clipboard of the user
+Vue.use(VueClipboard);
 
 /* eslint-disable no-new */
 new Vue({
