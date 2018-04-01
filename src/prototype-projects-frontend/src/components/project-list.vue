@@ -14,9 +14,12 @@
             <span class="project-list__content-groups-box-header-title">Most Played</span>
           </div>
           <ol class="project-list__content-groups-box-list">
-            <li v-for="project in mostPlayedProjects" class="project-list__content-groups-box-list-item">
-              <router-link :to="{ name: 'ProjectDetails', params: { projectId: project.project_id } }">{{ project.name }}</router-link>
-            </li>
+            <div v-for="project in mostPlayedProjects" class="project-list__content-groups-box-list-container">
+              <li class="project-list__content-groups-box-list-item">
+                <router-link :to="{ name: 'ProjectDetails', params: { projectId: project.project_id } }">{{ project.name }}</router-link>
+              </li>
+              <span class="project-list__content-groups-box-list-metadata">{{ project.plays }}</span>
+            </div>
           </ol>
         </div>
         <div class="project-list__content-groups-box">
@@ -164,6 +167,11 @@ export default {
           }
           &-list {
             margin-top: 16px;
+            padding-left: 20px;
+            &-container {
+              display: flex;
+              align-items: center;
+            }
             &-item {
               margin: 4px 0;
               & a {
@@ -175,6 +183,12 @@ export default {
                   color: #005e89;
                 }
               }
+            }
+            &-metadata {
+              margin-left: auto;
+              font-size: 18px;
+              font-weight: 600;
+              color: #73449B;
             }
           }
         }

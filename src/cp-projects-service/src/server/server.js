@@ -100,6 +100,19 @@ app.get('/api/2.0/projects/project/:projectId', async (req, res) => {
   res.send(projectData);
 });
 
+// gets the project statistics for a given project id
+app.get('/api/2.0/projects/project-statistics/:projectId', async (req, res) => {
+  // log api call
+  console.log('GET /api/2.0/projects/project-statistics/:projectId with ');
+  console.log(req.params);
+  
+  // get the statistics for this project id
+  const projectStatistics = (await dbService.query(`SELECT * FROM project_statistics WHERE project_id='${req.params.projectId}';`)).rows[0];
+  
+  // respond with the statistics
+  res.send(projectStatistics);
+});
+
 // returns project data based on query information
 app.get('/api/2.0/projects/project-data', async (req, res) => {
   // log api call
@@ -409,6 +422,21 @@ app.post('/api/2.0/projects/update-project', async (req, res) => {
   
   // respond
   res.send('successful project update');
+});
+
+// increments the number of plays a project has by 1
+app.post('/api/2.0/projects/increment-project-plays', async (req, res) => {
+  // log api call
+  console.log('POST /api/2.0/projects/increment-project-plays with ');
+  console.log(req.body);
+  
+  // get and update plays for this project id
+  const currentPlays = (await dbService.query(`SELECT plays FROM project_statistics WHERE project_id='${req.body.projectId}'`)).rows[0].plays;
+  const newPlays = parseInt(currentPlays) + 1;
+  await dbService.query(`UPDATE project_statistics SET plays=${newPlays} WHERE project_id='${req.body.projectId}'`);
+  
+  // respond
+  res.send('plays successfully updated');
 });
 
 // deletes the project with the given id

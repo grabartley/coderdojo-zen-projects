@@ -9,6 +9,7 @@ describe('ProjectRuntime', () => {
     sandbox = sinon.sandbox.create();
     projectServiceMock = {
       getProjectById: sinon.stub(),
+      incrementProjectPlays: sinon.stub(),
     };
     projectRuntimeMock = ProjectRuntime({
       '@/projects/service': projectServiceMock,
@@ -60,7 +61,7 @@ describe('ProjectRuntime', () => {
   });
   
   describe('created', () => {
-    it('should get the project data based on project id and call runProject()', async () => {
+    it('should get the project data, call runProject() and increment the plays', async () => {
       // ARRANGE
       let projectRuntime = vueUnitHelper(projectRuntimeMock);
       const divMock = document.createElement('div');
@@ -80,7 +81,7 @@ describe('ProjectRuntime', () => {
       };
       const projectDataMock = {
         body: {
-          project_id: '5678-1234',
+          project_id: '1234-5678',
           name: 'Test Project',
           type: 'python',
           entrypoint: 'TestProject.py',
@@ -89,12 +90,13 @@ describe('ProjectRuntime', () => {
           created_at: '2018-02-21T16:02:14.821Z',
           updated_at: null,
           author: null,
-          user_id: '1234-5678',
+          user_id: '5432-1678',
           github_integration_id: '8765-4321',
           deleted_at: null
         },
       };
       projectServiceMock.getProjectById.withArgs('1234-5678').returns(Promise.resolve(projectDataMock));
+      projectServiceMock.incrementProjectPlays.withArgs('1234-5678').returns(Promise.resolve());
       sandbox.spy(projectRuntime, 'runProject');
       sandbox.spy(projectRuntime.$router, 'push');
       
@@ -104,9 +106,10 @@ describe('ProjectRuntime', () => {
       // ASSERT
       expect(projectRuntime.projectData).to.equal(projectDataMock.body);
       expect(projectRuntime.runProject).to.have.been.calledOnce;
+      expect(projectServiceMock.incrementProjectPlays).to.have.been.calledWith('1234-5678');
       expect(projectRuntime.$router.push).to.not.have.been.called;
     });
-    it('should not call runProject() for HTML5 projects', async () => {
+    it('should not allow HTML5 projects', async () => {
       // ARRANGE
       let projectRuntime = vueUnitHelper(projectRuntimeMock);
       const divMock = document.createElement('div');

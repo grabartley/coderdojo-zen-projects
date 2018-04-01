@@ -70,7 +70,9 @@ export default {
     if (this.projectData.type === 'html') {
       this.$router.push('/');
     } else {
+      // run the project and increment the play counter
       this.runProject();
+      await projectService.incrementProjectPlays(this.projectData.project_id);
     }
   },
   destroyed() {
