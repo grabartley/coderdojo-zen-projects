@@ -313,6 +313,11 @@ app.post('/api/2.0/projects/create-project', async (req, res) => {
   // push tree of files to the repo
   await githubService.pushTreeToRepo(treeData);
   
+  // ensure resourceUrl is not malformed
+  if (!(projectData.resourceUrl.startsWith('http://') || projectData.resourceUrl.startsWith('https://'))) {
+    projectData.resourceUrl = `http://${projectData.resourceUrl}`;
+  }
+  
   // project data to be saved to database
   const metadata = {
     id: id,
@@ -360,6 +365,11 @@ app.post('/api/2.0/projects/update-project', async (req, res) => {
     }
     queryString = queryString.substring(0, queryString.length - 1);
     queryString += ` WHERE project_id='${projectData.projectId}';`;
+    
+    // ensure resource_url is not malformed
+    if (!(queryValues[2].startsWith('http://') || queryValues[2].startsWith('https://'))) {
+      queryValues[2] = `http://${queryValues[2]}`;
+    }
     
     // construct query object
     const query = {
