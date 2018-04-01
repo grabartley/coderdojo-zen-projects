@@ -68,12 +68,21 @@
       </div>
       <div class="project-details__information-content">
         <div class="project-details__information-content-actions">
-          <button class="project-details__information-content-actions-button" @click="">
+          <button class="project-details__information-content-actions-button" @click="isSharing = !isSharing" v-bind:class="{'project-details__information-content-actions-button-sharing': isSharing}">
             <span class="fas fa-share-alt"></span>
           </button>
           <button v-if="currentUser" class="project-details__information-content-actions-button" @click="editProject()">
             <span class="fas fa-edit"></span>
           </button>
+        </div>
+        <div v-if="isSharing" class="project-details__information-content-share">
+          <div class="project-details__information-content-share-title">
+            Share {{ projectData.name }} with the world!
+          </div>
+          <div class="project-details__information-content-share-url">
+            <input class="project-details__information-content-share-url-input" :value="fullUrl" onFocus="this.select()"></input>
+            <button class="project-details__information-content-share-url-copy fas fa-copy" v-clipboard:copy="fullUrl"></button>
+          </div>
         </div>
         <div class="project-details__information-content-section">
           <div class="project-details__information-content-section-title">
@@ -129,6 +138,8 @@
         projectData: null,
         dojoData: null,
         currentUser: null,
+        fullUrl: window.location.href,
+        isSharing: false,
       };
     },
     computed: {
@@ -264,6 +275,48 @@
               cursor: pointer;
               color: #FFFFFF;
               background-color: #73449B;
+            }
+            &-sharing {
+              border-bottom-left-radius: 0;
+              border-bottom-right-radius: 0;
+              color: #FFFFFF;
+              background-color: #73449B;
+            }
+          }
+        }
+        &-share {
+          margin-bottom: 16px;
+          padding: 24px 16px 32px 16px;
+          color: #FFFFFF;
+          background-color: #73449B;
+          &-title {
+            margin-bottom: 16px;
+            font-size: 24px;
+          }
+          &-url {
+            display: flex;
+            &-input {
+              flex: 11;
+              padding: 8px 12px;
+              border-right: none;
+              border-radius: 0;
+              &:focus {
+                outline: none;
+              }
+            }
+            &-copy {
+              flex: 0.5;
+              margin-right: 16px;
+              padding: 8px;
+              font-size: 16px;
+              background-color: #FFFFFF;
+              color: #2c3e50;
+              border: solid 0.5px #99999F;
+              border-left: none;
+              border-radius: none;
+              &:hover {
+                cursor: pointer;
+              }
             }
           }
         }
