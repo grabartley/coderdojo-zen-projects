@@ -106,28 +106,32 @@
           </div>
           <div class="project-details__information-content-section-content">
             <div v-if="projectData.type === 'html'" class="project-details__information-content-section-content-webpage">
-              <span class="project-details__information-content-section-content-webpage-link">
-                <a :href="githubPagesLink" target="_blank">
-                  <span class="project-details__information-content-section-content-webpage-link-text">Visit the website</span>
-                  <span class="project-details__information-content-section-content-webpage-link-icon fas fa-external-link-alt"></span>
-                </a>
-              </span>
+              <div class="project-details__information-content-section-content-webpage-information">
+                <div class="project-details__information-content-section-content-webpage-information-link">
+                  <a :href="githubPagesLink" target="_blank">
+                    <span class="project-details__information-content-section-content-webpage-information-link-text">Visit the website</span>
+                    <span class="project-details__information-content-section-content-webpage-information-link-icon fas fa-external-link-alt"></span>
+                  </a>
+                </div>
+                <div class="project-details__information-content-section-content-webpage-information-plays">
+                  <span class="project-details__information-content-section-content-webpage-information-plays-number">{{ projectData.plays }}</span>
+                  <span class="project-details__information-content-section-content-webpage-information-plays-word">Plays</span>
+                </div>
+              </div>
               <iframe class="project-details__information-content-section-content-webpage-window" :src="githubPagesLink"></iframe>
             </div>
-            <div v-else>
-              <div class="project-details__information-content-section-content-run">
-                <div class="project-details__information-content-section-content-run-information">
-                  <div class="project-details__information-content-section-content-run-information-message">
-                    <span>Click the button below to try out {{ projectData.name }}!</span>
-                  </div>
-                  <div class="project-details__information-content-section-content-run-information-plays">
-                    <span class="project-details__information-content-section-content-run-information-plays-number">{{ projectData.plays }}</span>
-                    <span class="project-details__information-content-section-content-run-information-plays-word">Plays</span>
-                  </div>
+            <div v-else class="project-details__information-content-section-content-run">
+              <div class="project-details__information-content-section-content-run-information">
+                <div class="project-details__information-content-section-content-run-information-message">
+                  <span>Click the button below to try out {{ projectData.name }}!</span>
                 </div>
-                <div class="project-details__information-content-section-content-run-button">
-                  <router-link class="primary-button" :to="{ name: 'ProjectRuntime', params: { projectId: projectData.project_id } }"><span class="project-details__information-content-section-content-run-button-icon fas fa-play"></span>Play</router-link>
+                <div class="project-details__information-content-section-content-run-information-plays">
+                  <span class="project-details__information-content-section-content-run-information-plays-number">{{ projectData.plays }}</span>
+                  <span class="project-details__information-content-section-content-run-information-plays-word">Plays</span>
                 </div>
+              </div>
+              <div class="project-details__information-content-section-content-run-button">
+                <router-link class="primary-button" :to="{ name: 'ProjectRuntime', params: { projectId: projectData.project_id } }"><span class="project-details__information-content-section-content-run-button-icon fas fa-play"></span>Play</router-link>
               </div>
             </div>
           </div>
@@ -371,15 +375,27 @@
             margin-top: 14px;
             &-webpage {
               margin: 10px 0;
-              text-align: right;
-              &-link {
-                color: #0093D5;
-                & a {
-                  text-decoration: none;
+              &-information {
+                display: flex;
+                align-items: flex-end;
+                &-link {
+                  flex: 10;
                   color: #0093D5;
-                  &:hover {
-                    text-decoration: underline;
-                    color: #005e89;
+                  & a {
+                    text-decoration: none;
+                    color: #0093D5;
+                    &:hover {
+                      text-decoration: underline;
+                      color: #005e89;
+                    }
+                  }
+                }
+                &-plays {
+                  &-number {
+                    font-size: 24px;
+                  }
+                  &-word {
+                    color: #99999F;
                   }
                 }
               }
