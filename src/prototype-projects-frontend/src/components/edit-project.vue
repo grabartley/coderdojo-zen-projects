@@ -5,6 +5,11 @@
       <span class="edit-project__banner-title">{{ projectData.name }}</span>
       <span class="edit-project__banner-author">by {{ projectData.author }}</span>
     </div>
+    <div class="edit-project__actions">
+      <button class="edit-project__actions-button" @click="viewProject">
+        <span class="fas fa-eye"></span>
+      </button>
+    </div>
     <div class="edit-project__information">
       <div class="edit-project__information-title">
         Project Information
@@ -106,6 +111,10 @@
       };
     },
     methods: {
+      // go to the project details page for this project
+      viewProject() {
+        this.$router.push(`/project/${this.projectData.project_id}`);
+      },
       // check if the form information is valid
       isValid() {
         this.isFormValidated = true;
@@ -204,6 +213,24 @@
         flex: 2;
         text-align: right;
         font-size: 18px;
+      }
+    }
+    &__actions {
+      margin: 0 32px;
+      text-align: right;
+      &-button {
+        width: 50px;
+        height: 30px;
+        font-size: 16px;
+        color: #73449B;
+        background-color: #FFFFFF;
+        border: solid 1px #73449B;
+        border-radius: 4px;
+        &:hover {
+          cursor: pointer;
+          color: #FFFFFF;
+          background-color: #73449B;
+        }
       }
     }
     &__information {
