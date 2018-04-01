@@ -10,6 +10,8 @@ describe('ProjectDetails', () => {
     sandbox = sinon.sandbox.create();
     projectServiceMock = {
       getProjectById: sinon.stub(),
+      getProjectStatisticsById: sinon.stub(),
+      incrementProjectPlays: sinon.stub(),
     };
     dojoServiceMock = {
       getDojoByGitHubId: sinon.stub(),
@@ -218,11 +220,31 @@ describe('ProjectDetails', () => {
           deleted_at: null,
         }
       };
+      const projectStatisticsMock = {
+        body: {
+          plays: 115,
+        }
+      };
       const dojoDataMock = {
         body: {
           id: '4321-5678',
           name: 'Test Dojo',
         }
+      };
+      const expectedProjectData = {
+        project_id: projectIdMock,
+        name: 'Test Project',
+        type: 'python',
+        entrypoint: 'TestProject.py',
+        description: 'A test project.',
+        github: 'https://github.com/championone/1234-5678',
+        created_at: '2018-02-21T16:02:14.821Z',
+        updated_at: null,
+        author: 'Champion One',
+        user_id: '5678-1234',
+        github_integration_id: '8765-4321',
+        deleted_at: null,
+        plays: 115,
       };
       projectDetails.$route = {
         params: {
@@ -233,13 +255,17 @@ describe('ProjectDetails', () => {
         get: (cookieName) => '4567-1238'
       };
       projectServiceMock.getProjectById.withArgs(projectIdMock).returns(Promise.resolve(projectDataMock));
+      projectServiceMock.getProjectStatisticsById.withArgs(projectIdMock).returns(Promise.resolve(projectStatisticsMock));
       dojoServiceMock.getDojoByGitHubId.withArgs(projectDataMock.body.github_integration_id).returns(Promise.resolve(dojoDataMock));
       
       // ACT
       await projectDetails.$lifecycleMethods.created();
       
       // ASSERT
-      expect(projectDetails.projectData).to.equal(projectDataMock.body);
+      expect(projectServiceMock.getProjectById).to.have.been.calledWith(projectIdMock);
+      expect(projectServiceMock.getProjectStatisticsById).to.have.been.calledWith(projectIdMock);
+      expect(projectDetails.projectData).to.deep.equal(expectedProjectData);
+      expect(projectServiceMock.incrementProjectPlays).to.not.have.been.called;
       expect(projectDetails.dojoData).to.equal(dojoDataMock.body);
       expect(projectDetails.currentUser).to.equal(null);
       
@@ -253,6 +279,71 @@ describe('ProjectDetails', () => {
       
       // ASSERT
       expect(projectDetails.currentUser).to.equal('5678-1234');
+    });
+    it('should increment plays for a HTML5 project', async () => {
+      // ARRANGE
+      let projectDetails = vueUnitHelper(projectDetailsWithMocks);
+      const projectIdMock = '1234-5678';
+      const projectDataMock = {
+        body: {
+          project_id: projectIdMock,
+          name: 'Test Project',
+          type: 'html',
+          entrypoint: 'index.html',
+          description: 'A test project.',
+          github: 'https://github.com/championone/1234-5678',
+          created_at: '2018-02-21T16:02:14.821Z',
+          updated_at: null,
+          author: 'Champion One',
+          user_id: '5678-1234',
+          github_integration_id: '8765-4321',
+          deleted_at: null,
+        }
+      };
+      const projectStatisticsMock = {
+        body: {
+          plays: 115,
+        }
+      };
+      const dojoDataMock = {
+        body: {
+          id: '4321-5678',
+          name: 'Test Dojo',
+        }
+      };
+      const expectedProjectData = {
+        project_id: projectIdMock,
+        name: 'Test Project',
+        type: 'html',
+        entrypoint: 'index.html',
+        description: 'A test project.',
+        github: 'https://github.com/championone/1234-5678',
+        created_at: '2018-02-21T16:02:14.821Z',
+        updated_at: null,
+        author: 'Champion One',
+        user_id: '5678-1234',
+        github_integration_id: '8765-4321',
+        deleted_at: null,
+        plays: 115,
+      };
+      projectDetails.$route = {
+        params: {
+          projectId: projectIdMock,
+        },
+      };
+      projectDetails.$cookies = {
+        get: (cookieName) => '4567-1238'
+      };
+      projectServiceMock.getProjectById.withArgs(projectIdMock).returns(Promise.resolve(projectDataMock));
+      projectServiceMock.getProjectStatisticsById.withArgs(projectIdMock).returns(Promise.resolve(projectStatisticsMock));
+      projectServiceMock.incrementProjectPlays.withArgs(projectIdMock).returns(Promise.resolve());
+      dojoServiceMock.getDojoByGitHubId.withArgs(projectDataMock.body.github_integration_id).returns(Promise.resolve(dojoDataMock));
+      
+      // ACT
+      await projectDetails.$lifecycleMethods.created();
+      
+      // ASSERT
+      expect(projectServiceMock.incrementProjectPlays).to.have.been.calledWith(projectIdMock);
     });
   });
 });

@@ -44,15 +44,6 @@
         </div>
         <div class="project-details__information-sidebar-item">
           <div class="project-details__information-sidebar-item-header">
-            <span class="project-details__information-sidebar-item-header-icon far fa-clock"></span>
-            <span class="project-details__information-sidebar-item-header-name">last updated</span>
-          </div>
-          <div class="project-details__information-sidebar-item-data">
-            <span>Last updated at <strong>{{ lastUpdatedTime }}</strong> on the <strong>{{ lastUpdatedDate }}</strong></span>
-          </div>
-        </div>
-        <div class="project-details__information-sidebar-item">
-          <div class="project-details__information-sidebar-item-header">
             <span class="project-details__information-sidebar-item-header-icon fa fa-code"></span>
             <span class="project-details__information-sidebar-item-header-name">source code</span>
           </div>
@@ -79,6 +70,15 @@
             </div>
           </div>
         </div>
+        <div class="project-details__information-sidebar-item">
+          <div class="project-details__information-sidebar-item-header">
+            <span class="project-details__information-sidebar-item-header-icon far fa-clock"></span>
+            <span class="project-details__information-sidebar-item-header-name">last updated</span>
+          </div>
+          <div class="project-details__information-sidebar-item-data">
+            <span>Last updated at <strong>{{ lastUpdatedTime }}</strong> on the <strong>{{ lastUpdatedDate }}</strong></span>
+          </div>
+        </div>
       </div>
       <div class="project-details__information-content">
         <div class="project-details__information-content-actions">
@@ -89,15 +89,17 @@
             <span class="fas fa-edit"></span>
           </button>
         </div>
-        <div v-if="isSharing" class="project-details__information-content-share">
-          <div class="project-details__information-content-share-title">
-            Share {{ projectData.name }} with the world!
+        <transition name="bounce">
+          <div v-if="isSharing" class="project-details__information-content-share">
+            <div class="project-details__information-content-share-title">
+              Share {{ projectData.name }} with the world!
+            </div>
+            <div class="project-details__information-content-share-url">
+              <input class="project-details__information-content-share-url-input" :value="fullUrl" onFocus="this.select()"></input>
+              <button class="project-details__information-content-share-url-copy fas fa-copy" v-clipboard:copy="fullUrl"></button>
+            </div>
           </div>
-          <div class="project-details__information-content-share-url">
-            <input class="project-details__information-content-share-url-input" :value="fullUrl" onFocus="this.select()"></input>
-            <button class="project-details__information-content-share-url-copy fas fa-copy" v-clipboard:copy="fullUrl"></button>
-          </div>
-        </div>
+        </transition>
         <div class="project-details__information-content-section">
           <div class="project-details__information-content-section-title">
             Try it out!
@@ -113,9 +115,19 @@
               <iframe class="project-details__information-content-section-content-webpage-window" :src="githubPagesLink"></iframe>
             </div>
             <div v-else>
-              <span>Click the button below to try out {{ projectData.name }}!</span>
               <div class="project-details__information-content-section-content-run">
-                <router-link class="primary-button" :to="{ name: 'ProjectRuntime', params: { projectId: projectData.project_id } }"><span class="project-details__information-content-section-content-run-icon fas fa-play"></span>Play</router-link>
+                <div class="project-details__information-content-section-content-run-information">
+                  <div class="project-details__information-content-section-content-run-information-message">
+                    <span>Click the button below to try out {{ projectData.name }}!</span>
+                  </div>
+                  <div class="project-details__information-content-section-content-run-information-plays">
+                    <span class="project-details__information-content-section-content-run-information-plays-number">{{ projectData.plays }}</span>
+                    <span class="project-details__information-content-section-content-run-information-plays-word">Plays</span>
+                  </div>
+                </div>
+                <div class="project-details__information-content-section-content-run-button">
+                  <router-link class="primary-button" :to="{ name: 'ProjectRuntime', params: { projectId: projectData.project_id } }"><span class="project-details__information-content-section-content-run-button-icon fas fa-play"></span>Play</router-link>
+                </div>
               </div>
             </div>
           </div>
@@ -203,9 +215,20 @@
       },
     },
     async created() {
+      // get project data by id
       const projectId = this.$route.params.projectId;
       this.projectData = (await projectService.getProjectById(projectId)).body;
       
+      // get project plays by id
+      const projectStatistics = (await projectService.getProjectStatisticsById(projectId)).body;
+      this.projectData.plays = projectStatistics.plays;
+      
+      // if the project is a HTML5 project, increment the plays for the project
+      if (this.projectData.type === 'html') {
+        await projectService.incrementProjectPlays(projectId);
+      }
+      
+      // get dojo data using the GitHub integration id
       this.dojoData = (await dojoService.getDojoByGitHubId(this.projectData.github_integration_id)).body;
       
       const loggedInUserId = this.$cookies.get('loggedIn');
@@ -367,14 +390,30 @@
               }
             }
             &-run {
-              margin: 75px 0;
-              text-align: center;
-              &-icon {
-                margin-right: 8px;
+              &-information {
+                display: flex;
+                &-message {
+                  flex: 10;
+                }
+                &-plays {
+                  &-number {
+                    font-size: 24px;
+                  }
+                  &-word {
+                    color: #99999F;
+                  }
+                }
               }
-              & a {
-                text-decoration: none;
-              }
+              &-button {
+                margin: 75px 0;
+                text-align: center;
+                &-icon {
+                  margin-right: 8px;
+                }
+                & a {
+                  text-decoration: none;
+                }
+              }  
             }
           }
         }
@@ -392,6 +431,23 @@
       &-text {
         padding-top: 8px;
       }
+    }
+  }
+  .bounce-enter-active {
+    animation: bounce-in .25s;
+  }
+  .bounce-leave-active {
+    animation: bounce-in .25s reverse;
+  }
+  @keyframes bounce-in {
+    0% {
+      transform: scale(0);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+    100% {
+      transform: scale(1);
     }
   }
 </style>

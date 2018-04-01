@@ -24,6 +24,20 @@ describe('ProjectService', () => {
       expect(result).to.equal('expectedResponse');
     });
   });
+  describe('getProjectStatisticsById', () => {
+    it('should make the correct API call', async () => {
+      // ARRANGE
+      const projectIdMock = '1234-5678';
+      sandbox.stub(Vue.http, 'get');
+      Vue.http.get.withArgs(`${Vue.config.apiServer}/api/2.0/projects/project-statistics/${projectIdMock}`).returns(Promise.resolve('expectedResponse'));
+      
+      // ACT
+      const result = await ProjectService.getProjectStatisticsById(projectIdMock);
+      
+      // ASSERT
+      expect(result).to.equal('expectedResponse');
+    });
+  });
   describe('getProjectData', () => {
     it('should make the correct API call', async () => {
       // ARRANGE
@@ -68,6 +82,20 @@ describe('ProjectService', () => {
       
       // ACT
       const result = await ProjectService.updateProject(projectDataMock);
+      
+      // ASSERT
+      expect(result).to.equal('expectedResponse');
+    });
+  });
+  describe('incrementProjectPlays', () => {
+    it('should make the correct API call', async () => {
+      // ARRANGE
+      sandbox.stub(Vue.http, 'post');
+      const projectIdMock = '1234-5678';
+      Vue.http.post.withArgs(`${Vue.config.apiServer}/api/2.0/projects/increment-project-plays`, {projectId: projectIdMock}).returns(Promise.resolve('expectedResponse'));
+      
+      // ACT
+      const result = await ProjectService.incrementProjectPlays(projectIdMock);
       
       // ASSERT
       expect(result).to.equal('expectedResponse');
