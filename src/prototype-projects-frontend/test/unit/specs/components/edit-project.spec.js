@@ -61,6 +61,7 @@ describe('EditProject', () => {
         };
         editProject.name = 'Test Project';
         editProject.description = 'A test project.';
+        editProject.resource = 'http://kata.coderdojo.com/some-page';
         editProject.entrypoint = 'test.py';
         editProject.filename = 'TestProject.zip';
         editProject.uploadedFile = 'fileData';
@@ -70,8 +71,8 @@ describe('EditProject', () => {
         const expectedUpdatePayload = {
           projectId: '1234-5678',
           type: 'python',
-          columns: ['name', 'description', 'entrypoint'],
-          values: ['Test Project', 'A test project.', 'test.py'],
+          columns: ['name', 'description', 'resource_url', 'entrypoint'],
+          values: ['Test Project', 'A test project.', 'http://kata.coderdojo.com/some-page', 'test.py'],
           githubIntegrationId: '8765-4321',
           filename: 'TestProject.zip',
           file: 'fileData',
@@ -270,6 +271,7 @@ describe('EditProject', () => {
           entrypoint: 'TestProject.py',
           description: 'A test project.',
           github: 'https://github.com/championone/1234-5678',
+          resource_url: 'http://kata.coderdojo.com/some-page',
           created_at: '2018-02-21T16:02:14.821Z',
           updated_at: null,
           author: 'Champion One',
@@ -290,6 +292,10 @@ describe('EditProject', () => {
       
       // ASSERT
       expect(editProject.projectData).to.equal(projectDataMock.body);
+      expect(editProject.name).to.equal('Test Project');
+      expect(editProject.description).to.equal('A test project.');
+      expect(editProject.resource).to.equal('http://kata.coderdojo.com/some-page');
+      expect(editProject.entrypoint).to.equal('TestProject.py');
     });
   });
 });

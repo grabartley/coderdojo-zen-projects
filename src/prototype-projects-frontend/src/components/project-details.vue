@@ -9,7 +9,7 @@
       <div class="project-details__information-sidebar">
         <div class="project-details__information-sidebar-item">
           <div class="project-details__information-sidebar-item-header">
-            <span class="project-details__information-sidebar-item-header-icon fas fa-wrench"></span>
+            <span class="project-details__information-sidebar-item-header-icon fas fa-cogs"></span>
             <span class="project-details__information-sidebar-item-header-name">technology</span>
           </div>
           <div class="project-details__information-sidebar-item-data" style="text-align: center;">
@@ -60,6 +60,20 @@
             <div class="project-details__information-sidebar-item-data-link">
               <a :href="projectData.github_url" target="_blank">
                 <span class="project-details__information-sidebar-item-data-link-text">View source code</span>
+                <span class="project-details__information-sidebar-item-data-link-icon fas fa-external-link-alt"></span>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="project-details__information-sidebar-item">
+          <div class="project-details__information-sidebar-item-header">
+            <span class="project-details__information-sidebar-item-header-icon fas fa-wrench"></span>
+            <span class="project-details__information-sidebar-item-header-name">resources</span>
+          </div>
+          <div class="project-details__information-sidebar-item-data">
+            <div class="project-details__information-sidebar-item-data-link">
+              <a :href="projectData.resource_url" target="_blank">
+                <span class="project-details__information-sidebar-item-data-link-text">View resources</span>
                 <span class="project-details__information-sidebar-item-data-link-icon fas fa-external-link-alt"></span>
               </a>
             </div>
@@ -252,6 +266,9 @@
                   text-decoration: underline;
                   color: #005e89;
                 }
+              }
+              &-icon {
+                font-size: 14px;
               }
             }
           }

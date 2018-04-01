@@ -85,6 +85,17 @@
         <div class="project-details-form__section-content-error">
           <div class="error-message" v-show="isFormValidated && errors.has('Dojo')">{{ errors.first('Dojo') }}</div>
         </div>
+        <div class="project-details-form__section-content-input">
+          <div class="project-details-form__section-content-input-name">
+            <label>Project Resource</label>
+          </div>
+          <div class="project-details-form__section-content-input-field">
+            <input v-validate.initial="'url'" v-model="projectResource" name="project resource"></input>
+          </div>
+        </div>
+        <div class="project-details-form__section-content-error">
+          <div class="error-message" v-show="isFormValidated && errors.has('project resource')">{{ errors.first('project resource') }}</div>
+        </div>
       </div>
     </div>
   </div>
@@ -102,6 +113,7 @@ export default {
       projectType: null,
       projectDescription: null,
       dojoId: null,
+      projectResource: null,
       isFormValidated: false,
       isPythonSelected: false,
       isNodeJSSelected: false,
@@ -121,6 +133,7 @@ export default {
       window.sessionStorage.setItem('projectType', this.projectType);
       window.sessionStorage.setItem('projectDescription', this.projectDescription);
       window.sessionStorage.setItem('dojoId', this.dojoId);
+      window.sessionStorage.setItem('projectResource', this.projectResource);
     },
   },
   async created() {
@@ -178,7 +191,6 @@ export default {
         &-input {
           display: flex;
           margin: 30px 0;
-          justify-content: center;
           align-items: center;
           &-name {
             flex: 2;

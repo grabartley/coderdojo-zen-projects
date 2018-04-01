@@ -51,6 +51,7 @@ export default {
           entrypoint: window.sessionStorage.getItem('projectEntrypoint'),
           description: window.sessionStorage.getItem('projectDescription'),
           dojoId: window.sessionStorage.getItem('dojoId'),
+          resourceUrl: window.sessionStorage.getItem('projectResource'),
           filename: window.sessionStorage.getItem('filename'),
           file: window.sessionStorage.getItem('projectFiles'),
           userId: this.$cookies.get('loggedIn'),
