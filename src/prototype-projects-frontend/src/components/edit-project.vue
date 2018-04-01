@@ -31,6 +31,17 @@
       <div class="edit-project__information-error">
         <div class="error-message" v-show="isFormValidated && errors.has('description')">{{ errors.first('description') }}</div>
       </div>
+      <div class="edit-project__information-input">
+        <div class="edit-project__information-input-name">
+          <label>Resource</label>
+        </div>
+        <div class="edit-project__information-input-field">
+          <input v-validate.initial="'url|required'" v-model="resource" name="resource"></input>
+        </div>
+      </div>
+      <div class="edit-project__information-error">
+        <div class="error-message" v-show="isFormValidated && errors.has('resource')">{{ errors.first('resource') }}</div>
+      </div>
       <div class="edit-project__information-title">
         Project Files
       </div>
@@ -83,6 +94,7 @@
         projectData: null,
         name: null,
         description: null,
+        resource: null,
         entrypoint: null,
         isZip: false,
         filename: null,
@@ -108,8 +120,8 @@
           await projectService.updateProject({
             projectId: this.projectData.project_id,
             type: this.projectData.type,
-            columns: ['name', 'description', 'entrypoint'],
-            values: [this.name, this.description, this.entrypoint],
+            columns: ['name', 'description', 'resource_url', 'entrypoint'],
+            values: [this.name, this.description, this.resource, this.entrypoint],
             githubIntegrationId: this.projectData.github_integration_id,
             filename: this.filename,
             file: this.uploadedFile,
@@ -164,6 +176,7 @@
       this.projectData = (await projectService.getProjectById(projectId)).body;
       this.name = this.projectData.name;
       this.description = this.projectData.description;
+      this.resource = this.projectData.resource_url;
       this.entrypoint = this.projectData.entrypoint;
     },
   }

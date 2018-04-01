@@ -59,6 +59,7 @@ describe('ProjectDetailsForm', () => {
         projectDetailsForm.projectType = 'python';
         projectDetailsForm.projectDescription = 'A test project.';
         projectDetailsForm.dojoId = '1234-5678';
+        projectDetailsForm.projectResource = 'http://kata.coderdojo.com/some-page';
         sandbox.spy(window.sessionStorage, 'setItem');
         
         // ACT
@@ -69,6 +70,7 @@ describe('ProjectDetailsForm', () => {
         expect(window.sessionStorage.setItem).to.have.been.calledWith('projectType', 'python');
         expect(window.sessionStorage.setItem).to.have.been.calledWith('projectDescription', 'A test project.');
         expect(window.sessionStorage.setItem).to.have.been.calledWith('dojoId', '1234-5678');
+        expect(window.sessionStorage.setItem).to.have.been.calledWith('projectResource', 'http://kata.coderdojo.com/some-page');
       });
     });
   });
