@@ -20,6 +20,24 @@ describe('EditProject', () => {
     sandbox.restore();
   });
   describe('methods', () => {
+    describe('viewProject', () => {
+      it('should redirect the user to the Project Details page for this project', async () => {
+        // ARRANGE
+        let editProject = vueUnitHelper(EditProject());
+        editProject.projectData = {
+          project_id: '1234-5678',
+        };
+        editProject.$router = {
+          push: sandbox.spy(),
+        };
+        
+        // ACT
+        editProject.viewProject();
+        
+        // ASSERT
+        expect(editProject.$router.push).to.have.been.calledWith('/project/1234-5678');
+      });
+    });
     describe('isValid', () => {
       it('should return true if there are no form errors', async () => {
         // ARRANGE
