@@ -74,16 +74,21 @@ describe('GitHubCallback', () => {
   });
   
   describe('created', () => {
-    it('should call getAccessToken', () => {
+    it('should call getAccessToken and redirect to the users profile page', async () => {
       // ARRANGE
       let githubCallback = vueUnitHelper(GitHubCallback());
+      githubCallback.loggedInUserId = '1234-5678';
+      githubCallback.$router = {
+        push: sandbox.spy(),
+      };
       sandbox.stub(githubCallback, 'getAccessToken');
       
       // ACT
-      githubCallback.$lifecycleMethods.created();
+      await githubCallback.$lifecycleMethods.created();
       
       // ASSERT
       expect(githubCallback.getAccessToken).to.have.been.calledOnce;
+      expect(githubCallback.$router.push).to.have.been.calledWith('/view-profile/1234-5678');
     });
   });
 });
