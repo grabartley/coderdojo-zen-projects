@@ -29,8 +29,9 @@
         await userService.storeAccessToken(this.loggedInUserId, githubData);
       },
     },
-    created() {
-      this.getAccessToken();
+    async created() {
+      await this.getAccessToken();
+      this.$router.push(`/view-profile/${this.loggedInUserId}`);
     },
   }
 </script>
