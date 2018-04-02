@@ -56,7 +56,7 @@
             </div>
           </div>
         </div>
-        <div class="project-details__information-sidebar-item">
+        <div v-if="projectData.resource_url" class="project-details__information-sidebar-item">
           <div class="project-details__information-sidebar-item-header">
             <span class="project-details__information-sidebar-item-header-icon fas fa-wrench"></span>
             <span class="project-details__information-sidebar-item-header-name">resources</span>
