@@ -3,9 +3,6 @@
     <div class="project-list__banner">
       <span class="project-list__banner-title">Projects</span>
     </div>
-    <div class="project-list__control">
-      <router-link v-if="loggedIn" :to="{ name: 'ProjectCreationForm', params: {} }">Create a Project</router-link>
-    </div>
     <div class="project-list__content">
       <div class="project-list__content-groups">
         <div class="project-list__content-groups-box">
@@ -54,12 +51,22 @@
           <div class="project-list__content-projects-list-message">
             Showing {{ firstOnPage }} to {{ lastOnPage }} of {{ projectData.length }} projects
           </div>
-          <div v-for="project in paginatedProjectData" class="project-list__content-projects-list-item">
-            <div class="project-list__content-projects-list-item-name">
-              <router-link :to="{ name: 'ProjectDetails', params: { projectId: project.project_id } }">{{ project.name }}</router-link>
+          <div class="project-list__content-projects-list-container">
+            <div class="project-list__content-projects-list-items">
+              <div v-for="project in paginatedProjectData" class="project-list__content-projects-list-items-item">
+                <div class="project-list__content-projects-list-items-item-name">
+                  <router-link :to="{ name: 'ProjectDetails', params: { projectId: project.project_id } }">{{ project.name }}</router-link>
+                </div>
+                <div class="project-list__content-projects-list-items-item-description">
+                  <label>{{ project.description }}</label>
+                </div>
+              </div>
             </div>
-            <div class="project-list__content-projects-list-item-description">
-              <label>{{ project.description }}</label>
+            <div v-if="loggedIn" class="project-list__content-projects-list-box">
+              <div class="project-list__content-projects-list-box-message">Got an idea to share?</div>
+              <button class="project-list__content-projects-list-box-button" @click="createProject">
+                <span>Create a Project</span>
+              </button>
             </div>
           </div>
           <pagination :records="projectData.length" :per-page="projectsPerPage" ref="pagination" for="projects-pagination" :options="{ texts: { count: '||' }, edgeNavigation: true }"></pagination>
@@ -100,6 +107,12 @@ export default {
     lastOnPage() {
       let result = this.firstOnPage + (this.projectsPerPage - 1);
       return result <= this.projectData.length ? result : this.projectData.length;
+    },
+  },
+  methods: {
+    // redirect the user to the Project Creation Form
+    createProject() {
+      this.$router.push('/create-project');
     },
   },
   async created() {
@@ -229,18 +242,52 @@ export default {
             color: #bdbfbf;
             border-bottom: solid 1px #bdbfbf;
           }
-          &-item {
-            margin: 16px 0;
-            text-align: left;
-            &-name {
-              margin-bottom: 4px;
-              & a {
-                color: #0093D5;
-                text-decoration: none;
-                &:hover {
-                  text-decoration: underline;
-                  color: #005e89;
+          &-container {
+            display: flex;
+          }
+          &-items {
+            flex: 10;
+            &-item {
+              margin: 16px 0;
+              text-align: left;
+              &-name {
+                margin-bottom: 4px;
+                & a {
+                  color: #0093D5;
+                  text-decoration: none;
+                  &:hover {
+                    text-decoration: underline;
+                    color: #005e89;
+                  }
                 }
+              }
+            }
+          }
+          &-box {
+            flex: 3;
+            margin: 64px 16px 64px 64px;
+            padding: 8px 16px;
+            min-height: 150px;
+            max-height: 150px;
+            border: solid 1px #FAA31A;
+            border-bottom: solid 2px #FAA31A;
+            &-message {
+              margin-top: 24px;
+              font-size: 18px;
+            }
+            &-button {
+              margin-top: 20px;
+              padding: 10px 4px;
+              width: 160px;
+              height: 40px;
+              font-size: 18px;
+              color: #FAA31A;
+              background-color: #FFFFFF;
+              border: solid 1px #FAA31A;
+              &:hover {
+                color: #FFFFFF;
+                background-color: #FAA31A;
+                cursor: pointer;
               }
             }
           }

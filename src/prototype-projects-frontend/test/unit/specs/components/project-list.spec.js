@@ -116,6 +116,24 @@ describe('ProjectList', () => {
     });
   });
   
+  describe('methods', () => {
+    describe('createProject', () => {
+      it('should redirect the user to the Project Creation Form', () => {
+        // ARRANGE
+        let projectList = vueUnitHelper(ProjectList());
+        projectList.$router = {
+          push: sandbox.spy(),
+        };
+        
+        // ACT
+        projectList.createProject();
+        
+        // ASSERT
+        expect(projectList.$router.push).to.have.been.calledWith('/create-project');
+      });
+    });
+  });
+  
   describe('created', () => {
     it('should get project data, check if the user is logged in and set up the pagination event handler', async () => {
       // ARRANGE
