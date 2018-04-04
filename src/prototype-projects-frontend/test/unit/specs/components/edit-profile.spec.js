@@ -34,6 +34,27 @@ describe('EditProfile', () => {
     });
   });
   
+  describe('methods', () => {
+    describe('viewProfile', () => {
+      it('should redirect to the View Profile page for this user', () => {
+        // ARRANGE
+        let editProfile = vueUnitHelper(EditProfile());
+        editProfile.userData = {
+          id: '1234-5678',
+        };
+        editProfile.$router = {
+          push: sandbox.spy(),
+        };
+        
+        // ACT
+        editProfile.viewProfile();
+        
+        // ASSERT
+        expect(editProfile.$router.push).to.have.been.calledWith('/view-profile/1234-5678');
+      });
+    });
+  });
+  
   describe('created', () => {
     it('should get user data', async () => {
       // ARRANGE
