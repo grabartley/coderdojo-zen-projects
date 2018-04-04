@@ -62,7 +62,7 @@
                 </div>
               </div>
             </div>
-            <div v-if="loggedIn" class="project-list__content-projects-list-box">
+            <div v-if="loggedInUser && loggedInUser.type === 'youth-o13'" class="project-list__content-projects-list-box">
               <div class="project-list__content-projects-list-box-message">Got an idea to share?</div>
               <button class="project-list__content-projects-list-box-button" @click="createProject">
                 <span>Create a Project</span>
@@ -78,6 +78,7 @@
 <script>
 import { Pagination, PaginationEvent } from 'vue-pagination-2';
 import projectService from '@/projects/service';
+import userService from '@/users/service';
 
 export default {
   name: 'ProjectList',
@@ -87,7 +88,7 @@ export default {
       mostPlayedProjects: [],
       recentlyUpdatedProjects: [],
       newlyCreatedProjects: [],
-      loggedIn: false,
+      loggedInUser: null,
       projectsPerPage: 6,
       currentPage: 1,
     };
@@ -117,23 +118,22 @@ export default {
   },
   async created() {
     // get the project data to display in the list
-    const projectDataResponse = await projectService.getProjectData();
-    this.projectData = projectDataResponse.body;
+    this.projectData = (await projectService.getProjectData()).body;
     
     // get the most played projects
-    const mostPlayedProjectsResponse = await projectService.getProjectData(false, 'plays', 'desc', 5);
-    this.mostPlayedProjects = mostPlayedProjectsResponse.body;
+    this.mostPlayedProjects = (await projectService.getProjectData(false, 'plays', 'desc', 5)).body;
     
     // get the recently updated projects
-    const recentlyUpdatedProjectsResponse = await projectService.getProjectData(false, 'updated_at', 'desc', 5);
-    this.recentlyUpdatedProjects = recentlyUpdatedProjectsResponse.body;
+    this.recentlyUpdatedProjects = (await projectService.getProjectData(false, 'updated_at', 'desc', 5)).body;
     
     // get the newly created projects
-    const newlyCreatedProjectsResponse = await projectService.getProjectData(false, 'created_at', 'desc', 5);
-    this.newlyCreatedProjects = newlyCreatedProjectsResponse.body;
+    this.newlyCreatedProjects = (await projectService.getProjectData(false, 'created_at', 'desc', 5)).body;
     
-    // check if logged in
-    this.loggedIn = this.$cookies.get('loggedIn');
+    // get the logged in user (if there is one)
+    const userId = this.$cookies.get('loggedIn');
+    if (userId) {
+      this.loggedInUser = (await userService.getUserData(userId)).body;
+    }
     
     // pagination event handler
     PaginationEvent.$on('vue-pagination::projects-pagination', (page) => {
