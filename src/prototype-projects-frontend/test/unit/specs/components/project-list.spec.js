@@ -5,6 +5,7 @@ describe('ProjectList', () => {
   let sandbox;
   let vuePagination2Mock;
   let projectServiceMock;
+  let userServiceMock;
   let projectListWithMocks;
   beforeEach(() => {
     sandbox = sinon.sandbox.create();
@@ -17,9 +18,13 @@ describe('ProjectList', () => {
     projectServiceMock = {
       getProjectData: sinon.stub(),
     };
+    userServiceMock = {
+      getUserData: sinon.stub(),
+    };
     projectListWithMocks = ProjectList({
       'vue-pagination-2': vuePagination2Mock,
       '@/projects/service': projectServiceMock,
+      '@/users/service': userServiceMock,
     });
   });
   afterEach(() => {
@@ -135,7 +140,51 @@ describe('ProjectList', () => {
   });
   
   describe('created', () => {
-    it('should get project data, check if the user is logged in and set up the pagination event handler', async () => {
+    it('should get project data, get the logged in user and set up the pagination event handler', async () => {
+      // ARRANGE
+      let projectList = vueUnitHelper(projectListWithMocks);
+      const projectDataResponseMock = {
+        body: 'projectData',
+      };
+      const mostPlayedProjectsResponseMock = {
+        body: 'mostPlayedProjects',
+      };
+      const recentlyUpdatedProjectsResponseMock = {
+        body: 'recentlyUpdatedProjects',
+      };
+      const newlyCreatedProjectsResponseMock = {
+        body: 'newlyCreatedProjects',
+      };
+      const userDataResponseMock = {
+        body: {
+          type: 'youth-o13',
+        },
+      };
+      projectServiceMock.getProjectData.withArgs().returns(projectDataResponseMock);
+      projectServiceMock.getProjectData.withArgs(false, 'plays', 'desc', 5).returns(mostPlayedProjectsResponseMock);
+      projectServiceMock.getProjectData.withArgs(false, 'updated_at', 'desc', 5).returns(recentlyUpdatedProjectsResponseMock);
+      projectServiceMock.getProjectData.withArgs(false, 'created_at', 'desc', 5).returns(newlyCreatedProjectsResponseMock);
+      projectList.$cookies = {
+        get: sandbox.stub(),
+      };
+      projectList.$cookies.get.withArgs('loggedIn').returns('1234-5678');
+      userServiceMock.getUserData.withArgs('1234-5678').returns(Promise.resolve(userDataResponseMock));
+      
+      // ACT
+      await projectList.$lifecycleMethods.created();
+      
+      // ASSERT
+      expect(projectServiceMock.getProjectData).to.have.callCount(4);
+      expect(projectList.projectData).to.equal('projectData');
+      expect(projectList.mostPlayedProjects).to.equal('mostPlayedProjects');
+      expect(projectList.recentlyUpdatedProjects).to.equal('recentlyUpdatedProjects');
+      expect(projectList.newlyCreatedProjects).to.equal('newlyCreatedProjects');
+      expect(projectList.$cookies.get).to.have.been.calledWith('loggedIn');
+      expect(userServiceMock.getUserData).to.have.been.calledWith('1234-5678');
+      expect(projectList.loggedInUser).to.equal(userDataResponseMock.body);
+      expect(vuePagination2Mock.PaginationEvent.$on).to.have.been.calledOnce;
+    });
+    it('should not set loggedInUser if no user is logged in', async () => {
       // ARRANGE
       let projectList = vueUnitHelper(projectListWithMocks);
       const projectDataResponseMock = {
@@ -157,20 +206,15 @@ describe('ProjectList', () => {
       projectList.$cookies = {
         get: sandbox.stub(),
       };
-      projectList.$cookies.get.withArgs('loggedIn').returns(true);
+      projectList.$cookies.get.withArgs('loggedIn').returns(null);
       
       // ACT
       await projectList.$lifecycleMethods.created();
       
       // ASSERT
-      expect(projectServiceMock.getProjectData).to.have.callCount(4);
-      expect(projectList.projectData).to.equal('projectData');
-      expect(projectList.mostPlayedProjects).to.equal('mostPlayedProjects');
-      expect(projectList.recentlyUpdatedProjects).to.equal('recentlyUpdatedProjects');
-      expect(projectList.newlyCreatedProjects).to.equal('newlyCreatedProjects');
       expect(projectList.$cookies.get).to.have.been.calledWith('loggedIn');
-      expect(projectList.loggedIn).to.be.true;
-      expect(vuePagination2Mock.PaginationEvent.$on).to.have.been.calledOnce;
+      expect(userServiceMock.getUserData).to.not.have.been.called;
+      expect(projectList.loggedInUser).to.equal(null);
     });
   });
 });

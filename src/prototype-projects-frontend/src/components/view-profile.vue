@@ -21,7 +21,7 @@
             <span class="fas fa-edit"></span>
           </button>
         </div>
-        <div class="view-profile__information-content-section">
+        <div v-if="userData.type === 'youth-o13'" class="view-profile__information-content-section">
           <div class="view-profile__information-content-section-title">
             Projects
           </div>
