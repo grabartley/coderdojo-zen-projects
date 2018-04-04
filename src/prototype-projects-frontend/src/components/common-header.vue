@@ -1,66 +1,144 @@
 <template>
   <div class="common-header">
-    <div class="common-header__project-list">
-      <router-link :to="{ name: 'ProjectList', params: {} }">Project List</router-link>
-    </div>
-    <div class="common-header__title">
-      CoderDojo Zen
-    </div>
+    <router-link class="common-header__title" :to="{ name: 'ProjectList', params: {} }">
+      <img src="@/assets/cd-logo.png" class="common-header__title-icon"></img>
+      <span class="common-header__title-text">CoderDojo Zen</span>
+    </router-link>
     <div class="common-header__login">
-      <button @click="logout" v-if="loggedIn">Logout</button>
-      <router-link v-else :to="{ name: 'Login', params: {} }">Login</router-link>
+      <div v-if="loggedInUser" class="common-header__login-profile">
+        <button class="common-header__login-profile-button" v-bind:class="{ 'common-header__login-profile-button--selected': profileDropdown }" @click="profileDropdown = !profileDropdown">
+          {{ loggedInUser.name }}
+        </button>
+        <div class="common-header__login-profile-dropdown" v-bind:class="{ 'common-header__login-profile-dropdown--open': profileDropdown }">
+          <button @click="myProfile" class="common-header__login-profile-dropdown-option">
+            My Profile
+          </button>
+          <button @click="logout" class="common-header__login-profile-dropdown-option">
+            Logout
+          </button>
+        </div>
+      </div>
+      <div v-else class="common-header__login-button">
+        <router-link :to="{ name: 'Login', params: {} }">Login</router-link>
+      </div>
     </div>
   </div>
 </template>
 <script>
+  import userService from '@/users/service';
+
   export default {
     name: 'CommonHeader',
     data() {
       return {
-        loggedIn: false,
+        loggedInUser: null,
+        profileDropdown: false,
       };
     },
     methods: {
+      myProfile() {
+        this.$router.push(`/view-profile/${this.loggedInUser.id}`);
+        this.profileDropdown = false;
+      },
       logout() {
         this.$cookies.remove('loggedIn');
-        this.loggedIn = false;
+        this.loggedInUser = null;
+        this.profileDropdown = false;
       },
     },
-    created() {
-      // check if logged in
-      this.loggedIn = this.$cookies.get('loggedIn');
+    async created() {
+      // get logged in user (if there is one)
+      const userId = this.$cookies.get('loggedIn');
+      if (userId) {
+        this.loggedInUser = (await userService.getUserData(userId)).body;
+      }
     },
   }
 </script>
 <style scoped lang="less">
   .common-header {
     display: flex;
-    padding: 20px;
+    align-items: center;
+    padding: 20px 0;
     background-color: #eee;
-    &__project-list {
-      flex: 2;
-      margin-left: 50px;
-      text-align: left;
-    }
     &__title {
-      font-size: 24px;
-      font-weight: bold;
+      display: flex;
+      align-items: center;
+      margin-left: 16px;
+      text-decoration: none;
+      color: #2c3e50;
+      &:hover {
+        color: #2c3e50;
+      }
+      &-icon {
+        width: 45px;
+        height: 45px;
+      }
+      &-text {
+        margin-left: 12px;
+        font-size: 24px;
+        font-weight: 300;
+      }
     }
     &__login {
       flex: 2;
-      margin-right: 50px;
-      text-align: right;
-    }
-  }
-  button, a {
-    border: none;
-    text-decoration: none;
-    color: #99999F;
-    background-color: #eee;
-    font-size: 16px;
-    &:hover {
-      cursor: pointer;
-      color: #73449B;
+      position: relative;
+      &-profile {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        right: 0;
+        top: -20px;
+        text-align: right;
+        z-index: 1;
+        &-button {
+          padding: 10px 20px;
+          color: #99999F;
+          background-color: #eee;
+          border: none;
+          &:hover {
+            text-decoration: none;
+            color: #2c3e50;
+          }
+          &--selected {
+            padding: 9px 19px;
+            color: #2c3e50;
+            background-color: #f2f2f2;
+            border: solid 1px #99999F;
+          }
+        }
+        &-dropdown {
+          display: none;
+          &--open {
+            display: flex;
+            flex-direction: column;
+          }
+          &-option {
+            padding: 10px 20px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background-color: #f2f2f2;
+            border: solid 1px #99999F;
+            border-top: none;
+            &:hover {
+              padding-left: 13px;
+              border-left: solid 8px #0093D5;
+              transition: 0.3s;
+            }
+          }
+        }
+      }
+      &-button {
+        margin-right: 16px;
+        text-align: right;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        & a {
+          text-decoration: none;
+          color: #2c3e50;
+        }
+      }
     }
   }
 </style>
