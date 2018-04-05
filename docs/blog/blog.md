@@ -4,6 +4,65 @@
 
 ****
 
+## Project Play Tracking, Sharing and Resource & Project List Styling
+#### 5th April 2018
+
+I have been working primarily on implementing further **features for projects** and have implemented the following:
+
+  * **Play Tracking**: Projects now keep track of **how many times they have been "played"** which means run for Python 3, NodeJS and Java projects and viewed for HTML5 projects. This value is displayed for each project and used to sort projects by "Most Played" in the Project List.
+  * **Sharing**: The share button on the Project Information page now gives a link to the project with an option to copy to clipboard for **easy sharing** of the project.
+  * **Resource**: An optional resource link can now be given when creating or updating a project which can be used to **link to CoderDojo learning resources** used to create/inspire the project. I have spoken with the CoderDojo Foundation (CDF) with regard to restricting this URL to a specific CoderDojo domain to prevent malicious/inappropriate links but as of right now they are building a new system for resources which is not ready yet so I have not restricted the domain yet.
+  
+These features can be seen in this screenshot:
+
+**Project Information Page**
+![Project Information Page](./images/project-information-page.png)
+
+Tracking plays allowed me to go on to finish **styling the Project List page** which was the most complex of my mockups to complete. This was largely due to the fact that I had to **paginate** projects when listing them in order to keep the page length reasonable. I have now completed the Project List styling and it can be seen below but the search functionality is not yet implemented.
+
+**Project List Page**
+![Project List Page](./images/project-list-styled.png)
+
+I also made several other small **changes to the frontend** styling including:
+
+  * Refactored class names
+  * Changed ordering of items in the sidebar on the Project Information page
+  * Changed icons for some headings and links
+  * Added "view" buttons to edit pages to allow navigating back from edit to view
+  * Basic styling for profile pages since they are only placeholders for real Zen pages
+  * Added CoderDojo logo and profile dropdown to the common header which is also a placeholder for the real Zen header
+  * Hid certain elements based on logged in user type (for example, "Create a Project" button only shows up for youths now since only youths can create projects)
+  
+With regard to the **Admin Panel**, I met with the CoderDojo Foundation on the 23rd March and showed them my mockups for it in order to get their **feedback** since they are the the admins that would be using it. As it turned out, the Admin Panel is actually **aimed more at Champions** (owners of Dojos) than the CDF directly but the **CDF should still have access to it**. Also, I had originally included some statistical charts in my mockups but these are **not required** since the CDF use a suite to automatically generate charts and reports already which will work in the same way for my project once it's integrated into Zen.
+
+With this feedback in mind, I have decided I will need to create a **Dojo page** for each Dojo as a **placeholder** in my project for the existing Zen Dojo page since that will be the most appropriate place for Champions to access the Admin Panel for their Dojo. I have also decided that it makes more sense for the **GitHub Oauth workflow** to begin in the Admin Panel since GitHub integrations exist **per Dojo, not per user**. Currently this begins on the Edit Profile placeholder page so I will be moving this and modifying the endpoint to be a **dojos endpoint** rather than users.
+
+I have also **fixed a major bug with runtimes** which was causing output from one project to appear when running another project. This was caused by runtime processes never terminating if they wait for input but the user leaves the page. I solved this by destroying the runtime process when the user leaves the page.
+
+Another fairly **major change** I made was to **restructure** the files in cp-projects-service to be more **modular**. I decided this change was needed because all of my endpoints and socket functionality existed in the one server file which was getting quite long. I split this file into the following **new structure**:
+
+  * api/
+    * dojos/
+      * endpoints.js
+    * projects/
+      * endpoints.js
+    * users/
+      * endpoints.js
+    * server.js
+  * services/
+    * web-socket-service.js
+    
+I think this will be much more **maintainable** in the long run.
+
+As a final note for this post, it was brought to my attention last week by Stephen Blott and Paul Clarke that there is a **potential issue with my project GitLab repository** since a repository check for it failed. I am not noticing any issues on my end and tried the following to make sure:
+
+  * Created a **fresh clone** of my repo locally and ran **git fsck**, there were no issues, just dangling data
+  * Made a **trivial change** locally and committed, pushed and merged it without any issues
+  
+The issue has been closed as of now with the hope that the repository check failing is **harmless** but I will be **checking regularly** to see if I notice any issues.
+
+****
+
 ## Implementing Mockups & Further Refining Runtime and Version Control Functionality
 #### 22nd March 2018
 
