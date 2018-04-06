@@ -1,4 +1,4 @@
-import ProjectDetailsForm from '!!vue-loader?inject!@/components/project-details-form';
+import ProjectDetailsForm from '!!vue-loader?inject!@/projects/project-details-form';
 import vueUnitHelper from 'vue-unit-helper';
 
 describe('ProjectDetailsForm', () => {

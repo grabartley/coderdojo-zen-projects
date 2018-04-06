@@ -1,4 +1,4 @@
-import ProjectCreationForm from '!!vue-loader?inject!@/components/project-creation-form';
+import ProjectCreationForm from '!!vue-loader?inject!@/projects/project-creation-form';
 import vueUnitHelper from 'vue-unit-helper';
 
 describe('ProjectCreationForm', () => {

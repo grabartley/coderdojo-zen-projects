@@ -1,4 +1,4 @@
-import EditProfile from '!!vue-loader?inject!@/components/edit-profile';
+import EditProfile from '!!vue-loader?inject!@/users/edit-profile';
 import vueUnitHelper from 'vue-unit-helper';
 
 describe('EditProfile', () => {

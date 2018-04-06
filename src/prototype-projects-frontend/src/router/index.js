@@ -1,15 +1,15 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import ProjectList from '@/components/project-list';
-import ProjectDetails from '@/components/project-details';
-import EditProject from '@/components/edit-project';
-import ProjectCreationForm from '@/components/project-creation-form';
-import ProjectRuntime from '@/components/project-runtime';
-import Acknowledgements from '@/components/acknowledgements';
-import Login from '@/components/login';
-import ViewProfile from '@/components/view-profile';
-import EditProfile from '@/components/edit-profile';
-import GitHubCallback from '@/components/github-callback';
+import ProjectList from '@/projects/project-list';
+import ProjectDetails from '@/projects/project-details';
+import EditProject from '@/projects/edit-project';
+import ProjectCreationForm from '@/projects/project-creation-form';
+import ProjectRuntime from '@/projects/project-runtime';
+import Acknowledgements from '@/common/acknowledgements';
+import Login from '@/users/login';
+import ViewProfile from '@/users/view-profile';
+import EditProfile from '@/users/edit-profile';
+import GitHubCallback from '@/dojos/github-callback';
 
 Vue.use(Router)
 

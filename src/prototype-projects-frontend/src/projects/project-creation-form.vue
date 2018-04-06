@@ -19,8 +19,8 @@
   </div>
 </template>
 <script>
-import ProjectDetailsForm from '@/components/project-details-form';
-import ProjectFilesForm from '@/components/project-files-form';
+import ProjectDetailsForm from '@/projects/project-details-form';
+import ProjectFilesForm from '@/projects/project-files-form';
 import projectService from '@/projects/service';
 
 export default {

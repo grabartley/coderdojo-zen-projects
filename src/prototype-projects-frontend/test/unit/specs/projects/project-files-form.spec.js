@@ -1,4 +1,4 @@
-import ProjectFilesForm from '@/components/project-files-form';
+import ProjectFilesForm from '@/projects/project-files-form';
 import vueUnitHelper from 'vue-unit-helper';
 
 describe('ProjectFilesForm', () => {

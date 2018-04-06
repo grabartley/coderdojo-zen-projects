@@ -1,4 +1,4 @@
-import ProjectRuntime from '!!vue-loader?inject!@/components/project-runtime';
+import ProjectRuntime from '!!vue-loader?inject!@/projects/project-runtime';
 import vueUnitHelper from 'vue-unit-helper';
 
 describe('ProjectRuntime', () => {

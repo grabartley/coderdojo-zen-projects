@@ -1,4 +1,4 @@
-import ProjectDetails from '!!vue-loader?inject!@/components/project-details';
+import ProjectDetails from '!!vue-loader?inject!@/projects/project-details';
 import vueUnitHelper from 'vue-unit-helper';
 
 describe('ProjectDetails', () => {
