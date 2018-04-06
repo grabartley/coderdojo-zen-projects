@@ -1,4 +1,4 @@
-import CommonHeader from '!!vue-loader?inject!@/components/common-header';
+import CommonHeader from '!!vue-loader?inject!@/common/common-header';
 import vueUnitHelper from 'vue-unit-helper';
 
 describe('CommonHeader', () => {

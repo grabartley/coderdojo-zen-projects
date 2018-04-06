@@ -6,8 +6,8 @@
   </div>
 </template>
 <script>
-  import commonHeader from '@/components/common-header';
-  import commonFooter from '@/components/common-footer';
+  import commonHeader from '@/common/common-header';
+  import commonFooter from '@/common/common-footer';
 
   export default {
     name: 'App',

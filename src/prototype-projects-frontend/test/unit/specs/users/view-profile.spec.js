@@ -1,4 +1,4 @@
-import ViewProfile from '!!vue-loader?inject!@/components/view-profile';
+import ViewProfile from '!!vue-loader?inject!@/users/view-profile';
 import vueUnitHelper from 'vue-unit-helper';
 
 describe('ViewProfile', () => {

@@ -1,4 +1,4 @@
-import EditProject from '!!vue-loader?inject!@/components/edit-project';
+import EditProject from '!!vue-loader?inject!@/projects/edit-project';
 import vueUnitHelper from 'vue-unit-helper';
 
 describe('EditProject', () => {

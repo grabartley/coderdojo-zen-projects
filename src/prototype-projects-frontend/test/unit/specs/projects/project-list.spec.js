@@ -1,4 +1,4 @@
-import ProjectList from '!!vue-loader?inject!@/components/project-list';
+import ProjectList from '!!vue-loader?inject!@/projects/project-list';
 import vueUnitHelper from 'vue-unit-helper';
 
 describe('ProjectList', () => {

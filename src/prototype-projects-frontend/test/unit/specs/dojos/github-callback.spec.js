@@ -1,4 +1,4 @@
-import GitHubCallback from '!!vue-loader?inject!@/components/github-callback';
+import GitHubCallback from '!!vue-loader?inject!@/dojos/github-callback';
 import vueUnitHelper from 'vue-unit-helper';
 
 describe('GitHubCallback', () => {

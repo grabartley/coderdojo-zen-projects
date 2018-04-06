@@ -1,4 +1,4 @@
-import Login from '!!vue-loader?inject!@/components/login';
+import Login from '!!vue-loader?inject!@/users/login';
 import vueUnitHelper from 'vue-unit-helper';
 
 describe('Login', () => {
