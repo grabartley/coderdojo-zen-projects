@@ -92,7 +92,8 @@
         text-align: right;
         z-index: 1;
         &-button {
-          padding: 10px 20px;
+          padding: 15px 20px;
+          min-width: 200px;
           color: #99999F;
           background-color: #eee;
           border: none;
@@ -101,7 +102,7 @@
             color: #2c3e50;
           }
           &--selected {
-            padding: 9px 19px;
+            padding: 14px 19px;
             color: #2c3e50;
             background-color: #f2f2f2;
             border: solid 1px #99999F;
