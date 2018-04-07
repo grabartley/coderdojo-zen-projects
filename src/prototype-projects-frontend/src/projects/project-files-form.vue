@@ -10,7 +10,7 @@
       <div class="project-files-form__section-content">
         <div class="project-files-form__section-content-input">
           <div class="project-files-form__section-content-input-name">
-            <label>Project entrypoint</label>
+            <label>Project main file</label>
           </div>
           <div class="project-files-form__section-content-input-field">
             <input v-validate.initial="{ required: true, regex: /^([a-zA-Z0-9\-\_])+\.([a-zA-Z])+$/ }" v-model="projectEntrypoint" name="project entrypoint"></input>
@@ -21,7 +21,7 @@
         </div>
         <div class="project-files-form__section-content-input">
           <div class="project-files-form__section-content-input-name">
-            <label v-if="!isZip">Please upload your project as a zip file with the project entrypoint file at the top level of the zip archive</label>
+            <label v-if="!isZip">Please upload your project as a zip file with the project main file at the top level of the zip archive</label>
           </div>
           <div class="project-files-form__section-content-input-field">
             <label class="project-files-form__section-content-input-file">
