@@ -3,16 +3,16 @@ import vueUnitHelper from 'vue-unit-helper';
 
 describe('GitHubCallback', () => {
   let sandbox;
-  let userServiceMock;
+  let dojoServiceMock;
   let githubCallbackWithMocks;
   
   beforeEach(() => {
     sandbox = sinon.sandbox.create();
-    userServiceMock = {
+    dojoServiceMock = {
       storeAccessToken: sinon.stub(),
     };
     githubCallbackWithMocks = GitHubCallback({
-      '@/users/service': userServiceMock,
+      '@/dojos/service': dojoServiceMock,
     });
   });
   
@@ -21,13 +21,27 @@ describe('GitHubCallback', () => {
   });
   
   describe('computed', () => {
+    describe('dojoId', () => {
+      it('should return the dojo id given in the url', () => {
+        // ARRANGE
+        let githubCallback = vueUnitHelper(GitHubCallback());
+        githubCallback.$route = {
+          query: {
+            dojoId: '5678-1234',
+          }
+        };
+        
+        // ACT & ASSERT
+        expect(githubCallback.dojoId).to.equal('5678-1234');
+      });
+    });
     describe('callbackCode', () => {
       it('should return the tmp code given in the url', () => {
         // ARRANGE
         let githubCallback = vueUnitHelper(GitHubCallback());
         githubCallback.$route = {
           query: {
-            code: '1234'
+            code: '1234',
           }
         };
         
@@ -40,7 +54,7 @@ describe('GitHubCallback', () => {
         // ARRANGE
         let githubCallback = vueUnitHelper(GitHubCallback());
         githubCallback.$cookies = {
-          get: () => '1234-5678'
+          get: () => '1234-5678',
         };
         sandbox.spy(githubCallback.$cookies, 'get');
         
@@ -53,10 +67,11 @@ describe('GitHubCallback', () => {
 
   describe('methods', () => {
     describe('getAccessToken', () => {
-      it('should call the user service function to get the access token', () => {
+      it('should call the dojo service function to get the access token', () => {
         // ARRANGE
         let githubCallback = vueUnitHelper(githubCallbackWithMocks);
         githubCallback.githubClientId = 'testClientId';
+        githubCallback.dojoId = 'testDojoId';
         githubCallback.callbackCode = 'testCallbackCode';
         githubCallback.loggedInUserId = 'testLoggedInUserId';
         const expectedGitHubData = {
@@ -68,16 +83,16 @@ describe('GitHubCallback', () => {
         githubCallback.getAccessToken();
         
         // ASSERT
-        expect(userServiceMock.storeAccessToken).to.have.been.calledWith('testLoggedInUserId', expectedGitHubData);
+        expect(dojoServiceMock.storeAccessToken).to.have.been.calledWith('testDojoId', 'testLoggedInUserId', expectedGitHubData);
       });
     });
   });
   
   describe('created', () => {
-    it('should call getAccessToken and redirect to the users profile page', async () => {
+    it('should call getAccessToken and redirect to the dojo admin panel', async () => {
       // ARRANGE
       let githubCallback = vueUnitHelper(GitHubCallback());
-      githubCallback.loggedInUserId = '1234-5678';
+      githubCallback.dojoId = '5678-1234';
       githubCallback.$router = {
         push: sandbox.spy(),
       };
@@ -88,7 +103,7 @@ describe('GitHubCallback', () => {
       
       // ASSERT
       expect(githubCallback.getAccessToken).to.have.been.calledOnce;
-      expect(githubCallback.$router.push).to.have.been.calledWith('/view-profile/1234-5678');
+      expect(githubCallback.$router.push).to.have.been.calledWith('/admin-panel/5678-1234');
     });
   });
 });

@@ -11,7 +11,7 @@ describe('DojoService', () => {
   });
   
   describe('getDojoById', () => {
-    it('should return the dojo data for the given dojo id', async () => {
+    it('should make the correct API call', async () => {
       // ARRANGE
       const dojoIdMock = '1234-5678';
       const dojoMock = {
@@ -27,8 +27,22 @@ describe('DojoService', () => {
       expect(dojo).to.equal(dojoMock);
     });
   });
+  describe('getUsersDojos', () => {
+    it('should make the correct API call', async () => {
+      // ARRANGE
+      const userIdMock = '1234-5678';
+      const usersDojosMock = ['5678-1234'];
+      sandbox.stub(Vue.http, 'get').withArgs(`${Vue.config.apiServer}/api/2.0/dojos/dojos-for-user/${userIdMock}`).returns(Promise.resolve(usersDojosMock));
+      
+      // ACT
+      const usersDojos = await DojoService.getUsersDojos(userIdMock);
+      
+      // ASSERT
+      expect(usersDojos).to.equal(usersDojosMock);
+    });
+  });
   describe('getDojoByGitHubId', () => {
-    it('should return the dojo data for the given GitHub integration id', async () => {
+    it('should make the correct API call', async () => {
       // ARRANGE
       const githubIdMock = '5678-1234';
       const dojoMock = {
@@ -44,18 +58,32 @@ describe('DojoService', () => {
       expect(dojo).to.equal(dojoMock);
     });
   });
-  describe('getUsersDojos', () => {
-    it('should return the dojo ids of the Dojos the user has joined', async () => {
+  describe('isGitHubIntegrated', () => {
+    it('should make the correct API call', async () => {
       // ARRANGE
-      const userIdMock = '1234-5678';
-      const usersDojosMock = ['5678-1234'];
-      sandbox.stub(Vue.http, 'get').withArgs(`${Vue.config.apiServer}/api/2.0/dojos/dojos-for-user/${userIdMock}`).returns(Promise.resolve(usersDojosMock));
+      const dojoIdMock = '1234-5678';
+      sandbox.stub(Vue.http, 'get').withArgs(`${Vue.config.apiServer}/api/2.0/dojos/is-github-integrated/${dojoIdMock}`).returns(Promise.resolve('expectedResponse'));
       
       // ACT
-      const usersDojos = await DojoService.getUsersDojos(userIdMock);
+      const response = await DojoService.isGitHubIntegrated(dojoIdMock);
       
       // ASSERT
-      expect(usersDojos).to.equal(usersDojosMock);
+      expect(response).to.equal('expectedResponse');
+    });
+  });
+  describe('storeAccessToken', () => {
+    it('should make the correct API call', async () => {
+      // ARRANGE
+      const dojoIdMock = '1234-5678';
+      const userIdMock = '5678-1234';
+      const githubDataMock = 'githubData';
+      sandbox.stub(Vue.http, 'post').withArgs(`${Vue.config.apiServer}/api/2.0/dojos/${dojoIdMock}/${userIdMock}/integrations/github`, githubDataMock).returns(Promise.resolve('expectedResponse'));
+      
+      // ACT
+      const response = await DojoService.storeAccessToken(dojoIdMock, userIdMock, githubDataMock);
+      
+      // ASSERT
+      expect(response).to.equal('expectedResponse');
     });
   });
 });

@@ -1,7 +1,11 @@
+import uuid from 'uuid/v4';
 import dbService from '../../services/db-service';
+import githubService from '../../services/github-service';
 
 // registers all the endpoints for dojos
 function registerEndpoints(app) {
+  const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
+
   // get Dojo data by id (mock of Zen API)
   app.get('/api/2.0/dojos/:dojoId', async (req, res) => {
     // log api call
@@ -49,6 +53,45 @@ function registerEndpoints(app) {
     
     // respond
     res.send(dojo.rows[0]);
+  });
+  
+  // check if Dojo has GitHub integration
+  app.get('/api/2.0/dojos/is-github-integrated/:dojoId', async (req, res) => {
+    // log api call
+    console.log('GET /api/2.0/dojos/is-github-integrated/:dojoId with ');
+    console.log(req.params);
+    
+    // check if github integration exists for this dojo
+    const githubIntegrationIdResponse = (await dbService.query(`SELECT github_integration_id FROM github_integrations WHERE dojo_id='${req.params.dojoId}'`)).rows[0];
+    
+    // respond with boolean
+    res.send(!!githubIntegrationIdResponse);
+  });
+  
+  // completes GitHub integration for dojo with dojoId and user with userId
+  app.post('/api/2.0/dojos/:dojoId/:userId/integrations/github', async (req, res) => {
+    // log api call
+    console.log('POST /api/2.0/dojos/:dojoId/:userId/integrations/github with ');
+    console.log(req.params);
+    console.log(req.body);
+    
+    // get data from body and params and set secret
+    let githubData = req.body;
+    githubData['client_secret'] = GITHUB_CLIENT_SECRET;
+    const dojoId = req.params.dojoId;
+    const userId = req.params.userId;
+    
+    // get access token
+    let data = await githubService.getAccessToken(githubData);
+    data = data.split('&');
+    const accessToken = ((data[0]).split('='))[1];
+    
+    // store as new github integration
+    const githubIntegrationId = uuid();
+    await dbService.insertInto('github_integrations', ['github_integration_id', 'user_id', 'dojo_id', 'github_access_token'], [githubIntegrationId, userId, dojoId, accessToken]);
+    
+    // respond
+    res.send('Successful integration');
   });
 }
 

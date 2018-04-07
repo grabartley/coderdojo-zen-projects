@@ -24,28 +24,26 @@ describe('ViewProfile', () => {
   });
   
   describe('methods', () => {
-    describe('editProfile', () => {
-      it('should redirect the user to their Edit Profile page', () => {
+    describe('viewDojo', () => {
+      it('should redirect the user to the Dojo page', () => {
         // ARRANGE
         let viewProfile = vueUnitHelper(ViewProfile());
-        viewProfile.userData = {
-          id: '1234-5678',
-        };
+        const dojoIdMock = '5678-1234';
         viewProfile.$router = {
           push: sandbox.spy(),
         };
         
         // ACT
-        viewProfile.editProfile();
+        viewProfile.viewDojo(dojoIdMock);
         
         // ASSERT
-        expect(viewProfile.$router.push).to.have.been.calledWith('/edit-profile/1234-5678');
+        expect(viewProfile.$router.push).to.have.been.calledWith('/dojos/5678-1234');
       });
     });
   });
   
   describe('created', () => {
-    it('should get user data from route params and set currentUser if the user is viewing their own profile', async () => {
+    it('should get user and dojo data', async () => {
       // ARRANGE
       let viewProfile = vueUnitHelper(viewProfileWithMocks);
       viewProfile.$route = {
@@ -67,9 +65,6 @@ describe('ViewProfile', () => {
       dojoServiceMock.getUsersDojos.withArgs('1234-5678').returns(Promise.resolve({
         body: expectedUsersDojos,
       }));
-      viewProfile.$cookies = {
-        get: (cookieName) => '1234-5678',
-      };
       
       // ACT
       await viewProfile.$lifecycleMethods.created();
@@ -79,39 +74,6 @@ describe('ViewProfile', () => {
       expect(dojoServiceMock.getUsersDojos).to.have.been.calledWith('1234-5678');
       expect(viewProfile.userData).to.deep.equal(expectedUserData);
       expect(viewProfile.usersDojos).to.deep.equal(expectedUsersDojos);
-      expect(viewProfile.currentUser).to.equal('1234-5678');
-    });
-    it('should not set currentUser if the user is not viewing their own profile', async () => {
-      // ARRANGE
-      let viewProfile = vueUnitHelper(viewProfileWithMocks);
-      viewProfile.$route = {
-        params: {
-          userId: '1234-5678',
-        },
-      };
-      const expectedUserData = {
-        id: '1234-5678',
-      };
-      const expectedUsersDojos = [
-        'dojo 1',
-        'dojo 2',
-        'dojo 3',
-      ];
-      userServiceMock.getUserData.withArgs('1234-5678').returns(Promise.resolve({
-        body: expectedUserData,
-      }));
-      dojoServiceMock.getUsersDojos.withArgs('1234-5678').returns(Promise.resolve({
-        body: expectedUsersDojos,
-      }));
-      viewProfile.$cookies = {
-        get: (cookieName) => '4321-5678',
-      };
-      
-      // ACT
-      await viewProfile.$lifecycleMethods.created();
-      
-      // ASSERT
-      expect(viewProfile.currentUser).to.equal(null);
     });
   });
 });

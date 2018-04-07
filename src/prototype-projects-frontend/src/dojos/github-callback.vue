@@ -3,7 +3,7 @@
   </div>
 </template>
 <script>
-  import userService from '@/users/service';
+  import dojoService from '@/dojos/service';
   
   export default {
     name: 'GitHubCallback',
@@ -13,6 +13,9 @@
       };
     },
     computed: {
+      dojoId() {
+        return this.$route.query.dojoId;
+      },
       callbackCode() {
         return this.$route.query.code;
       },
@@ -26,12 +29,12 @@
           client_id: this.githubClientId,
           code: this.callbackCode,
         };
-        await userService.storeAccessToken(this.loggedInUserId, githubData);
+        await dojoService.storeAccessToken(this.dojoId, this.loggedInUserId, githubData);
       },
     },
     async created() {
       await this.getAccessToken();
-      this.$router.push(`/view-profile/${this.loggedInUserId}`);
+      this.$router.push(`/admin-panel/${this.dojoId}`);
     },
   }
 </script>

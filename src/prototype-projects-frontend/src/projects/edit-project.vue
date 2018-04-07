@@ -5,12 +5,12 @@
       <span class="edit-project__banner-title">{{ projectData.name }}</span>
       <span class="edit-project__banner-author">by {{ projectData.author }}</span>
     </div>
-    <div class="edit-project__actions">
+    <div v-if="!projectData.deleted_at" class="edit-project__actions">
       <button class="edit-project__actions-button" @click="viewProject">
         <span class="fas fa-eye"></span>
       </button>
     </div>
-    <div class="edit-project__information">
+    <div v-if="!projectData.deleted_at" class="edit-project__information">
       <div class="edit-project__information-title">
         Project Information
       </div>
@@ -77,7 +77,7 @@
         </div>
       </div>
     </div>
-    <div class="edit-project__control">
+    <div v-if="!projectData.deleted_at" class="edit-project__control">
       <button class="primary-button" v-bind:class="{'edit-project__control-spinning': updatingProject}" @click="updateProject()">
         <span v-if="updatingProject" class="fa fa-spinner fa-spin"></span>
         <span v-else>Update Project</span>
@@ -86,6 +86,14 @@
         <span v-if="deletingProject" class="fa fa-spinner fa-spin"></span>
         <span v-else>Delete Project</span>
       </button>
+    </div>
+    <div v-else class="edit-project__deleted">
+      <div class="edit-project__deleted-box">
+        <div class="edit-project__deleted-box-message">
+          <span class="edit-project__deleted-box-message-icon fas fa-ban"></span>
+          <span class="edit-project__deleted-box-message-text">This project was deleted!</span>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -308,6 +316,19 @@
         font-size: 16px;
         width: 50px;
         transition: 0.3s;
+      }
+    }
+    &__deleted {
+      padding: 20px 30px;
+      &-box {
+        padding: 20px 30px;
+        border: solid 1px #FAA31A;
+        border-bottom: solid 2px #FAA31A;
+        &-message {
+          &-icon {
+            color: #9B1C20;
+          }
+        }
       }
     }
   }

@@ -55,6 +55,21 @@ describe('ProjectService', () => {
       expect(result).to.equal('expectedResponse');
     });
   });
+  describe('getProjectsForDojo', () => {
+    it('should make the correct API call', async () => {
+      // ARRANGE
+      sandbox.stub(Vue.http, 'get');
+      const dojoIdMock = '5678-1234';
+      const deletedMock = false;
+      Vue.http.get.withArgs(`${Vue.config.apiServer}/api/2.0/projects/projects-for-dojo/${dojoIdMock}?deleted=${deletedMock}`).returns(Promise.resolve('expectedResponse'));
+      
+      // ACT
+      const result = await ProjectService.getProjectsForDojo(dojoIdMock, deletedMock);
+      
+      // ASSERT
+      expect(result).to.equal('expectedResponse');
+    });
+  });
   describe('createProject', () => {
     it('should make the correct API call', async () => {
       // ARRANGE

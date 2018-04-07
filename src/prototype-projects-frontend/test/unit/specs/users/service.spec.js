@@ -14,11 +14,26 @@ describe('UserService', () => {
     it('should make the correct API call', async () => {
       // ARRANGE
       sandbox.stub(Vue.http, 'get');
-      let userIdMock = '1234-5678'
+      const userIdMock = '1234-5678'
       Vue.http.get.withArgs(`${Vue.config.apiServer}/api/2.0/profiles/load-user-profile/${userIdMock}`).returns('expectedResponse');
       
       // ACT
-      let result = await UserService.getUserData(userIdMock);
+      const result = await UserService.getUserData(userIdMock);
+      
+      // ASSERT
+      expect(result).to.equal('expectedResponse');
+    });
+  });
+  describe('isUserChampion', () => {
+    it('should make the correct API call', async () => {
+      // ARRANGE
+      sandbox.stub(Vue.http, 'get');
+      const userIdMock = '1234-5678';
+      const dojoIdMock = '5678-1234'
+      Vue.http.get.withArgs(`${Vue.config.apiServer}/api/2.0/users/is-champion/${userIdMock}/${dojoIdMock}`).returns('expectedResponse');
+      
+      // ACT
+      const result = await UserService.isUserChampion(userIdMock, dojoIdMock);
       
       // ASSERT
       expect(result).to.equal('expectedResponse');
@@ -28,32 +43,14 @@ describe('UserService', () => {
     it('should make the correct API call', async () => {
       // ARRANGE
       sandbox.stub(Vue.http, 'post');
-      let loginDataMock = {
+      const loginDataMock = {
         email: 'champion1@example.com',
         email: 'testchampion1',
       };
       Vue.http.post.withArgs(`${Vue.config.apiServer}/api/2.0/users/login`, loginDataMock).returns('expectedResponse');
       
       // ACT
-      let result = await UserService.login(loginDataMock);
-      
-      // ASSERT
-      expect(result).to.equal('expectedResponse');
-    });
-  });
-  describe('storeAccessToken', () => {
-    it('should make the correct API call', async () => {
-      // ARRANGE
-      sandbox.stub(Vue.http, 'post');
-      let userIdMock = '1234-5678';
-      let githubDataMock = {
-        client_id: '5678-1234',
-        code: '8765-4321',
-      };
-      Vue.http.post.withArgs(`${Vue.config.apiServer}/api/2.0/users/${userIdMock}/integrations/github`, githubDataMock).returns('expectedResponse');  
-      
-      // ACT
-      let result = await UserService.storeAccessToken(userIdMock, githubDataMock);
+      const result = await UserService.login(loginDataMock);
       
       // ASSERT
       expect(result).to.equal('expectedResponse');
