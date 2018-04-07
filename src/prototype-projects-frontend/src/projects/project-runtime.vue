@@ -12,7 +12,11 @@
           <router-link :to="{ name: 'ProjectDetails', params: { projectId: projectData.project_id } }">Back to Project</router-link>
         </span>
       </div>
-      <div class="project-runtime__content-terminal" ref="terminal"></div>
+      <div v-if="!outputReceived && projectData" class="project-runtime__content-loading">
+        <span class="project-runtime__content-loading-spinner fa fa-spinner fa-spin"></span>
+        <span class="project-runtime__content-loading-message">Loading {{ projectData.name }}...</span>
+      </div>
+      <div v-show="outputReceived" class="project-runtime__content-terminal" ref="terminal"></div>
     </div>
   </div>
 </template>
@@ -26,10 +30,16 @@ export default {
     return {
       projectData: null,
       term: null,
+      outputReceived: false,
       projectRunning: false,
     };
   },
   sockets: {
+    // when the first output has been received from the server
+    firstOutput() {
+      // we have now received output
+      this.outputReceived = true;
+    },
     // when an output event is emitted by the server
     output(data) {
       // if the terminal exists and a project is running
@@ -47,16 +57,12 @@ export default {
         cols: 120,
         rows: 35
       });
-      
       // open the terminal
       this.term.open(this.$refs.terminal, true);
-      
       // a project is now running
       this.projectRunning = true;
-      
       // tell the backend to spawn a container for this project
       this.$socket.emit('start', this.projectData.project_id);
-      
       // when a command is entered
       this.term.on('data', (data) => {
         // send it to the server
@@ -121,6 +127,12 @@ export default {
               color: #005e89;
             }
           }
+        }
+      }
+      &-loading {
+        font-size: 24px;
+        &-spinner {
+          margin-right: 12px;
         }
       }
       &-terminal {
