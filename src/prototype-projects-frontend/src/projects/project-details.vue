@@ -1,11 +1,11 @@
 <template>
-  <div v-if="projectData && !projectData.deleted_at" class="project-details">
+  <div v-if="projectData" class="project-details">
     <div class="project-details__banner">
       <img class="project-details__banner-image" src="@/assets/cd-logo.png" alt="Project Image"></img>
       <span class="project-details__banner-title">{{ projectData.name }}</span>
       <span class="project-details__banner-author">by {{ projectData.author }}</span>
     </div>
-    <div class="project-details__information">
+    <div v-if="!projectData.deleted_at" class="project-details__information">
       <div class="project-details__information-sidebar">
         <div class="project-details__information-sidebar-item">
           <div class="project-details__information-sidebar-item-header">
@@ -151,6 +151,14 @@
           <div class="project-details__information-content-section-content">
             Badges have not been integrated yet!
           </div>
+        </div>
+      </div>
+    </div>
+    <div v-else class="project-details__deleted">
+      <div class="project-details__deleted-box">
+        <div class="project-details__deleted-box-message">
+          <span class="project-details__deleted-box-message-icon fas fa-ban"></span>
+          <span class="project-details__deleted-box-message-text">This project was deleted!</span>
         </div>
       </div>
     </div>
@@ -446,6 +454,19 @@
       }
       &-text {
         padding-top: 8px;
+      }
+    }
+    &__deleted {
+      padding: 20px 30px;
+      &-box {
+        padding: 20px 30px;
+        border: solid 1px #FAA31A;
+        border-bottom: solid 2px #FAA31A;
+        &-message {
+          &-icon {
+            color: #9B1C20;
+          }
+        }
       }
     }
   }

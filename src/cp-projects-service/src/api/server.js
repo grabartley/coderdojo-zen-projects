@@ -16,11 +16,14 @@ const APP = express();
 const SERVER = http.createServer(APP);
 const PORT = 3000;
 
-// used to parse POST data
+// used to parse POST data with max size 100MB
 APP.use(bodyParser.urlencoded({
-  extended: false
+  limit: '100mb',
+  extended: true
 }));
-APP.use(bodyParser.json());
+APP.use(bodyParser.json({
+  limit: '100mb'
+}));
 
 // used for Cross-Origin Resource Sharing (CORS)
 APP.use(cors());

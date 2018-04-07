@@ -16,11 +16,6 @@
         </div>
       </div>
       <div class="view-profile__information-content">
-        <div class="view-profile__information-content-actions">
-          <button v-if="currentUser" class="view-profile__information-content-actions-button" @click="editProfile">
-            <span class="fas fa-edit"></span>
-          </button>
-        </div>
         <div v-if="userData.type === 'youth-o13'" class="view-profile__information-content-section">
           <div class="view-profile__information-content-section-title">
             Projects
@@ -34,7 +29,7 @@
             Dojos
           </div>
           <div class="view-profile__information-content-section-content" style="text-align: center;">
-            <div v-for="dojo in usersDojos" class="view-profile__bubble">
+            <div v-for="dojo in usersDojos" class="view-profile__bubble" @click="viewDojo(dojo.id)">
               <img src="@/assets/cd-logo.png" alt="Dojo Logo" class="view-profile__bubble-image"></img>
               <span class="view-profile__bubble-text">{{ dojo.name }}</span>
             </div>
@@ -54,13 +49,11 @@
       return {
         userData: null,
         usersDojos: null,
-        currentUser: null,
       };
     },
     methods: {
-      // redirects the user to their edit profile page
-      editProfile() {
-        this.$router.push(`/edit-profile/${this.userData.id}`);
+      viewDojo(dojoId) {
+        this.$router.push(`/dojos/${dojoId}`);
       },
     },
     async created() {
@@ -69,11 +62,6 @@
       // get user and dojo data
       this.userData = (await userService.getUserData(userId)).body;
       this.usersDojos = (await dojoService.getUsersDojos(userId)).body;
-      
-      const loggedInUserId = this.$cookies.get('loggedIn');
-      if (this.userData.id === loggedInUserId) {
-        this.currentUser = loggedInUserId;
-      } 
     },
   }
 </script>
@@ -147,8 +135,17 @@
       align-items: center;
       margin: 10px;
       &-image {
-        width: 85px;
-        height: 85px;
+        width: 95px;
+        height: 95px;
+        border: solid 7px white;
+        border-radius: 70px;
+        &:hover {
+          background-color: #73449B;
+          border: solid 7px #73449B;
+          border-radius: 70px;
+          cursor: pointer;
+          transition: border 0.3s ease-out;
+        }
       }
       &-text {
         padding-top: 8px;

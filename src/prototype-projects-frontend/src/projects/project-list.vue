@@ -149,7 +149,6 @@ export default {
       color: white;
       background-color: #73449B;
       &-title {
-        margin-left: 16px;
         font-size: 30px;
       }
     }

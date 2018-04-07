@@ -8,7 +8,8 @@ import ProjectRuntime from '@/projects/project-runtime';
 import Acknowledgements from '@/common/acknowledgements';
 import Login from '@/users/login';
 import ViewProfile from '@/users/view-profile';
-import EditProfile from '@/users/edit-profile';
+import DojoDetails from '@/dojos/dojo-details';
+import AdminPanel from '@/dojos/admin-panel';
 import GitHubCallback from '@/dojos/github-callback';
 
 Vue.use(Router)
@@ -57,12 +58,17 @@ export default new Router({
       component: ViewProfile,
     },
     {
-      path: '/edit-profile/:userId',
-      name: 'EditProfile',
-      component: EditProfile,
+      path: '/dojos/:dojoId',
+      name: 'DojoDetails',
+      component: DojoDetails,
     },
     {
-      path: '/users/integrations/github',
+      path: '/admin-panel/:dojoId',
+      name: 'AdminPanel',
+      component: AdminPanel,
+    },
+    {
+      path: '/dojos/integrations/github',
       name: 'GitHubCallback',
       component: GitHubCallback,
     },

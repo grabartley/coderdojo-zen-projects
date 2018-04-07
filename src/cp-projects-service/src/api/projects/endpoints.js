@@ -86,6 +86,35 @@ function registerEndpoints(app) {
     // return the project data
     res.send(projectData);
   });
+  
+  // get projects for dojo with given dojo id
+  app.get('/api/2.0/projects/projects-for-dojo/:dojoId', async (req, res) => {
+    // log api call
+    console.log('GET /api/2.0/projects/projects-for-dojo/:dojoId with ');
+    console.log(req.params);
+    console.log(req.query);
+    
+    // extract query information
+    const deleted = req.query.deleted;
+    
+    // get the projects for the dojo with the given dojo id
+    const githubIntegrationIdResponse = (await dbService.query(`SELECT github_integration_id FROM github_integrations WHERE dojo_id='${req.params.dojoId}'`)).rows[0];
+    if (githubIntegrationIdResponse) {
+      const githubIntegrationId = githubIntegrationIdResponse.github_integration_id;
+      let projectData = (await dbService.query(`SELECT * FROM projects WHERE github_integration_id='${githubIntegrationId}'`)).rows;
+      // if we don't want to return projects which have been deleted, filter them out
+      if (deleted !== 'true') {
+        projectData = _.filter(projectData, (project) => {
+          return !project.deleted_at;
+        });
+      }
+      // respond with the projects
+      res.send(projectData);
+    } else {
+      // no projects since GitHub not integrated
+      res.send({});
+    }
+  });
 
   // creates a project
   app.post('/api/2.0/projects/create-project', async (req, res) => {
