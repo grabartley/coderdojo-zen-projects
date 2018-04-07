@@ -41,7 +41,7 @@
           <label>Resource</label>
         </div>
         <div class="edit-project__information-input-field">
-          <input v-validate.initial="'url|required'" v-model="resource" name="resource"></input>
+          <input v-validate.initial="'url'" v-model="resource" name="resource"></input>
         </div>
       </div>
       <div class="edit-project__information-error">

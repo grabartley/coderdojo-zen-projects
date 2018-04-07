@@ -124,6 +124,10 @@ function registerEndpoints(app) {
     
     // store project data
     let projectData = req.body;
+    // set 'null' to be null
+    if (projectData.resourceUrl === 'null') {
+      projectData.resourceUrl = null;
+    }
     
     // remove header information from file data
     let file = projectData.file.split(',');
@@ -188,7 +192,7 @@ function registerEndpoints(app) {
       dojoId: projectData.dojoId
     };
     
-    // add project zip file to the GitHub repository
+    // add README.md to the GitHub repository
     await githubService.commitFileToRepo(commitData);
     
     // create tree data object to pass to GitHub service
@@ -203,7 +207,7 @@ function registerEndpoints(app) {
     await githubService.pushTreeToRepo(treeData);
     
     // ensure resourceUrl is not malformed
-    if (!(projectData.resourceUrl.startsWith('http://') || projectData.resourceUrl.startsWith('https://'))) {
+    if (projectData.resourceUrl && !(projectData.resourceUrl.startsWith('http://') || projectData.resourceUrl.startsWith('https://'))) {
       projectData.resourceUrl = `http://${projectData.resourceUrl}`;
     }
     
@@ -256,7 +260,7 @@ function registerEndpoints(app) {
       queryString += ` WHERE project_id='${projectData.projectId}';`;
       
       // ensure resource_url is not malformed
-      if (!(queryValues[2].startsWith('http://') || queryValues[2].startsWith('https://'))) {
+      if (queryValues[2] && !(queryValues[2].startsWith('http://') || queryValues[2].startsWith('https://'))) {
         queryValues[2] = `http://${queryValues[2]}`;
       }
       
