@@ -89,7 +89,7 @@
             <span class="fas fa-edit"></span>
           </button>
         </div>
-        <transition name="bounce">
+        <transition name="pop">
           <div v-if="isSharing" class="project-details__information-content-share">
             <div class="project-details__information-content-share-title">
               Share {{ projectData.name }} with the world!
@@ -411,6 +411,8 @@
                 margin-top: 10px;
                 width: 100%;
                 height: 600px;
+                border: solid 3px #FAA31A;
+                border-bottom: solid 4px #FAA31A;
               }
             }
             &-run {
@@ -468,23 +470,6 @@
           }
         }
       }
-    }
-  }
-  .bounce-enter-active {
-    animation: bounce-in .25s;
-  }
-  .bounce-leave-active {
-    animation: bounce-in .25s reverse;
-  }
-  @keyframes bounce-in {
-    0% {
-      transform: scale(0);
-    }
-    50% {
-      transform: scale(1.05);
-    }
-    100% {
-      transform: scale(1);
     }
   }
 </style>

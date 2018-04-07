@@ -14,9 +14,11 @@
       </div>
       <div v-if="!outputReceived && projectData" class="project-runtime__content-loading">
         <span class="project-runtime__content-loading-spinner fa fa-spinner fa-spin"></span>
-        <span class="project-runtime__content-loading-message">Loading {{ projectData.name }}...</span>
+        <span class="project-runtime__content-loading-message">Loading {{ projectData.name }}</span>
       </div>
-      <div v-show="outputReceived" class="project-runtime__content-terminal" ref="terminal"></div>
+      <transition name="pop">
+        <div v-show="outputReceived" class="project-runtime__content-terminal" ref="terminal"></div>
+      </transition>
     </div>
   </div>
 </template>
@@ -51,6 +53,8 @@ export default {
   },
   methods: {
     runProject() {
+      // tell the backend to spawn a container for this project
+      this.$socket.emit('start', this.projectData.project_id);
       // instansiate the terminal
       this.term = new Terminal({
         cursorBlink: true,
@@ -61,8 +65,6 @@ export default {
       this.term.open(this.$refs.terminal, true);
       // a project is now running
       this.projectRunning = true;
-      // tell the backend to spawn a container for this project
-      this.$socket.emit('start', this.projectData.project_id);
       // when a command is entered
       this.term.on('data', (data) => {
         // send it to the server
@@ -130,15 +132,21 @@ export default {
         }
       }
       &-loading {
-        font-size: 24px;
+        margin: 32px 0;
+        padding: 16px 8px;
+        font-size: 20px;
+        border: solid 1px #FAA31A;
+        border-bottom: solid 2px #FAA31A;
         &-spinner {
           margin-right: 12px;
         }
       }
       &-terminal {
-        padding: 10px 10px 10px 10px;
+        padding: 10px 10px 15px 10px;
         background-color: black;
         min-height: 600px;
+        border: solid 3px #FAA31A;
+        border-bottom: solid 4px #FAA31A;
       }
     }
   }
