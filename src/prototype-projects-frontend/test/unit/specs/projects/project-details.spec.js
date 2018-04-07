@@ -1,5 +1,6 @@
 import ProjectDetails from '!!vue-loader?inject!@/projects/project-details';
 import vueUnitHelper from 'vue-unit-helper';
+import timeShift from 'timeshift-js';
 
 describe('ProjectDetails', () => {
   let sandbox;
@@ -118,49 +119,63 @@ describe('ProjectDetails', () => {
       });
     });
     describe('lastUpdatedTime', () => {
-      it('should return the formatted time of the last update', () => {
+      it('should return the formatted time of the last update in the users timezone', () => {
         // ARRANGE
         let projectDetails = vueUnitHelper(ProjectDetails());
+        const defaultDate = Date;
+        Date = timeShift.Date;
+        timeShift.setTimezoneOffset(120);
         projectDetails.projectData = {
-          created_at: '2018-02-23T22:26:22.884Z',
+          created_at: '2018-02-23T22:26:22.884',
           updated_at: null,
         };
         
         // ACT & ASSERT
-        expect(projectDetails.lastUpdatedTime).to.equal('10:26pm');
+        expect(projectDetails.lastUpdatedTime).to.equal('12:26am');
         
         // ARRANGE
         projectDetails = vueUnitHelper(ProjectDetails());
+        timeShift.setTimezoneOffset(-120);
         projectDetails.projectData = {
-          created_at: '2018-02-23T22:26:22.884Z',
-          updated_at: '2018-02-23T05:14:55.884Z',
+          created_at: '2018-02-23T22:26:22.884',
+          updated_at: '2018-02-23T05:14:55.884',
         };
         
         // ACT & ASSERT
-        expect(projectDetails.lastUpdatedTime).to.equal('5:14am');
+        expect(projectDetails.lastUpdatedTime).to.equal('3:14am');
+        
+        // RESET DATE
+        Date = defaultDate;
       });
     });
     describe('lastUpdatedDate', () => {
-      it('should return the formatted date of the last update', () => {
+      it('should return the formatted date of the last update in the users timezone', () => {
         // ARRANGE
         let projectDetails = vueUnitHelper(ProjectDetails());
+        const defaultDate = Date;
+        Date = timeShift.Date;
+        timeShift.setTimezoneOffset(120);
         projectDetails.projectData = {
-          created_at: '2018-02-23T22:26:22.884Z',
+          created_at: '2018-02-23T23:26:22.884',
           updated_at: null,
         };
         
         // ACT & ASSERT
-        expect(projectDetails.lastUpdatedDate).to.equal('23rd of February 2018');
+        expect(projectDetails.lastUpdatedDate).to.equal('24th of February 2018');
         
         // ARRANGE
         projectDetails = vueUnitHelper(ProjectDetails());
+        timeShift.setTimezoneOffset(-120);
         projectDetails.projectData = {
-          created_at: '2018-02-23T22:26:22.884Z',
-          updated_at: '2018-03-02T05:14:55.884Z',
+          created_at: '2018-02-23T22:26:22.884',
+          updated_at: '2018-03-02T01:14:55.884',
         };
         
         // ACT & ASSERT
-        expect(projectDetails.lastUpdatedDate).to.equal('2nd of March 2018');
+        expect(projectDetails.lastUpdatedDate).to.equal('1st of March 2018');
+        
+        // RESET DATE
+        Date = defaultDate;
       });
     });
     describe('githubPagesLink', () => {
