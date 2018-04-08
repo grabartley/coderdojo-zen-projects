@@ -9,7 +9,7 @@ describe('GitHubCallback', () => {
   beforeEach(() => {
     sandbox = sinon.sandbox.create();
     dojoServiceMock = {
-      storeAccessToken: sinon.stub(),
+      completeGitHubIntegration: sinon.stub(),
     };
     githubCallbackWithMocks = GitHubCallback({
       '@/dojos/service': dojoServiceMock,
@@ -83,7 +83,7 @@ describe('GitHubCallback', () => {
         githubCallback.getAccessToken();
         
         // ASSERT
-        expect(dojoServiceMock.storeAccessToken).to.have.been.calledWith('testDojoId', 'testLoggedInUserId', expectedGitHubData);
+        expect(dojoServiceMock.completeGitHubIntegration).to.have.been.calledWith('testDojoId', 'testLoggedInUserId', expectedGitHubData);
       });
     });
   });

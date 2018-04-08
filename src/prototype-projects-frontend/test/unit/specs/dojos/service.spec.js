@@ -85,7 +85,7 @@ describe('DojoService', () => {
       expect(response).to.equal('expectedResponse');
     });
   });
-  describe('storeAccessToken', () => {
+  describe('completeGitHubIntegration', () => {
     it('should make the correct API call', async () => {
       // ARRANGE
       const dojoIdMock = '1234-5678';
@@ -94,7 +94,20 @@ describe('DojoService', () => {
       sandbox.stub(Vue.http, 'post').withArgs(`${Vue.config.apiServer}/api/2.0/dojos/${dojoIdMock}/${userIdMock}/integrations/github`, githubDataMock).returns(Promise.resolve('expectedResponse'));
       
       // ACT
-      const response = await DojoService.storeAccessToken(dojoIdMock, userIdMock, githubDataMock);
+      const response = await DojoService.completeGitHubIntegration(dojoIdMock, userIdMock, githubDataMock);
+      
+      // ASSERT
+      expect(response).to.equal('expectedResponse');
+    });
+  });
+  describe('removeGitHubIntegration', () => {
+    it('should make the correct API call', async () => {
+      // ARRANGE
+      const dojoIdMock = '1234-5678';
+      sandbox.stub(Vue.http, 'post').withArgs(`${Vue.config.apiServer}/api/2.0/dojos/${dojoIdMock}/remove-github-integration`).returns(Promise.resolve('expectedResponse'));
+      
+      // ACT
+      const response = await DojoService.removeGitHubIntegration(dojoIdMock);
       
       // ASSERT
       expect(response).to.equal('expectedResponse');

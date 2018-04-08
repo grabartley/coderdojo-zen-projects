@@ -29,7 +29,7 @@
           client_id: this.githubClientId,
           code: this.callbackCode,
         };
-        await dojoService.storeAccessToken(this.dojoId, this.loggedInUserId, githubData);
+        await dojoService.completeGitHubIntegration(this.dojoId, this.loggedInUserId, githubData);
       },
     },
     async created() {
