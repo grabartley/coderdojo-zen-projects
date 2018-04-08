@@ -13,6 +13,7 @@ describe('AdminPanel', () => {
     dojoServiceMock = {
       getDojoById: sinon.stub(),
       isGitHubIntegrated: sinon.stub(),
+      removeGitHubIntegration: sinon.stub(),
     };
     projectServiceMock = {
       getProjectsForDojo: sinon.stub(),
@@ -152,6 +153,47 @@ describe('AdminPanel', () => {
         
         // ASSERT
         expect(adminPanel.$router.push).to.have.been.calledWith('/edit-project/5678-1234');
+      });
+    });
+    describe('removeGitHubIntegration', () => {
+      it('should make the API call to remove the GitHub integration from this Dojo and then refresh the page', async () => {
+        // ARRANGE
+        let adminPanel = vueUnitHelper(adminPanelWithMocks);
+        const dojoIdMock = '1234-5678';
+        adminPanel.removingGitHubIntegration = false;
+        dojoServiceMock.removeGitHubIntegration.withArgs(dojoIdMock).returns(Promise.resolve(''));
+        adminPanel.$route = {
+          params: {
+            dojoId: dojoIdMock,
+          },
+        };
+        adminPanel.$router = {
+          go: sandbox.spy(),
+        };
+        
+        // ACT
+        await adminPanel.removeGitHubIntegration();
+        
+        // ASSERT
+        expect(adminPanel.removingGitHubIntegration).to.be.true;
+        expect(dojoServiceMock.removeGitHubIntegration).to.have.been.calledWith(dojoIdMock);
+        expect(adminPanel.$router.go).to.have.been.calledOnce;
+      });
+      it('should not do anything if already removing the GitHub integration', async () => {
+        // ARRANGE
+        let adminPanel = vueUnitHelper(adminPanelWithMocks);
+        adminPanel.removingGitHubIntegration = true;
+        adminPanel.$router = {
+          go: sandbox.spy(),
+        };
+        
+        // ACT
+        await adminPanel.removeGitHubIntegration();
+        
+        // ASSERT
+        expect(adminPanel.removingGitHubIntegration).to.be.true;
+        expect(dojoServiceMock.removeGitHubIntegration).to.not.have.been.called;
+        expect(adminPanel.$router.go).to.not.have.been.called;
       });
     });
   });

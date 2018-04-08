@@ -65,6 +65,19 @@
           <div class="admin-panel__content-section-content-message">
             GitHub is integrated for this Dojo!
           </div>
+          <div class="admin-panel__content-section-content-danger">
+            <button v-if="!removingGitHubConfirmation" class="admin-panel__content-section-content-danger-button danger-button" @click="removingGitHubConfirmation = true">
+              <span>Remove GitHub Integration</span>
+            </button>
+            <button v-else class="admin-panel__content-section-content-danger-button danger-button" v-bind:class="{'admin-panel__content-section-content-danger-button--spinning': removingGitHubIntegration}" @click="removeGitHubIntegration">
+              <span v-if="removingGitHubIntegration" class="fa fa-spinner fa-spin"></span>
+              <span v-else>Confirm Removal</span>
+            </button>
+            <div class="admin-panel__content-section-content-danger-message">
+              <span class="admin-panel__content-section-content-danger-message-emphasis">warning:</span>
+              <span>Removing the GitHub integration for this Dojo will permanently delete all projects associated with it and Ninjas in your Dojo will not be able to create projects again until a new integration has been made!</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -88,6 +101,8 @@
         projectsPerPage: 6,
         currentPage: 1,
         searchQuery: '',
+        removingGitHubConfirmation: false,
+        removingGitHubIntegration: false,
         githubClientId: process.env.GITHUB_CLIENT_ID,
       };
     },
@@ -115,6 +130,14 @@
     methods: {
       editProject(projectId) {
         this.$router.push(`/edit-project/${projectId}`);
+      },
+      async removeGitHubIntegration() {
+        // if not already removing GitHub integration
+        if (!this.removingGitHubIntegration) {
+          this.removingGitHubIntegration = true;
+          await dojoService.removeGitHubIntegration(this.$route.params.dojoId);
+          this.$router.go();
+        }
       },
     },
     async created() {
@@ -274,6 +297,30 @@
               }
               &-paginator {
                 text-align: center;
+              }
+            }
+          }
+          &-danger {
+            display: flex;
+            align-items: center;
+            margin-top: 16px;
+            &-button {
+              height: 45px;
+              width: 220px;
+              font-size: 14px;
+              &--spinning {
+                width: 50px;
+                transition: 0.3s;
+              }
+            }
+            &-message {
+              flex: 1;
+              margin: 0 32px;
+              &-emphasis {
+                margin-right: 4px;
+                text-transform: uppercase;
+                font-weight: bold;
+                color: #9B1C20;
               }
             }
           }

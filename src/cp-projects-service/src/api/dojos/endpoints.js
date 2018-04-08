@@ -117,6 +117,33 @@ function registerEndpoints(app) {
     // respond
     res.send('Successful integration');
   });
+  
+  // removes GitHub integration for dojo with dojoId and deletes all associated projects
+  app.post('/api/2.0/dojos/:dojoId/remove-github-integration', async (req, res) => {
+    // log api call
+    console.log('POST /api/2.0/dojos/:dojoId/remove-github-integration with ');
+    console.log(req.params);
+    
+    // get data from params
+    const dojoId = req.params.dojoId;
+    
+    // get github integration id and associated project ids
+    const githubIntegrationId = (await dbService.query(`SELECT github_integration_id FROM github_integrations WHERE dojo_id='${dojoId}'`)).rows[0].github_integration_id;
+    const projectIdResponses = (await dbService.query(`SELECT project_id FROM projects WHERE github_integration_id='${githubIntegrationId}'`)).rows;
+    
+    // remove associated projects and their statistics
+    for (let i = 0; i < projectIdResponses.length; i++) {
+      const projectId = projectIdResponses[i].project_id;
+      await dbService.query(`DELETE FROM project_statistics WHERE project_id='${projectId}'`);
+      await dbService.query(`DELETE FROM projects WHERE project_id='${projectId}'`);
+    }
+    
+    // remove github integration
+    await dbService.query(`DELETE FROM github_integrations WHERE github_integration_id='${githubIntegrationId}'`);
+    
+    // respond
+    res.send('Integration removed');
+  });
 }
 
 module.exports = {

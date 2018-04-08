@@ -12,7 +12,9 @@ const dojoService = {
   // returns true if the dojo with the given id has a GitHub integration
   isGitHubIntegrated: dojoId => Vue.http.get(`${Vue.config.apiServer}/api/2.0/dojos/is-github-integrated/${dojoId}`),
   // completes GitHub integration for dojo with dojoId and user with userId
-  storeAccessToken: (dojoId, userId, githubData) => Vue.http.post(`${Vue.config.apiServer}/api/2.0/dojos/${dojoId}/${userId}/integrations/github`, githubData),
+  completeGitHubIntegration: (dojoId, userId, githubData) => Vue.http.post(`${Vue.config.apiServer}/api/2.0/dojos/${dojoId}/${userId}/integrations/github`, githubData),
+  // removes GitHub integration and all associated projects for Dojo with given dojoId
+  removeGitHubIntegration: (dojoId) => Vue.http.post(`${Vue.config.apiServer}/api/2.0/dojos/${dojoId}/remove-github-integration`),
 };
 
 export default dojoService;
