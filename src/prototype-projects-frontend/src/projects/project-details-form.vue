@@ -72,7 +72,7 @@
           <div class="project-details-form__section-content-input-name">
             <label>Dojo</label>
           </div>
-          <div class="project-details-form__section-content-input-field">
+          <div v-if="usersDojos && usersDojos.length > 0" class="project-details-form__section-content-input-field">
             <label v-for="dojo in usersDojos">
               <input v-validate.initial="'required'" v-model="dojoId" name="Dojo" type="radio" :value="dojo.id"></input>
               <div class="project-details-form__section-content-input-field-bubble">
@@ -81,6 +81,7 @@
               </div>
             </label>
           </div>
+          <div v-else v-validate.initial="'required'" class="project-details-form__section-content-input-message error-message">You need to join a Dojo which has GitHub integrated in order to create a project!</div>
         </div>
         <div class="project-details-form__section-content-error">
           <div class="error-message" v-show="isFormValidated && errors.has('Dojo')">{{ errors.first('Dojo') }}</div>
@@ -140,7 +141,7 @@ export default {
     // get the logged in user's joined dojos
     this.loggedInUser = this.$cookies.get('loggedIn');
     if (this.loggedInUser) {
-      this.usersDojos = (await dojoService.getUsersDojos(this.loggedInUser)).body;
+      this.usersDojos = (await dojoService.getUsersDojosWithGitHub(this.loggedInUser)).body;
     } else {
       this.$router.push('/');
     }
@@ -190,11 +191,12 @@ export default {
         margin-top: 20px;
         &-input {
           display: flex;
-          margin: 30px 0;
           align-items: center;
+          margin: 30px 0;
           &-name {
             flex: 2;
             text-align: right;
+            margin-top: 5px;
             margin-right: 20px;
           }
           &-field {
@@ -243,6 +245,9 @@ export default {
                 visibility: hidden;
               }
             }
+          }
+          &-message {
+            flex: 4;
           }
         }
         &-error {

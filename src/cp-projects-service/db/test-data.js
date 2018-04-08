@@ -12,7 +12,7 @@ async function loadTestData() {
     INSERT INTO users (id, email, name, type, dojos) VALUES ('2293049b-6332-5611-fd54-920ab2029183', 'parent2@example.com', 'Parent Two', 'parent-guardian', '{"54b7f667-6c3c-acbd-bb4c-0911a6e7cd5d"}');
     INSERT INTO users (id, email, name, type, dojos) VALUES ('dff82fc7-aa6c-7821-1213-c78dc7f21133', 'parent3@example.com', 'Parent Three', 'parent-guardian', '{"54b7f667-6c3c-acbd-bb4c-0911a6e7cd5d"}');
     INSERT INTO users (id, email, name, type, dojos) VALUES ('12a4df02-6cbd-40b0-b2df-2531b136afec', 'child1@example.com', 'Child One', 'youth-o13', '{"54b7f667-6c3c-acbd-bb4c-0911a6e7cd5d"}');
-    INSERT INTO users (id, email, name, type, dojos) VALUES ('b850ff0a-232e-a532-b672-839d9a99d291', 'child2@example.com', 'Child Two', 'youth-o13', '{"54b7f667-6c3c-acbd-bb4c-0911a6e7cd5d", "7382a5ff-bce6-9200-b3d2-aa76b12106b5"}');
+    INSERT INTO users (id, email, name, type, dojos) VALUES ('b850ff0a-232e-a532-b672-839d9a99d291', 'child2@example.com', 'Child Two', 'youth-o13', '{"7382a5ff-bce6-9200-b3d2-aa76b12106b5"}');
     INSERT INTO users (id, email, name, type, dojos) VALUES ('c2818fa8-8188-7dd8-45bc-38200acc0f90', 'child3@example.com', 'Child Three', 'youth-o13', '{"18d376b4-22a4-ed8d-7355-9034bb7b0034"}');
     INSERT INTO users (id, email, name, type, dojos) VALUES ('fe281cd2-cc45-1930-0011-a67c329f91d2', 'child4@example.com', 'Child Four', 'youth-o13', '{"54b7f667-6c3c-acbd-bb4c-0911a6e7cd5d", "18d376b4-22a4-ed8d-7355-9034bb7b0034", "7382a5ff-bce6-9200-b3d2-aa76b12106b5"}');
     INSERT INTO users (id, email, name, type, dojos) VALUES ('464301e1-4b30-48ae-860f-d7de502ec7c9', 'cdfadmin1@example.com', 'CDFAdmin One', 'cdf-admin', '{}');

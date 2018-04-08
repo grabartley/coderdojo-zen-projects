@@ -8,7 +8,7 @@ describe('ProjectDetailsForm', () => {
   beforeEach(() => {
     sandbox = sinon.sandbox.create();
     dojoServiceMock = {
-      getUsersDojos: sinon.stub(),
+      getUsersDojosWithGitHub: sinon.stub(),
     };
     projectDetailsFormWithMocks = ProjectDetailsForm({
       '@/dojos/service': dojoServiceMock,
@@ -76,7 +76,7 @@ describe('ProjectDetailsForm', () => {
   });
   
   describe('created', () => {
-    it('should get the logged in users joined dojos', async () => {
+    it('should get the logged in users joined dojos with GitHub integrations', async () => {
       // ARRANGE
       const projectDetailsForm = vueUnitHelper(projectDetailsFormWithMocks);
       projectDetailsForm.usersDojos = null;
@@ -87,7 +87,7 @@ describe('ProjectDetailsForm', () => {
       projectDetailsForm.$router = {
         push: () => null,
       };
-      const usersDojosResponseMock = {
+      const usersDojosWithGitHubResponseMock = {
         body: [
           {
             id: '5678-1234',
@@ -95,7 +95,7 @@ describe('ProjectDetailsForm', () => {
           }
         ]
       };
-      dojoServiceMock.getUsersDojos.withArgs('1234-5678').returns(Promise.resolve(usersDojosResponseMock));
+      dojoServiceMock.getUsersDojosWithGitHub.withArgs('1234-5678').returns(Promise.resolve(usersDojosWithGitHubResponseMock));
       sandbox.spy(projectDetailsForm.$router, 'push');
       
       // ACT
@@ -103,8 +103,8 @@ describe('ProjectDetailsForm', () => {
       
       // ASSERT
       expect(projectDetailsForm.loggedInUser).to.equal('1234-5678');
-      expect(dojoServiceMock.getUsersDojos).to.have.been.calledWith('1234-5678');
-      expect(projectDetailsForm.usersDojos).to.deep.equal(usersDojosResponseMock.body);
+      expect(dojoServiceMock.getUsersDojosWithGitHub).to.have.been.calledWith('1234-5678');
+      expect(projectDetailsForm.usersDojos).to.deep.equal(usersDojosWithGitHubResponseMock.body);
       expect(projectDetailsForm.$router.push).to.not.have.been.called;
     });
     it('should redirect back to project list if not logged in', async () => {
@@ -125,7 +125,7 @@ describe('ProjectDetailsForm', () => {
       
       // ASSERT
       expect(projectDetailsForm.loggedInUser).to.equal(null);
-      expect(dojoServiceMock.getUsersDojos).to.not.have.been.called;
+      expect(dojoServiceMock.getUsersDojosWithGitHub).to.not.have.been.called;
       expect(projectDetailsForm.usersDojos).to.equal(null);
       expect(projectDetailsForm.$router.push).to.have.been.calledWith('/');
     });
