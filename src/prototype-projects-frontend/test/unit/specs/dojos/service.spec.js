@@ -41,6 +41,20 @@ describe('DojoService', () => {
       expect(usersDojos).to.equal(usersDojosMock);
     });
   });
+  describe('getUsersDojosWithGitHub', () => {
+    it('should make the correct API call', async () => {
+      // ARRANGE
+      const userIdMock = '1234-5678';
+      const usersDojosWithGitHubMock = ['5678-1234'];
+      sandbox.stub(Vue.http, 'get').withArgs(`${Vue.config.apiServer}/api/2.0/dojos/dojos-for-user-with-github/${userIdMock}`).returns(Promise.resolve(usersDojosWithGitHubMock));
+      
+      // ACT
+      const usersDojosWithGitHub = await DojoService.getUsersDojosWithGitHub(userIdMock);
+      
+      // ASSERT
+      expect(usersDojosWithGitHub).to.equal(usersDojosWithGitHubMock);
+    });
+  });
   describe('getDojoByGitHubId', () => {
     it('should make the correct API call', async () => {
       // ARRANGE

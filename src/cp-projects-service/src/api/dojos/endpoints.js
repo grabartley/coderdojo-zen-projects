@@ -19,7 +19,7 @@ function registerEndpoints(app) {
     res.send(dojo.rows[0]);
   });
   
-  // get current logged in user's joined Dojos (mock of Zen API)
+  // get given users joined Dojos (mock of Zen API)
   app.get('/api/2.0/dojos/dojos-for-user/:userId', async (req, res) => {
     // log api call
     console.log('GET /api/2.0/dojos/dojos-for-user/:userId with ');
@@ -34,6 +34,30 @@ function registerEndpoints(app) {
     for (let i = 0; i < dojoIdsForUser.length; i++) {
       let dojo = await dbService.query(`SELECT * from dojos WHERE id='${dojoIdsForUser[i]}';`);
       dojosForUser.push(dojo.rows[0]);
+    }
+    
+    // respond
+    res.send(dojosForUser);
+  });
+  
+  // get given users joined Dojos which have GitHub integrated
+  app.get('/api/2.0/dojos/dojos-for-user-with-github/:userId', async (req, res) => {
+    // log api call
+    console.log('GET /api/2.0/dojos/dojos-for-user-with-github/:userId with ');
+    console.log(req.params);
+    
+    // get the dojo ids for the given user from the database
+    let dojoIdsForUser = await dbService.query(`SELECT dojos from users WHERE id='${req.params.userId}';`);
+    dojoIdsForUser = dojoIdsForUser.rows[0].dojos;
+    let dojosForUser = [];
+    
+    // for each dojo id, get the dojo data if GitHub is integrated
+    for (let i = 0; i < dojoIdsForUser.length; i++) {
+      const githubIntegrationIdResponse = (await dbService.query(`SELECT github_integration_id FROM github_integrations WHERE dojo_id='${dojoIdsForUser[i]}'`)).rows[0];
+      if (!!githubIntegrationIdResponse) {
+        const dojo = await dbService.query(`SELECT * from dojos WHERE id='${dojoIdsForUser[i]}';`);
+        dojosForUser.push(dojo.rows[0]);
+      }
     }
     
     // respond

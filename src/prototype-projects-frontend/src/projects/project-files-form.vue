@@ -127,6 +127,7 @@ export default {
           &-name {
             flex: 2;
             text-align: right;
+            margin-top: 5px;
             margin-right: 20px;
           }
           &-field {
