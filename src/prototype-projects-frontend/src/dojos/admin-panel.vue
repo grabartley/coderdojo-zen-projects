@@ -16,7 +16,7 @@
           <div class="admin-panel__content-section-content-projects">
             <div class="admin-panel__content-section-content-projects-search">
               <input class="admin-panel__content-section-content-projects-search-input" v-model="searchQuery" placeholder="Search projects..."></input>
-              <button class="admin-panel__content-section-content-projects-search-button fa fa-search"></button>
+              <span class="admin-panel__content-section-content-projects-search-icon fa fa-search"></span>
             </div>
             <div class="admin-panel__content-section-content-projects-list">
               <div class="admin-panel__content-section-content-projects-list-message">
@@ -209,17 +209,13 @@
                   outline: none;
                 }
               }
-              &-button {
-                flex: 0.5;
+              &-icon {
+                flex: 0.3;
                 padding: 8px;
                 font-size: 16px;
-                background-color: #FFFFFF;
                 border: solid 0.5px #99999F;
                 border-left: none;
                 border-radius: none;
-                &:hover {
-                  cursor: pointer;
-                }
               }
             }
             &-list {

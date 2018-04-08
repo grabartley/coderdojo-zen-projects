@@ -45,7 +45,7 @@
       <div class="project-list__content-projects">
         <div class="project-list__content-projects-search">
           <input class="project-list__content-projects-search-input" v-model="searchQuery" placeholder="Search projects..."></input>
-          <button class="project-list__content-projects-search-button fa fa-search"></button>
+          <span class="project-list__content-projects-search-icon fa fa-search"></span>
         </div>
         <div class="project-list__content-projects-list">
           <div class="project-list__content-projects-list-message">
@@ -238,17 +238,13 @@ export default {
               outline: none;
             }
           }
-          &-button {
+          &-icon {
             flex: 0.5;
             padding: 8px;
             font-size: 16px;
-            background-color: #FFFFFF;
             border: solid 0.5px #99999F;
             border-left: none;
             border-radius: none;
-            &:hover {
-              cursor: pointer;
-            }
           }
         }
         &-list {
