@@ -15,7 +15,7 @@
           </div>
           <div class="admin-panel__content-section-content-projects">
             <div class="admin-panel__content-section-content-projects-search">
-              <input class="admin-panel__content-section-content-projects-search-input" placeholder="Search projects..."></input>
+              <input class="admin-panel__content-section-content-projects-search-input" v-model="searchQuery" placeholder="Search projects..."></input>
               <button class="admin-panel__content-section-content-projects-search-button fa fa-search"></button>
             </div>
             <div class="admin-panel__content-section-content-projects-list">
@@ -25,8 +25,11 @@
               <div class="admin-panel__content-section-content-projects-list-container">
                 <div class="admin-panel__content-section-content-projects-list-items">
                   <div v-for="project in paginatedProjectData" class="admin-panel__content-section-content-projects-list-items-item">
-                    <div class="admin-panel__content-section-content-projects-list-items-item-name">
-                      <router-link :to="{ name: 'ProjectDetails', params: { projectId: project.project_id } }">{{ project.name }}</router-link>
+                    <div class="admin-panel__content-section-content-projects-list-items-item-information">
+                      <router-link class="admin-panel__content-section-content-projects-list-items-item-information-name" :to="{ name: 'ProjectDetails', params: { projectId: project.project_id } }">
+                        {{ project.name }}
+                      </router-link>
+                      <div class="admin-panel__content-section-content-projects-list-items-item-information-description">{{ project.description }}</div>
                     </div>
                     <div class="admin-panel__content-section-content-projects-list-items-item-actions">
                       <button class="admin-panel__content-section-content-projects-list-items-item-actions-button" @click="editProject(project.project_id)">
@@ -81,8 +84,10 @@
         isGitHubIntegrated: false,
         dojoData: null,
         projectData: null,
+        fullProjectData: null,
         projectsPerPage: 6,
         currentPage: 1,
+        searchQuery: '',
         githubClientId: process.env.GITHUB_CLIENT_ID,
       };
     },
@@ -132,13 +137,28 @@
       
       // get the projects for this dojo
       if (this.isGitHubIntegrated) {
-        this.projectData = (await projectService.getProjectsForDojo(dojoId, true)).body;  
+        this.projectData = (await projectService.getProjectsForDojo(dojoId, true)).body;
+        this.fullProjectData = this.projectData;
       }
       
       // pagination event handler
       PaginationEvent.$on('vue-pagination::projects-pagination', (page) => {
         this.currentPage = page;
       });
+    },
+    watch: {
+      searchQuery: {
+        handler(newSearchQuery, prevSearchQuery) {
+          const searchQuery = newSearchQuery.toUpperCase();
+          let newProjectData = [];
+          this.fullProjectData.forEach((project) => {
+            if (project.name.toUpperCase().includes(searchQuery) || project.description.toUpperCase().includes(searchQuery)) {
+              newProjectData.push(project);
+            }
+          });
+          this.projectData = newProjectData;
+        },
+      },
     },
   }
 </script>
@@ -222,8 +242,9 @@
                   &:first-child {
                     border-top: solid 1px #bdbfbf;
                   }
-                  &-name {
+                  &-information {
                     flex: 10;
+                    margin-right: 30px;
                     & a {
                       color: #0093D5;
                       text-decoration: none;
@@ -231,6 +252,9 @@
                         text-decoration: underline;
                         color: #005e89;
                       }
+                    }
+                    &-description {
+                      margin-top: 4px;
                     }
                   }
                   &-actions {
