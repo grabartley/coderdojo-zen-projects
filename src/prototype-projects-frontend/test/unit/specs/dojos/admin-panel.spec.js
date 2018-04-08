@@ -203,6 +203,7 @@ describe('AdminPanel', () => {
       expect(adminPanel.isGitHubIntegrated).to.be.true;
       expect(projectServiceMock.getProjectsForDojo).to.have.been.calledWith('1234-5678', true);
       expect(adminPanel.projectData).to.equal(projectDataMock.body);
+      expect(adminPanel.fullProjectData).to.equal(adminPanel.projectData);
     });
     it('should redirect the user away if they are not a champion of this Dojo', async () => {
       // ARRANGE
@@ -280,6 +281,70 @@ describe('AdminPanel', () => {
       expect(adminPanel.isGitHubIntegrated).to.be.false;
       expect(projectServiceMock.getProjectsForDojo).to.not.have.been.called;
       expect(adminPanel.projectData).to.equal(null);
+      expect(adminPanel.fullProjectData).to.equal(null);
+    });
+  });
+  
+  describe('watch', () => {
+    describe('searchQuery', () => {
+      it('should filter project data based on the new search query', () => {
+        // ARRANGE
+        let adminPanel = vueUnitHelper(AdminPanel());
+        const fullProjectDataMock = [
+          {
+            name: 'Chess',
+            description: 'A command-line chess game.',
+          },
+          {
+            name: 'Current Date and Time',
+            description: 'Displays the current date and time in ISO format.',
+          },
+          {
+            name: 'Django',
+            description: 'Testing Django.',
+          },
+          {
+            name: 'Castle Escape',
+            description: 'Which way is out?',
+          },
+          {
+            name: 'Square Number',
+            description: 'Squares a given number!',
+          },
+        ];
+        const projectDataMock = [
+          {
+            name: 'Chess',
+            description: 'A command-line chess game.',
+          },
+          {
+            name: 'Current Date and Time',
+            description: 'Displays the current date and time in ISO format.',
+          },
+          {
+            name: 'Castle Escape',
+            description: 'Which way is out?',
+          },
+        ];
+        adminPanel.fullProjectData = fullProjectDataMock;
+        adminPanel.projectData = projectDataMock;
+        const expectedProjectData = [
+          {
+            name: 'Chess',
+            description: 'A command-line chess game.',
+          },
+          {
+            name: 'Castle Escape',
+            description: 'Which way is out?',
+          },
+        ];
+        
+        // ACT
+        adminPanel.$watchers.searchQuery('ch', 'c');
+        
+        // ASSERT
+        expect(adminPanel.projectData).to.deep.equal(expectedProjectData);
+      });
     });
   });
 });

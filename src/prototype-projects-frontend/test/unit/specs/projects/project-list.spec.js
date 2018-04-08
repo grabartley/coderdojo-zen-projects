@@ -176,6 +176,7 @@ describe('ProjectList', () => {
       // ASSERT
       expect(projectServiceMock.getProjectData).to.have.callCount(4);
       expect(projectList.projectData).to.equal('projectData');
+      expect(projectList.fullProjectData).to.equal('projectData');
       expect(projectList.mostPlayedProjects).to.equal('mostPlayedProjects');
       expect(projectList.recentlyUpdatedProjects).to.equal('recentlyUpdatedProjects');
       expect(projectList.newlyCreatedProjects).to.equal('newlyCreatedProjects');
@@ -215,6 +216,69 @@ describe('ProjectList', () => {
       expect(projectList.$cookies.get).to.have.been.calledWith('loggedIn');
       expect(userServiceMock.getUserData).to.not.have.been.called;
       expect(projectList.loggedInUser).to.equal(null);
+    });
+  });
+  
+  describe('watch', () => {
+    describe('searchQuery', () => {
+      it('should filter project data based on the new search query', () => {
+        // ARRANGE
+        let projectList = vueUnitHelper(ProjectList());
+        const fullProjectDataMock = [
+          {
+            name: 'Chess',
+            description: 'A command-line chess game.',
+          },
+          {
+            name: 'Current Date and Time',
+            description: 'Displays the current date and time in ISO format.',
+          },
+          {
+            name: 'Django',
+            description: 'Testing Django.',
+          },
+          {
+            name: 'Castle Escape',
+            description: 'Which way is out?',
+          },
+          {
+            name: 'Square Number',
+            description: 'Squares a given number!',
+          },
+        ];
+        const projectDataMock = [
+          {
+            name: 'Chess',
+            description: 'A command-line chess game.',
+          },
+          {
+            name: 'Current Date and Time',
+            description: 'Displays the current date and time in ISO format.',
+          },
+          {
+            name: 'Castle Escape',
+            description: 'Which way is out?',
+          },
+        ];
+        projectList.fullProjectData = fullProjectDataMock;
+        projectList.projectData = projectDataMock;
+        const expectedProjectData = [
+          {
+            name: 'Chess',
+            description: 'A command-line chess game.',
+          },
+          {
+            name: 'Castle Escape',
+            description: 'Which way is out?',
+          },
+        ];
+        
+        // ACT
+        projectList.$watchers.searchQuery('ch', 'c');
+        
+        // ASSERT
+        expect(projectList.projectData).to.deep.equal(expectedProjectData);
+      });
     });
   });
 });

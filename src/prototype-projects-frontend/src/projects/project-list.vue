@@ -44,7 +44,7 @@
       </div>
       <div class="project-list__content-projects">
         <div class="project-list__content-projects-search">
-          <input class="project-list__content-projects-search-input" placeholder="Search projects..."></input>
+          <input class="project-list__content-projects-search-input" v-model="searchQuery" placeholder="Search projects..."></input>
           <button class="project-list__content-projects-search-button fa fa-search"></button>
         </div>
         <div class="project-list__content-projects-list">
@@ -85,12 +85,14 @@ export default {
   data() {
     return {
       projectData: [],
+      fullProjectData: [],
       mostPlayedProjects: [],
       recentlyUpdatedProjects: [],
       newlyCreatedProjects: [],
       loggedInUser: null,
       projectsPerPage: 6,
       currentPage: 1,
+      searchQuery: '',
     };
   },
   components: {
@@ -120,6 +122,9 @@ export default {
     // get the project data to display in the list
     this.projectData = (await projectService.getProjectData()).body;
     
+    // backup the project data for use in searching
+    this.fullProjectData = this.projectData;
+    
     // get the most played projects
     this.mostPlayedProjects = (await projectService.getProjectData(false, 'plays', 'desc', 5)).body;
     
@@ -139,6 +144,20 @@ export default {
     PaginationEvent.$on('vue-pagination::projects-pagination', (page) => {
       this.currentPage = page;
     });
+  },
+  watch: {
+    searchQuery: {
+      handler(newSearchQuery, prevSearchQuery) {
+        const searchQuery = newSearchQuery.toUpperCase();
+        let newProjectData = [];
+        this.fullProjectData.forEach((project) => {
+          if (project.name.toUpperCase().includes(searchQuery) || project.description.toUpperCase().includes(searchQuery)) {
+            newProjectData.push(project);
+          }
+        });
+        this.projectData = newProjectData;
+      },
+    },
   },
 }
 </script>
