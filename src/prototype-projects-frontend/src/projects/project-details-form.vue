@@ -139,7 +139,7 @@ export default {
   },
   async created() {
     // get the logged in user's joined dojos
-    this.loggedInUser = this.$cookies.get('loggedIn');
+    this.loggedInUser = this.$cookie.get('loggedIn');
     if (this.loggedInUser) {
       this.usersDojos = (await dojoService.getUsersDojosWithGitHub(this.loggedInUser)).body;
     } else {

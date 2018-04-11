@@ -35,7 +35,7 @@ describe('ProjectCreationForm', () => {
             submitForm: () => null,
           },
         };
-        projectCreationForm.$cookies = {
+        projectCreationForm.$cookie = {
           get: () => null,
         };
         window.sessionStorage.setItem('projectName', 'Test Project');
@@ -46,7 +46,7 @@ describe('ProjectCreationForm', () => {
         window.sessionStorage.setItem('projectResource', 'http://kata.coderdojo.com/some-page');
         window.sessionStorage.setItem('filename', 'test.zip');
         window.sessionStorage.setItem('projectFiles', 'fileData');
-        sandbox.stub(projectCreationForm.$cookies, 'get').withArgs('loggedIn').returns('1234-5678');
+        sandbox.stub(projectCreationForm.$cookie, 'get').withArgs('loggedIn').returns('1234-5678');
         const expectedProjectData = {
           name: 'Test Project',
           type: 'python',

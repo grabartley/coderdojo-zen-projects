@@ -222,10 +222,10 @@ describe('AdminPanel', () => {
       adminPanel.$router = {
         push: sandbox.spy(),
       };
-      adminPanel.$cookies = {
+      adminPanel.$cookie = {
         get: sandbox.stub(),
       };
-      adminPanel.$cookies.get.withArgs('loggedIn').returns('4321-5678');
+      adminPanel.$cookie.get.withArgs('loggedIn').returns('4321-5678');
       userServiceMock.isUserChampion.withArgs('4321-5678', '1234-5678').returns(Promise.resolve(isUserChampionMock));
       dojoServiceMock.getDojoById.withArgs('1234-5678').returns(Promise.resolve(dojoDataMock));
       dojoServiceMock.isGitHubIntegrated.withArgs('1234-5678').returns(Promise.resolve(isGitHubIntegratedMock));
@@ -235,7 +235,7 @@ describe('AdminPanel', () => {
       await adminPanel.$lifecycleMethods.created();
       
       // ASSERT
-      expect(adminPanel.$cookies.get).to.have.been.calledWith('loggedIn');
+      expect(adminPanel.$cookie.get).to.have.been.calledWith('loggedIn');
       expect(userServiceMock.isUserChampion).to.have.been.calledWith('4321-5678', '1234-5678');
       expect(adminPanel.isLoggedInUserChampion).to.be.true;
       expect(adminPanel.$router.push).to.not.have.been.called;
@@ -270,10 +270,10 @@ describe('AdminPanel', () => {
       adminPanel.$router = {
         push: sandbox.spy(),
       };
-      adminPanel.$cookies = {
+      adminPanel.$cookie = {
         get: sandbox.stub(),
       };
-      adminPanel.$cookies.get.withArgs('loggedIn').returns('1234-8765');
+      adminPanel.$cookie.get.withArgs('loggedIn').returns('1234-8765');
       userServiceMock.isUserChampion.withArgs('1234-8765', '1234-5678').returns(Promise.resolve(isUserChampionMock));
       dojoServiceMock.getDojoById.withArgs('1234-5678').returns(Promise.resolve(dojoDataMock));
       dojoServiceMock.isGitHubIntegrated.withArgs('1234-5678').returns(Promise.resolve(isGitHubIntegratedMock));
@@ -307,10 +307,10 @@ describe('AdminPanel', () => {
       adminPanel.$router = {
         push: sandbox.spy(),
       };
-      adminPanel.$cookies = {
+      adminPanel.$cookie = {
         get: sandbox.stub(),
       };
-      adminPanel.$cookies.get.withArgs('loggedIn').returns('4321-5678');
+      adminPanel.$cookie.get.withArgs('loggedIn').returns('4321-5678');
       userServiceMock.isUserChampion.withArgs('4321-5678', '1234-5678').returns(Promise.resolve(isUserChampionMock));
       dojoServiceMock.getDojoById.withArgs('1234-5678').returns(Promise.resolve(dojoDataMock));
       dojoServiceMock.isGitHubIntegrated.withArgs('1234-5678').returns(Promise.resolve(isGitHubIntegratedMock));

@@ -61,7 +61,7 @@ describe('Login', () => {
         login.isValid.returns(true);
         login.email = 'test@example.com';
         login.password = 'testpassword';
-        let expectedLoginData = {
+        let loginDataMock = {
           email: 'test@example.com',
           password: 'testpassword',
         };
@@ -70,23 +70,24 @@ describe('Login', () => {
             id: '1234-5678',
           },
         };
-        userServiceMock.login.withArgs(expectedLoginData).returns(mockResponse);
-        login.$cookies = {
-          set: () => null
+        userServiceMock.login.withArgs(loginDataMock).returns(mockResponse);
+        login.$cookie = {
+          set: sandbox.spy(),
         };
-        sandbox.spy(login.$cookies, 'set');
         login.$router = {
-          push: () => null
+          push: sandbox.spy(),
+          go: sandbox.spy(),
         };
-        sandbox.spy(login.$router, 'push');
         
         // ACT
         await login.login();
         
         // ASSERT
+        expect(userServiceMock.login).to.have.been.calledWith(loginDataMock);
         expect(login.loginFailed).to.equal(false);
-        expect(login.$cookies.set).to.have.been.calledWith('loggedIn', '1234-5678');
+        expect(login.$cookie.set).to.have.been.calledWith('loggedIn', '1234-5678');
         expect(login.$router.push).to.have.been.calledWith('/view-profile/1234-5678');
+        expect(login.$router.go).to.have.been.calledOnce;
       });
       it('should check for user information and not give them a login cookie if it is incorrect', async () => {
         // ARRANGE
@@ -95,52 +96,48 @@ describe('Login', () => {
         login.isValid.returns(true);
         login.email = 'unknown@example.com';
         login.password = 'unknownpassword';
-        let expectedLoginData = {
+        let loginDataMock = {
           email: 'unknown@example.com',
           password: 'unknownpassword',
         };
         let mockResponse = {
           body: null
         };
-        userServiceMock.login.withArgs(expectedLoginData).returns(mockResponse);
-        login.$cookies = {
-          set: () => null
+        userServiceMock.login.withArgs(loginDataMock).returns(mockResponse);
+        login.$cookie = {
+          set: sandbox.spy(),
         };
-        sandbox.spy(login.$cookies, 'set');
         login.$router = {
-          push: () => null
+          push: sandbox.spy(),
+          go: sandbox.spy(),
         };
-        sandbox.spy(login.$router, 'push');
         
         // ACT
         await login.login();
         
         // ASSERT
+        expect(userServiceMock.login).to.have.been.calledWith(loginDataMock);
         expect(login.loginFailed).to.equal(true);
-        expect(login.$cookies.set).to.not.have.been.called;
+        expect(login.$cookie.set).to.not.have.been.called;
         expect(login.$router.push).to.not.have.been.called;
+        expect(login.$router.go).to.not.have.been.called;
       });
       it('should do nothing with invalid form data', () => {
         // ARRANGE
         let login = vueUnitHelper(loginWithMocks);
         sandbox.stub(login, 'isValid');
         login.isValid.returns(false);
-        login.$cookies = {
+        login.$cookie = {
           set: () => null
         };
-        sandbox.spy(login.$cookies, 'set');
-        login.$router = {
-          push: () => null
-        };
-        sandbox.spy(login.$router, 'push');
+        sandbox.spy(login.$cookie, 'set');
         
         // ACT
         login.login();
         
         // ASSERT
         expect(login.loginFailed).to.equal(false);
-        expect(login.$cookies.set).to.not.have.been.called;
-        expect(login.$router.push).to.not.have.been.called;
+        expect(login.$cookie.set).to.not.have.been.called;
       });
     });
   });

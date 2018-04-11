@@ -135,7 +135,7 @@ export default {
     this.newlyCreatedProjects = (await projectService.getProjectData(false, 'created_at', 'desc', 5)).body;
     
     // get the logged in user (if there is one)
-    const userId = this.$cookies.get('loggedIn');
+    const userId = this.$cookie.get('loggedIn');
     if (userId) {
       this.loggedInUser = (await userService.getUserData(userId)).body;
     }

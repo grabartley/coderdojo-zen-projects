@@ -54,7 +54,7 @@ export default {
           resourceUrl: window.sessionStorage.getItem('projectResource'),
           filename: window.sessionStorage.getItem('filename'),
           file: window.sessionStorage.getItem('projectFiles'),
-          userId: this.$cookies.get('loggedIn'),
+          userId: this.$cookie.get('loggedIn'),
         };
         
         // send the project to the backend to save

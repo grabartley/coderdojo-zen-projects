@@ -62,7 +62,7 @@
       // check if GitHub has been integrated for this dojo
       this.isGitHubIntegrated = (await dojoService.isGitHubIntegrated(dojoId)).body;
       // check is the logged in user a champion of this dojo
-      const loggedInUserId = this.$cookies.get('loggedIn');
+      const loggedInUserId = this.$cookie.get('loggedIn');
       this.isLoggedInUserChampion = (await userService.isUserChampion(loggedInUserId, dojoId)).body;
     },
   }

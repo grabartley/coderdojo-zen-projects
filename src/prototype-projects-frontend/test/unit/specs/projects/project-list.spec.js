@@ -164,10 +164,10 @@ describe('ProjectList', () => {
       projectServiceMock.getProjectData.withArgs(false, 'plays', 'desc', 5).returns(mostPlayedProjectsResponseMock);
       projectServiceMock.getProjectData.withArgs(false, 'updated_at', 'desc', 5).returns(recentlyUpdatedProjectsResponseMock);
       projectServiceMock.getProjectData.withArgs(false, 'created_at', 'desc', 5).returns(newlyCreatedProjectsResponseMock);
-      projectList.$cookies = {
+      projectList.$cookie = {
         get: sandbox.stub(),
       };
-      projectList.$cookies.get.withArgs('loggedIn').returns('1234-5678');
+      projectList.$cookie.get.withArgs('loggedIn').returns('1234-5678');
       userServiceMock.getUserData.withArgs('1234-5678').returns(Promise.resolve(userDataResponseMock));
       
       // ACT
@@ -180,7 +180,7 @@ describe('ProjectList', () => {
       expect(projectList.mostPlayedProjects).to.equal('mostPlayedProjects');
       expect(projectList.recentlyUpdatedProjects).to.equal('recentlyUpdatedProjects');
       expect(projectList.newlyCreatedProjects).to.equal('newlyCreatedProjects');
-      expect(projectList.$cookies.get).to.have.been.calledWith('loggedIn');
+      expect(projectList.$cookie.get).to.have.been.calledWith('loggedIn');
       expect(userServiceMock.getUserData).to.have.been.calledWith('1234-5678');
       expect(projectList.loggedInUser).to.equal(userDataResponseMock.body);
       expect(vuePagination2Mock.PaginationEvent.$on).to.have.been.calledOnce;
@@ -204,16 +204,16 @@ describe('ProjectList', () => {
       projectServiceMock.getProjectData.withArgs(false, 'plays', 'desc', 5).returns(mostPlayedProjectsResponseMock);
       projectServiceMock.getProjectData.withArgs(false, 'updated_at', 'desc', 5).returns(recentlyUpdatedProjectsResponseMock);
       projectServiceMock.getProjectData.withArgs(false, 'created_at', 'desc', 5).returns(newlyCreatedProjectsResponseMock);
-      projectList.$cookies = {
+      projectList.$cookie = {
         get: sandbox.stub(),
       };
-      projectList.$cookies.get.withArgs('loggedIn').returns(null);
+      projectList.$cookie.get.withArgs('loggedIn').returns(null);
       
       // ACT
       await projectList.$lifecycleMethods.created();
       
       // ASSERT
-      expect(projectList.$cookies.get).to.have.been.calledWith('loggedIn');
+      expect(projectList.$cookie.get).to.have.been.calledWith('loggedIn');
       expect(userServiceMock.getUserData).to.not.have.been.called;
       expect(projectList.loggedInUser).to.equal(null);
     });

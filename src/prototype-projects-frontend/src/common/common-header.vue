@@ -5,7 +5,7 @@
       <span class="common-header__title-text">CoderDojo Zen</span>
     </router-link>
     <div class="common-header__login">
-      <div v-if="loggedInUser" class="common-header__login-profile">
+      <div v-show="loggedIn" class="common-header__login-profile">
         <button class="common-header__login-profile-button" v-bind:class="{ 'common-header__login-profile-button--selected': profileDropdown }" @click="profileDropdown = !profileDropdown">
           {{ loggedInUser.name }}
         </button>
@@ -18,7 +18,7 @@
           </button>
         </div>
       </div>
-      <div v-else class="common-header__login-button">
+      <div v-show="!loggedIn" class="common-header__login-button">
         <router-link :to="{ name: 'Login', params: {} }">Login</router-link>
       </div>
     </div>
@@ -31,7 +31,8 @@
     name: 'CommonHeader',
     data() {
       return {
-        loggedInUser: null,
+        loggedInUser: {},
+        loggedIn: false,
         profileDropdown: false,
       };
     },
@@ -41,16 +42,19 @@
         this.profileDropdown = false;
       },
       logout() {
-        this.$cookies.remove('loggedIn');
-        this.loggedInUser = null;
+        this.$cookie.remove('loggedIn');
+        this.loggedInUser = {};
+        this.loggedIn = false;
         this.profileDropdown = false;
+        this.$router.push('/');
       },
     },
     async created() {
       // get logged in user (if there is one)
-      const userId = this.$cookies.get('loggedIn');
+      const userId = this.$cookie.get('loggedIn');
       if (userId) {
         this.loggedInUser = (await userService.getUserData(userId)).body;
+        this.loggedIn = true;
       }
     },
   }

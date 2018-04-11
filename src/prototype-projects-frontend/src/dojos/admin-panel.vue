@@ -144,7 +144,7 @@
       const dojoId = this.$route.params.dojoId;
       
       // check is the logged in user a champion of this dojo
-      const loggedInUserId = this.$cookies.get('loggedIn');
+      const loggedInUserId = this.$cookie.get('loggedIn');
       this.isLoggedInUserChampion = (await userService.isUserChampion(loggedInUserId, dojoId)).body;
       
       // redirect user away if they are not authorized to be here
