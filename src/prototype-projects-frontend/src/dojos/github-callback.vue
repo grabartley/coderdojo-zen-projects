@@ -20,7 +20,7 @@
         return this.$route.query.code;
       },
       loggedInUserId() {
-        return this.$cookies.get('loggedIn');
+        return this.$cookie.get('loggedIn');
       },
     },
     methods: {

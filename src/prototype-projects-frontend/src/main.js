@@ -4,7 +4,7 @@ import Vue from 'vue'
 import VueResource from 'vue-resource';
 import VueSocketIO from 'vue-socket.io';
 import VeeValidate from 'vee-validate';
-import VueCookies from 'vue-cookies';
+import VueJSCookie from 'vue-js-cookie';
 import VueClipboard from 'vue-clipboard2'
 import App from './App'
 import router from './router'
@@ -21,7 +21,7 @@ Vue.use(VueSocketIO, 'http://localhost:3000');
 // used for form validation
 Vue.use(VeeValidate);
 // used to store and get browser cookies
-Vue.use(VueCookies);
+Vue.use(VueJSCookie);
 // used to copy data to the clipboard of the user
 Vue.use(VueClipboard);
 

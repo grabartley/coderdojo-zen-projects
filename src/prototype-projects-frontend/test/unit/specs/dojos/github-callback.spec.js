@@ -53,14 +53,14 @@ describe('GitHubCallback', () => {
       it('should return the value associated with the LoggedIn cookie', () => {
         // ARRANGE
         let githubCallback = vueUnitHelper(GitHubCallback());
-        githubCallback.$cookies = {
+        githubCallback.$cookie = {
           get: () => '1234-5678',
         };
-        sandbox.spy(githubCallback.$cookies, 'get');
+        sandbox.spy(githubCallback.$cookie, 'get');
         
         // ACT & ASSERT
         expect(githubCallback.loggedInUserId).to.equal('1234-5678');
-        expect(githubCallback.$cookies.get).to.have.been.calledWith('loggedIn');
+        expect(githubCallback.$cookie.get).to.have.been.calledWith('loggedIn');
       });
     });
   });

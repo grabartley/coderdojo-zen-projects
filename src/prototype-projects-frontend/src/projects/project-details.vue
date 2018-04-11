@@ -243,7 +243,7 @@
       // get dojo data using the GitHub integration id
       this.dojoData = (await dojoService.getDojoByGitHubId(this.projectData.github_integration_id)).body;
       
-      const loggedInUserId = this.$cookies.get('loggedIn');
+      const loggedInUserId = this.$cookie.get('loggedIn');
       if (this.projectData.user_id === loggedInUserId) {
         this.currentUser = loggedInUserId;
       } 

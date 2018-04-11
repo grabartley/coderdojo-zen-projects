@@ -266,7 +266,7 @@ describe('ProjectDetails', () => {
           projectId: projectIdMock,
         },
       };
-      projectDetails.$cookies = {
+      projectDetails.$cookie = {
         get: (cookieName) => '4567-1238'
       };
       projectServiceMock.getProjectById.withArgs(projectIdMock).returns(Promise.resolve(projectDataMock));
@@ -285,7 +285,7 @@ describe('ProjectDetails', () => {
       expect(projectDetails.currentUser).to.equal(null);
       
       // ARRANGE
-      projectDetails.$cookies = {
+      projectDetails.$cookie = {
         get: (cookieName) => '5678-1234'
       };
       
@@ -346,7 +346,7 @@ describe('ProjectDetails', () => {
           projectId: projectIdMock,
         },
       };
-      projectDetails.$cookies = {
+      projectDetails.$cookie = {
         get: (cookieName) => '4567-1238'
       };
       projectServiceMock.getProjectById.withArgs(projectIdMock).returns(Promise.resolve(projectDataMock));

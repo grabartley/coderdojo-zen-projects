@@ -67,10 +67,10 @@ describe('DojoDetails', () => {
           dojoId: '1234-5678',
         },
       };
-      dojoDetails.$cookies = {
+      dojoDetails.$cookie = {
         get: sandbox.stub(),
       };
-      dojoDetails.$cookies.get.withArgs('loggedIn').returns('5678-1234');
+      dojoDetails.$cookie.get.withArgs('loggedIn').returns('5678-1234');
       dojoServiceMock.getDojoById.withArgs('1234-5678').returns(Promise.resolve(expectedDojoDataResponse));
       dojoServiceMock.isGitHubIntegrated.withArgs('1234-5678').returns(Promise.resolve(isGitHubIntegratedResponse));
       userServiceMock.isUserChampion.withArgs('5678-1234', '1234-5678').returns(Promise.resolve(isLoggedInUserChampionResponse));

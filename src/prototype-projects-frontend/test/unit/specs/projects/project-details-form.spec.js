@@ -81,7 +81,7 @@ describe('ProjectDetailsForm', () => {
       const projectDetailsForm = vueUnitHelper(projectDetailsFormWithMocks);
       projectDetailsForm.usersDojos = null;
       projectDetailsForm.loggedInUser = null;
-      projectDetailsForm.$cookies = {
+      projectDetailsForm.$cookie = {
         get: (cookieName) => '1234-5678',
       };
       projectDetailsForm.$router = {
@@ -112,7 +112,7 @@ describe('ProjectDetailsForm', () => {
       const projectDetailsForm = vueUnitHelper(ProjectDetailsForm());
       projectDetailsForm.usersDojos = null;
       projectDetailsForm.loggedInUser = null;
-      projectDetailsForm.$cookies = {
+      projectDetailsForm.$cookie = {
         get: (cookieName) => null,
       };
       projectDetailsForm.$router = {

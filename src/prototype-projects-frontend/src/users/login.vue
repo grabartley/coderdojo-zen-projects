@@ -46,8 +46,10 @@
           let response = await userService.login(loginData);
           if (response.body) {
             this.loginFailed = false;
-            this.$cookies.set('loggedIn', response.body.id);
+            this.$cookie.set('loggedIn', response.body.id);
             this.$router.push(`/view-profile/${response.body.id}`);
+            // go needed to refresh header component
+            this.$router.go();
           } else {
             this.loginFailed = true;
           }

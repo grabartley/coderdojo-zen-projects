@@ -40,11 +40,14 @@ describe('CommonHeader', () => {
       });
     });
     describe('logout', () => {
-      it('should log the user out', () => {
+      it('should log the user out and redirect to the Project List', () => {
         // ARRANGE
         let commonHeader = vueUnitHelper(CommonHeader());
-        commonHeader.$cookies = {
+        commonHeader.$cookie = {
           remove: sandbox.spy(),
+        };
+        commonHeader.$router = {
+          push: sandbox.spy(),
         };
         commonHeader.loggedInUser = {
           id: '1234-5678',
@@ -55,9 +58,11 @@ describe('CommonHeader', () => {
         commonHeader.logout();
         
         // ASSERT
-        expect(commonHeader.$cookies.remove).to.have.been.calledWith('loggedIn');
-        expect(commonHeader.loggedInUser).to.equal(null);
-        expect(commonHeader.profileDropdown).to.equal(false);
+        expect(commonHeader.$cookie.remove).to.have.been.calledWith('loggedIn');
+        expect(commonHeader.loggedInUser).to.deep.equal({});
+        expect(commonHeader.loggedIn).to.be.false;
+        expect(commonHeader.profileDropdown).to.be.false;
+        expect(commonHeader.$router.push).to.have.been.calledWith('/');
       });
     });
   });
@@ -72,35 +77,37 @@ describe('CommonHeader', () => {
           id: '1234-5678',
         },
       };
-      commonHeader.$cookies = {
+      commonHeader.$cookie = {
         get: sandbox.stub(),
       };
-      commonHeader.$cookies.get.withArgs('loggedIn').returns(userIdMock);
+      commonHeader.$cookie.get.withArgs('loggedIn').returns(userIdMock);
       userServiceMock.getUserData.withArgs(userIdMock).returns(Promise.resolve(userDataResponseMock));
       
       // ACT
       await commonHeader.$lifecycleMethods.created();
       
       // ASSERT
-      expect(commonHeader.$cookies.get).to.have.been.calledWith('loggedIn');
+      expect(commonHeader.$cookie.get).to.have.been.calledWith('loggedIn');
       expect(userServiceMock.getUserData).to.have.been.calledWith(userIdMock);
       expect(commonHeader.loggedInUser).to.equal(userDataResponseMock.body);
+      expect(commonHeader.loggedIn).to.be.true;
     });
     it('should not get user data if there is no logged in user', async () => {
       // ARRANGE
       let commonHeader = vueUnitHelper(commonHeaderWithMocks);
-      commonHeader.$cookies = {
+      commonHeader.$cookie = {
         get: sandbox.stub(),
       };
-      commonHeader.$cookies.get.withArgs('loggedIn').returns(null);
+      commonHeader.$cookie.get.withArgs('loggedIn').returns(null);
       
       // ACT
       await commonHeader.$lifecycleMethods.created();
       
       // ASSERT
-      expect(commonHeader.$cookies.get).to.have.been.calledWith('loggedIn');
+      expect(commonHeader.$cookie.get).to.have.been.calledWith('loggedIn');
       expect(userServiceMock.getUserData).to.not.have.been.called;
-      expect(commonHeader.loggedInUser).to.equal(null);
+      expect(commonHeader.loggedInUser).to.deep.equal({});
+      expect(commonHeader.loggedIn).to.be.false;
     });
   });
 });
