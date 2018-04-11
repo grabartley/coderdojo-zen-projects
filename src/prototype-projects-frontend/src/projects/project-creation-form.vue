@@ -8,10 +8,147 @@
     </div>
     <div class="project-creation-form__content">
       <form>
-        <project-details-form ref="projectDetailsFormRef"></project-details-form>
-        <project-files-form ref="projectFilesFormRef"></project-files-form>
+        <div class="project-creation-form__content-section">
+          <div class="project-creation-form__content-section-title">
+            Project Information
+          </div>
+          <div class="project-creation-form__content-section-subtitle">
+            Tell us what your project is about!
+          </div>
+          <div class="project-creation-form__content-section-content">
+            <div class="project-creation-form__content-section-content-input">
+              <div class="project-creation-form__content-section-content-input-name">
+                <label>Project Name</label>
+              </div>
+              <div class="project-creation-form__content-section-content-input-field">
+                <input v-validate.initial="'required'" v-model="projectName" name="project name"></input>
+              </div>
+            </div>
+            <div class="project-creation-form__content-section-content-error">
+              <div class="error-message" v-show="isFormValidated && errors.has('project name')">{{ errors.first('project name') }}</div>
+            </div>
+            <div class="project-creation-form__content-section-content-input">
+              <div class="project-creation-form__content-section-content-input-name">
+                <label>Project Type</label>
+              </div>
+              <div class="project-creation-form__content-section-content-input-field">
+                <label>
+                  <input v-validate.initial="'required'" v-model="projectType" name="project type" type="radio" value="python"></input>
+                  <div class="project-creation-form__content-section-content-input-field-bubble">
+                    <img src="@/assets/python-logo.png" alt="Python Logo" class="project-creation-form__content-section-content-input-field-bubble-image" v-bind:class="{ 'project-creation-form__content-section-content-input-field-bubble-image--selected': isPythonSelected }"></img>
+                    <label class="project-creation-form__content-section-content-input-field-bubble-text">Python 3</label>
+                  </div>
+                </label>
+                <label>
+                  <input v-model="projectType" name="project type" type="radio" value="javascript"></input>
+                  <div class="project-creation-form__content-section-content-input-field-bubble">
+                    <img src="@/assets/nodejs-logo.png" alt="NodeJS Logo" class="project-creation-form__content-section-content-input-field-bubble-image" v-bind:class="{ 'project-creation-form__content-section-content-input-field-bubble-image--selected': isNodeJSSelected }"></img>
+                    <label class="project-creation-form__content-section-content-input-field-bubble-text">NodeJS</label>
+                  </div>
+                </label>
+                <label>
+                  <input v-model="projectType" name="project type" type="radio" value="html"></input>
+                  <div class="project-creation-form__content-section-content-input-field-bubble">
+                    <img src="@/assets/html5-logo.png" alt="HTML5 Logo" class="project-creation-form__content-section-content-input-field-bubble-image" v-bind:class="{ 'project-creation-form__content-section-content-input-field-bubble-image--selected': isHTMLSelected }"></img>
+                    <label class="project-creation-form__content-section-content-input-field-bubble-text">HTML5</label>
+                  </div>
+                </label>
+                <label>
+                  <input v-model="projectType" name="project type" type="radio" value="java"></input>
+                  <div class="project-creation-form__content-section-content-input-field-bubble">
+                    <img src="@/assets/java-logo.png" alt="Java Logo" class="project-creation-form__content-section-content-input-field-bubble-image" v-bind:class="{ 'project-creation-form__content-section-content-input-field-bubble-image--selected': isJavaSelected }"></img>
+                    <label class="project-creation-form__content-section-content-input-field-bubble-text">Java</label>
+                  </div>
+                </label>
+              </div>
+            </div>
+            <div class="project-creation-form__content-section-content-error">
+              <div class="error-message" v-show="isFormValidated && errors.has('project type')">{{ errors.first('project type') }}</div>
+            </div>
+            <div class="project-creation-form__content-section-content-input">
+              <div class="project-creation-form__content-section-content-input-name">
+                <label>Project Description</label>
+              </div>
+              <div class="project-creation-form__content-section-content-input-field">
+                <textarea v-validate.initial="'required'" v-model="projectDescription" name="project description"></textarea>
+              </div>
+            </div>
+            <div class="project-creation-form__content-section-content-error">
+              <div class="error-message" v-show="isFormValidated && errors.has('project description')">{{ errors.first('project description') }}</div>
+            </div>
+            <div class="project-creation-form__content-section-content-input">
+              <div class="project-creation-form__content-section-content-input-name">
+                <label>Dojo</label>
+              </div>
+              <div v-if="usersDojos && usersDojos.length > 0" class="project-creation-form__content-section-content-input-field">
+                <label v-for="dojo in usersDojos">
+                  <input v-validate.initial="'required'" v-model="dojoId" name="Dojo" type="radio" :value="dojo.id"></input>
+                  <div class="project-creation-form__content-section-content-input-field-bubble">
+                    <img src="@/assets/cd-logo.png" alt="Dojo Logo" class="project-creation-form__content-section-content-input-field-bubble-image" v-bind:class="{ 'project-creation-form__content-section-content-input-field-bubble-image--selected': dojo.id === dojoId }"></img>
+                    <label class="project-creation-form__content-section-content-input-field-bubble-text">{{ dojo.name }}</label>
+                  </div>
+                </label>
+              </div>
+              <div v-else v-validate.initial="'required'" class="project-creation-form__content-section-content-input-message error-message">You need to join a Dojo which has GitHub integrated in order to create a project!</div>
+            </div>
+            <div class="project-creation-form__content-section-content-error">
+              <div class="error-message" v-show="isFormValidated && errors.has('Dojo')">{{ errors.first('Dojo') }}</div>
+            </div>
+            <div class="project-creation-form__content-section-content-input">
+              <div class="project-creation-form__content-section-content-input-name">
+                <label>Project Resource</label>
+              </div>
+              <div class="project-creation-form__content-section-content-input-field">
+                <input v-validate.initial="'url'" v-model="projectResource" name="project resource"></input>
+              </div>
+            </div>
+            <div class="project-creation-form__content-section-content-error">
+              <div class="error-message" v-show="isFormValidated && errors.has('project resource')">{{ errors.first('project resource') }}</div>
+            </div>
+          </div>
+        </div>
+        <div class="project-creation-form__content-section">
+          <div class="project-creation-form__content-section-title">
+            Project Files
+          </div>
+          <div class="project-creation-form__content-section-subtitle">
+            Upload the code for your project here!
+          </div>
+          <div class="project-creation-form__content-section-content">
+            <div class="project-creation-form__content-section-content-input">
+              <div class="project-creation-form__content-section-content-input-name">
+                <label>Project main file</label>
+              </div>
+              <div class="project-creation-form__content-section-content-input-field">
+                <input v-validate.initial="{ required: true, regex: /^([a-zA-Z0-9\-\_])+\.([a-zA-Z])+$/ }" v-model="projectEntrypoint" name="project entrypoint"></input>
+              </div>
+            </div>
+            <div class="project-creation-form__content-section-content-error">
+              <div class="error-message" v-show="isFormValidated && errors.has('project entrypoint')">{{ errors.first('project entrypoint') }}</div>
+            </div>
+            <div class="project-creation-form__content-section-content-input">
+              <div class="project-creation-form__content-section-content-input-name">
+                <label v-if="!isZip">Please upload your project as a zip file with the project main file at the top level of the zip archive</label>
+              </div>
+              <div class="project-creation-form__content-section-content-input-field">
+                <label class="project-creation-form__content-section-content-input-file">
+                  <span class="project-creation-form__content-section-content-input-file-image fa fa-upload" alt="File Upload"></span>
+                  <input class="project-creation-form__content-section-content-input-file-hidden" v-validate.initial="'required'" type="file" name="project files" @change="onFileUpload"></input>
+                </label>
+                <span class="project-creation-form__content-section-content-input-file-details" v-show="filename">
+                  <span class="project-creation-form__content-section-content-input-file-details-icon fa fa-file-archive"></span>
+                  <span class="project-creation-form__content-section-content-input-file-details-name">{{ filename }}</span>
+                </span>
+              </div>
+            </div>
+            <div class="project-creation-form__content-section-content-error">
+              <div class="error-message" v-show="isFormValidated && errors.has('project files')">{{ errors.first('project files') }}</div>
+              <div class="error-message" v-show="isFormValidated && !isZip">Project files must be uploaded as a zip archive!</div>
+            </div>
+          </div>
+        </div>
       </form>
-      <button class="project-creation-form__content-button primary-button" v-bind:class="{'project-creation-form__content-button-spinning': creatingProject}" @click="createProject()">
+      <button class="project-creation-form__content-button primary-button" v-bind:class="{'project-creation-form__content-button--spinning': creatingProject}" @click="createProject()">
         <span v-if="creatingProject" class="fa fa-spinner fa-spin"></span>
         <span v-else>Create Project</span>
       </button>
@@ -19,41 +156,82 @@
   </div>
 </template>
 <script>
-import ProjectDetailsForm from '@/projects/project-details-form';
-import ProjectFilesForm from '@/projects/project-files-form';
 import projectService from '@/projects/service';
+import dojoService from '@/dojos/service';
 
 export default {
   name: 'ProjectCreationForm',
   data() {
     return {
       creatingProject: false,
+      loggedInUser: null,
+      usersDojos: null,
+      projectName: null,
+      projectType: null,
+      projectDescription: null,
+      dojoId: null,
+      projectResource: null,
+      isFormValidated: false,
+      isPythonSelected: false,
+      isNodeJSSelected: false,
+      isHTMLSelected: false,
+      isJavaSelected: false,
+      isZip: false,
+      isFileUploaded: false,
+      projectEntrypoint: null,
+      filename: null,
+      uploadedFile: null,
     };
   },
-  components: {
-    ProjectDetailsForm,
-    ProjectFilesForm,
-  },
   methods: {
+    // check if the form information is valid
+    isValid() {
+      this.isFormValidated = true;
+      return this.isFileUploaded && !this.creatingProject && !this.errors.any();
+    },
+    // when a file is chosen for upload
+    onFileUpload(e) {
+      let files = e.target.files;
+      // if files exist
+      if (files.length) {
+        // take the first one
+        let file = files[0];
+        let fr = new FileReader();
+        let vm = this;
+        // store the filename
+        this.filename = file.name;
+        // if the file is a zip file
+        if (file.type === 'application/zip') {
+          this.isZip = true;
+          // read the file
+          fr.readAsDataURL(file);
+          // when the file has been read
+          fr.onload = (e) => {
+            // store the file data
+            vm.uploadedFile = e.target.result;
+            this.isFileUploaded = true;
+          }
+        } else {
+          this.isZip = false;
+        }
+      }
+    },
     // if all form data is valid and we're not already creating a project, create the project
     async createProject() {
-      if (this.$refs.projectDetailsFormRef.isValid() && this.$refs.projectFilesFormRef.isValid() && !this.creatingProject) {
+      if (this.isValid()) {
         // a project is being created
         this.creatingProject = true;
-        // store information from the form inputs
-        this.$refs.projectDetailsFormRef.submitForm();
-        this.$refs.projectFilesFormRef.submitForm();
         
         // create data structure for the information
-        let projectData = {
-          name: window.sessionStorage.getItem('projectName'),
-          type: window.sessionStorage.getItem('projectType'),
-          entrypoint: window.sessionStorage.getItem('projectEntrypoint'),
-          description: window.sessionStorage.getItem('projectDescription'),
-          dojoId: window.sessionStorage.getItem('dojoId'),
-          resourceUrl: window.sessionStorage.getItem('projectResource'),
-          filename: window.sessionStorage.getItem('filename'),
-          file: window.sessionStorage.getItem('projectFiles'),
+        const projectData = {
+          name: this.projectName,
+          type: this.projectType,
+          description: this.projectDescription,
+          dojoId: this.dojoId,
+          resourceUrl: this.projectResource,
+          entrypoint: this.projectEntrypoint,
+          filename: this.filename,
+          file: this.uploadedFile,
           userId: this.$cookie.get('loggedIn'),
         };
         
@@ -64,6 +242,38 @@ export default {
         this.$router.push(`/project/${projectId}`);
       }
     }
+  },
+  async created() {
+    // get the logged in user's joined dojos
+    this.loggedInUser = this.$cookie.get('loggedIn');
+    if (this.loggedInUser) {
+      this.usersDojos = (await dojoService.getUsersDojosWithGitHub(this.loggedInUser)).body;
+    } else {
+      this.$router.push('/');
+    }
+  },
+  watch: {
+    projectType: {
+      handler(newProjectType, prevProjectType) {
+        this.isPythonSelected = false;
+        this.isNodeJSSelected = false;
+        this.isHTMLSelected = false;
+        this.isJavaSelected = false;
+        switch (newProjectType) {
+          case 'python':
+            this.isPythonSelected = true;
+            break;
+          case 'javascript':
+            this.isNodeJSSelected = true;
+            break;
+          case 'html':
+            this.isHTMLSelected = true;
+            break;
+          case 'java':
+            this.isJavaSelected = true;
+        }
+      },
+    },
   },
 }
 </script>
@@ -86,9 +296,125 @@ export default {
       }
     }
     &__content {
+      margin: 0 32px;
+      &-section {
+        margin-bottom: 40px;
+        text-align: left;
+        &-title {
+          font-size: 24px;
+          color: #0093D5;
+          border-bottom: 1px solid #99999F;
+        }
+        &-subtitle {
+          margin-top: 8px;
+          font-size: 14px;
+          color: #99999F;
+        }
+        &-content {
+          margin-top: 20px;
+          &-input {
+            display: flex;
+            align-items: center;
+            margin: 30px 0;
+            &-name {
+              flex: 2;
+              text-align: right;
+              margin-top: 5px;
+              margin-right: 20px;
+            }
+            &-field {
+              flex: 4;
+              text-align: left;
+              margin-right: 10px;
+              &-bubble {
+                display: inline-flex;
+                flex-direction: column;
+                align-items: center;
+                &-image {
+                  width: 75px;
+                  height: 75px;
+                  border: solid 7px white;
+                  border-radius: 70px;
+                  &:hover {
+                    background-color: #73449B;
+                    border: solid 7px #73449B;
+                    border-radius: 70px;
+                    cursor: pointer;
+                    transition: border 0.3s ease-out;
+                  }
+                  &--selected {
+                    background-color: #73449B;
+                    border: solid 7px #73449B;
+                    border-radius: 70px;
+                  }
+                }
+                &-text {
+                  padding-top: 5px;
+                }
+              }
+              & input, textarea {
+                width: 60%;
+                max-width: 600px;
+              }
+              & textarea {
+                height: 150px;
+              }
+              & label {
+                margin: 0 10px;
+                & input {
+                  width: 10px;
+                  position: absolute;
+                  z-index: -1;
+                  visibility: hidden;
+                }
+              }
+            }
+            &-message {
+              flex: 4;
+            }
+            &-file {
+              &-image {
+                padding: 15px 45px;
+                border-radius: 10px;
+                font-size: 5em;
+                color: #000000;
+                background-color: #eee;
+                border: solid 1px #99999F;
+                &:hover {
+                  cursor: pointer;
+                  color: #FFFFFF;
+                  background-color: #99999F;
+                  transition: color 0.3s;
+                  transition: background-color 0.3s ease-out;
+                }
+              }
+              & input {
+                width: 10px;
+                position: absolute;
+                z-index: -1;
+                visibility: hidden;
+              }
+              &-details {
+                display: inline-flex;
+                align-items: center;
+                margin-left: 40px;
+                &-icon {
+                  font-size: 40px;
+                }
+                &-name {
+                  margin-left: 10px;
+                }
+              }
+            }
+          }
+          &-error {
+            text-align: center;
+          }
+        }
+      }
       &-button {
         margin: 20px 0;
-        &-spinning {
+        &--spinning {
           font-size: 16px;
           width: 50px;
           transition: 0.3s;
