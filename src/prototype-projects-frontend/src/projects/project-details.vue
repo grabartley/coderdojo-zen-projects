@@ -210,10 +210,10 @@
         }
       },
       lastUpdatedTime() {
-        return moment(this.projectData.updated_at || this.projectData.created_at).subtract(moment().utcOffset(), 'minutes').format('h:mma');
+        return moment(this.projectData.updated_at || this.projectData.created_at).add(moment().utcOffset(), 'minutes').format('h:mma');
       },
       lastUpdatedDate() {
-        return moment(this.projectData.updated_at || this.projectData.created_at).subtract(moment().utcOffset(), 'minutes').format('Do of MMMM YYYY');
+        return moment(this.projectData.updated_at || this.projectData.created_at).add(moment().utcOffset(), 'minutes').format('Do of MMMM YYYY');
       },
       githubPagesLink() {
         let githubAccount = this.projectData.github_url.split('/');
