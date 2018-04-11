@@ -137,7 +137,7 @@
       &-image {
         width: 95px;
         height: 95px;
-        border: solid 7px white;
+        border: solid 7px #FFFFFF;
         border-radius: 70px;
         &:hover {
           background-color: #73449B;

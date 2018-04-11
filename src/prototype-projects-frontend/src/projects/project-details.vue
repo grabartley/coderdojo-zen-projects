@@ -36,8 +36,8 @@
             <span class="project-details__information-sidebar-item-header-name">dojo</span>
           </div>
           <div class="project-details__information-sidebar-item-data" style="text-align: center;">
-            <div class="project-details__bubble">
-              <img src="@/assets/cd-logo.png" alt="Dojo Logo" class="project-details__bubble-image"></img>
+            <div class="project-details__bubble" @click="viewDojo(dojoData.id)">
+              <img src="@/assets/cd-logo.png" alt="Dojo Logo" class="project-details__bubble-image--link"></img>
               <span class="project-details__bubble-text">{{ dojoData.name }}</span>
             </div>
           </div>
@@ -224,6 +224,9 @@
     methods: {
       editProject() {
         this.$router.push(`/edit-project/${this.projectData.project_id}`);
+      },
+      viewDojo(dojoId) {
+        this.$router.push(`/dojos/${dojoId}`);
       },
     },
     async created() {
@@ -451,8 +454,21 @@
       align-items: center;
       margin-top: 10px;
       &-image {
-        width: 85px;
-        height: 85px;
+        width: 92px;
+        height: 92px;
+        &--link {
+          width: 92px;
+          height: 92px;
+          border: solid 7px #f8f8f8;
+          border-radius: 70px;
+          &:hover {
+            background-color: #73449B;
+            border: solid 7px #73449B;
+            border-radius: 70px;
+            cursor: pointer;
+            transition: border 0.3s ease-out;
+          }
+        }
       }
       &-text {
         padding-top: 8px;
