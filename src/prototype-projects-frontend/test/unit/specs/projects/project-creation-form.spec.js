@@ -47,7 +47,7 @@ describe('ProjectCreationForm', () => {
         window.sessionStorage.setItem('filename', 'test.zip');
         window.sessionStorage.setItem('projectFiles', 'fileData');
         sandbox.stub(projectCreationForm.$cookie, 'get').withArgs('loggedIn').returns('1234-5678');
-        const expectedProjectData = {
+        const projectDataMock = {
           name: 'Test Project',
           type: 'python',
           entrypoint: 'test.py',
@@ -58,12 +58,16 @@ describe('ProjectCreationForm', () => {
           file: 'fileData',
           userId: '1234-5678',
         };
+        const createProjectResponseMock = {
+          body: '8765-4321',
+        };
         projectCreationForm.$router = {
           push: () => null
         };
         sandbox.spy(projectCreationForm.$refs.projectDetailsFormRef, 'submitForm');
         sandbox.spy(projectCreationForm.$refs.projectFilesFormRef, 'submitForm');
         sandbox.spy(projectCreationForm.$router, 'push');
+        projectServiceMock.createProject.withArgs(projectDataMock).returns(Promise.resolve(createProjectResponseMock));
 
         // ACT
         await projectCreationForm.createProject();
@@ -72,8 +76,8 @@ describe('ProjectCreationForm', () => {
         expect(projectCreationForm.creatingProject).to.be.true;
         expect(projectCreationForm.$refs.projectDetailsFormRef.submitForm).to.have.been.calledOnce;
         expect(projectCreationForm.$refs.projectFilesFormRef.submitForm).to.have.been.calledOnce;
-        expect(projectServiceMock.createProject).to.have.been.calledWith(expectedProjectData);
-        expect(projectCreationForm.$router.push).to.have.been.calledWith('/');
+        expect(projectServiceMock.createProject).to.have.been.calledWith(projectDataMock);
+        expect(projectCreationForm.$router.push).to.have.been.calledWith('/project/8765-4321');
       });
       it('should not create a project with invalid project data', async () => {
         // ARRANGE

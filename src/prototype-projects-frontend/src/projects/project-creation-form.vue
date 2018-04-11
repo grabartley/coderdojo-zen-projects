@@ -58,10 +58,10 @@ export default {
         };
         
         // send the project to the backend to save
-        await projectService.createProject(projectData);
+        const projectId = (await projectService.createProject(projectData)).body;
         
-        // send the user back to the projects list for now
-        this.$router.push('/');
+        // send the user to the project page for the project they just created
+        this.$router.push(`/project/${projectId}`);
       }
     }
   },
