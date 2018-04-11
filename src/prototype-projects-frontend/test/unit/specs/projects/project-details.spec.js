@@ -213,6 +213,22 @@ describe('ProjectDetails', () => {
         expect(projectDetails.$router.push).to.have.been.calledWith('/edit-project/1234-5678');
       });
     });
+    describe('viewDojo', () => {
+      it('should redirect the user to the dojo page for the given id', () => {
+        // ARRANGE
+        let projectDetails = vueUnitHelper(ProjectDetails());
+        const dojoIdMock = '4321-5678';
+        projectDetails.$router = {
+          push: sandbox.spy(),
+        };
+        
+        // ACT
+        projectDetails.viewDojo(dojoIdMock);
+        
+        // ASSERT
+        expect(projectDetails.$router.push).to.have.been.calledWith('/dojos/4321-5678');
+      });
+    });
   });
   describe('created', () => {
     it('should get the data for this project (including Dojo data) and check if the logged in user owns it', async () => {
