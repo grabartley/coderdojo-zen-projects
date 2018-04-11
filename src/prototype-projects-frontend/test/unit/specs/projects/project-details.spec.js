@@ -124,7 +124,7 @@ describe('ProjectDetails', () => {
         let projectDetails = vueUnitHelper(ProjectDetails());
         const defaultDate = Date;
         Date = timeShift.Date;
-        timeShift.setTimezoneOffset(120);
+        timeShift.setTimezoneOffset(-120);
         projectDetails.projectData = {
           created_at: '2018-02-23T22:26:22.884',
           updated_at: null,
@@ -135,7 +135,7 @@ describe('ProjectDetails', () => {
         
         // ARRANGE
         projectDetails = vueUnitHelper(ProjectDetails());
-        timeShift.setTimezoneOffset(-120);
+        timeShift.setTimezoneOffset(120);
         projectDetails.projectData = {
           created_at: '2018-02-23T22:26:22.884',
           updated_at: '2018-02-23T05:14:55.884',
@@ -154,7 +154,7 @@ describe('ProjectDetails', () => {
         let projectDetails = vueUnitHelper(ProjectDetails());
         const defaultDate = Date;
         Date = timeShift.Date;
-        timeShift.setTimezoneOffset(120);
+        timeShift.setTimezoneOffset(-120);
         projectDetails.projectData = {
           created_at: '2018-02-23T23:26:22.884',
           updated_at: null,
@@ -165,7 +165,7 @@ describe('ProjectDetails', () => {
         
         // ARRANGE
         projectDetails = vueUnitHelper(ProjectDetails());
-        timeShift.setTimezoneOffset(-120);
+        timeShift.setTimezoneOffset(120);
         projectDetails.projectData = {
           created_at: '2018-02-23T22:26:22.884',
           updated_at: '2018-03-02T01:14:55.884',
