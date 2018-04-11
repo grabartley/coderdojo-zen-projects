@@ -232,8 +232,8 @@ function registerEndpoints(app) {
     // add statistics entry for project to the database
     await dbService.insertInto('project_statistics', ['project_statistics_id', 'project_id'], [statisticsId, id]);
     
-    // respond to client
-    res.send('successful project creation');
+    // respond to client with the project id
+    res.send(id);
   });
 
   // updates a project with the given projectData
