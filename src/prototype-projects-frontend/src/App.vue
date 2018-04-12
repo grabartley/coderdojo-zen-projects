@@ -32,9 +32,6 @@
     line-height: normal;
   }
   input, textarea {
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
     padding: 8px 10px;
     font-size: 16px;
     color: #2c3e50;
