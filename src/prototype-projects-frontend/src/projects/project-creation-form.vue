@@ -120,7 +120,9 @@
                 <label>Project main file</label>
               </div>
               <div class="project-creation-form__content-section-content-input-field">
-                <input v-validate.initial="{ required: true, regex: /^([a-zA-Z0-9\-\_])+\.([a-zA-Z])+$/ }" v-model="projectEntrypoint" name="project entrypoint"></input>
+                <input v-if="projectType !== 'html'" class="project-creation-form__content-section-content-input-field-filename" v-validate.initial="{ required: true, regex: /^([a-zA-Z0-9\-\_])+$/ }" v-model="projectEntrypoint" name="project entrypoint"></input>
+                <input v-else class="project-creation-form__content-section-content-input-field-filename" v-validate.initial="'required'" v-model="projectEntrypoint" name="project entrypoint" disabled="disabled"></input>
+                <span v-if="projectType" class="project-creation-form__content-section-content-input-field-extension">{{ entrypointExtension }}</span>
               </div>
             </div>
             <div class="project-creation-form__content-section-content-error">
@@ -179,6 +181,7 @@ export default {
       isZip: false,
       isFileUploaded: false,
       projectEntrypoint: null,
+      entrypointExtension: null,
       filename: null,
       uploadedFile: null,
     };
@@ -229,7 +232,7 @@ export default {
           description: this.projectDescription,
           dojoId: this.dojoId,
           resourceUrl: this.projectResource,
-          entrypoint: this.projectEntrypoint,
+          entrypoint: `${this.projectEntrypoint}${this.entrypointExtension}`,
           filename: this.filename,
           file: this.uploadedFile,
           userId: this.$cookie.get('loggedIn'),
@@ -262,15 +265,23 @@ export default {
         switch (newProjectType) {
           case 'python':
             this.isPythonSelected = true;
+            this.projectEntrypoint = null;
+            this.entrypointExtension = '.py';
             break;
           case 'javascript':
             this.isNodeJSSelected = true;
+            this.projectEntrypoint = null;
+            this.entrypointExtension = '.js';
             break;
           case 'html':
             this.isHTMLSelected = true;
+            this.projectEntrypoint = 'index';
+            this.entrypointExtension = '.html';
             break;
           case 'java':
             this.isJavaSelected = true;
+            this.projectEntrypoint = null;
+            this.entrypointExtension = '.java';
         }
       },
     },
@@ -351,6 +362,15 @@ export default {
                 &-text {
                   padding-top: 5px;
                 }
+              }
+              &-extension {
+                margin-left: -6px;
+                padding: 10px;
+                padding-top: 11px;
+                font-weight: bold;
+                background-color: #73449B;
+                color: #FFFFFF;
+                border-radius: 2px;
               }
               & input, textarea {
                 width: 60%;

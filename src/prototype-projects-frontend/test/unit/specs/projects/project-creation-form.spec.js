@@ -150,7 +150,8 @@ describe('ProjectCreationForm', () => {
         projectCreationForm.projectDescription = 'A test project.';
         projectCreationForm.dojoId = '5678-1234';
         projectCreationForm.projectResource = 'http://kata.coderdojo.com/some-page';
-        projectCreationForm.projectEntrypoint = 'test.py';
+        projectCreationForm.projectEntrypoint = 'test';
+        projectCreationForm.entrypointExtension = '.py';
         projectCreationForm.filename = 'test.zip';
         projectCreationForm.uploadedFile = 'fileData';
         const expectedProjectData = {
@@ -256,7 +257,7 @@ describe('ProjectCreationForm', () => {
   
   describe('watch', () => {
     describe('projectType', () => {
-      it('should update booleans based on selected type', () => {
+      it('should update booleans and entrypoint data based on selected type', () => {
         // ARRANGE
         const projectCreationForm = vueUnitHelper(ProjectCreationForm());
         
@@ -268,6 +269,8 @@ describe('ProjectCreationForm', () => {
         expect(projectCreationForm.isNodeJSSelected).to.be.false;
         expect(projectCreationForm.isHTMLSelected).to.be.false;
         expect(projectCreationForm.isJavaSelected).to.be.false;
+        expect(projectCreationForm.projectEntrypoint).to.equal(null);
+        expect(projectCreationForm.entrypointExtension).to.equal('.py');
         
         // ACT
         projectCreationForm.$watchers.projectType('javascript', null);
@@ -277,6 +280,8 @@ describe('ProjectCreationForm', () => {
         expect(projectCreationForm.isNodeJSSelected).to.be.true;
         expect(projectCreationForm.isHTMLSelected).to.be.false;
         expect(projectCreationForm.isJavaSelected).to.be.false;
+        expect(projectCreationForm.projectEntrypoint).to.equal(null);
+        expect(projectCreationForm.entrypointExtension).to.equal('.js');
         
         // ACT
         projectCreationForm.$watchers.projectType('html', null);
@@ -286,6 +291,8 @@ describe('ProjectCreationForm', () => {
         expect(projectCreationForm.isNodeJSSelected).to.be.false;
         expect(projectCreationForm.isHTMLSelected).to.be.true;
         expect(projectCreationForm.isJavaSelected).to.be.false;
+        expect(projectCreationForm.projectEntrypoint).to.equal('index');
+        expect(projectCreationForm.entrypointExtension).to.equal('.html');
         
         // ACT
         projectCreationForm.$watchers.projectType('java', null);
@@ -295,6 +302,8 @@ describe('ProjectCreationForm', () => {
         expect(projectCreationForm.isNodeJSSelected).to.be.false;
         expect(projectCreationForm.isHTMLSelected).to.be.false;
         expect(projectCreationForm.isJavaSelected).to.be.true;
+        expect(projectCreationForm.projectEntrypoint).to.equal(null);
+        expect(projectCreationForm.entrypointExtension).to.equal('.java');
       });
     });
   });
