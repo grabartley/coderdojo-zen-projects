@@ -70,6 +70,20 @@ describe('ProjectService', () => {
       expect(result).to.equal('expectedResponse');
     });
   });
+  describe('getProjectsForUser', () => {
+    it('should make the correct API call', async () => {
+      // ARRANGE
+      sandbox.stub(Vue.http, 'get');
+      const userIdMock = '1234-5678';
+      Vue.http.get.withArgs(`${Vue.config.apiServer}/api/2.0/projects/projects-for-user/${userIdMock}`).resolves('expectedResponse');
+      
+      // ACT
+      const result = await ProjectService.getProjectsForUser(userIdMock);
+      
+      // ASSERT
+      expect(result).to.equal('expectedResponse');
+    });
+  });
   describe('createProject', () => {
     it('should make the correct API call', async () => {
       // ARRANGE

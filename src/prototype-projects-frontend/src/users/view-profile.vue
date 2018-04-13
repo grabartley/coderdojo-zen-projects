@@ -16,12 +16,15 @@
         </div>
       </div>
       <div class="view-profile__information-content">
-        <div v-if="userData.type === 'youth-o13'" class="view-profile__information-content-section">
+        <div v-if="userData.type === 'youth-o13' && usersProjects" class="view-profile__information-content-section">
           <div class="view-profile__information-content-section-title">
             Projects
           </div>
-          <div class="view-profile__information-content-section-content">
-            Project information will go here!
+          <div class="view-profile__information-content-section-content" style="text-align: center;">
+            <div v-for="project in usersProjects" class="view-profile__bubble" @click="viewProject(project.project_id)">
+              <img :src="projectTypeImage(project.type)" alt="Project Technology" class="view-profile__bubble-image"></img>
+              <span class="view-profile__bubble-text">{{ project.name }}</span>
+            </div>
           </div>
         </div>
         <div class="view-profile__information-content-section">
@@ -42,6 +45,7 @@
 <script>
   import userService from '@/users/service';
   import dojoService from '@/dojos/service';
+  import projectService from '@/projects/service';
 
   export default {
     name: 'ViewProfile',
@@ -49,9 +53,27 @@
       return {
         userData: null,
         usersDojos: null,
+        usersProjects: null,
       };
     },
     methods: {
+      projectTypeImage(type) {
+        switch (type) {
+          case ('python'):
+            return require('@/assets/python-logo.png');
+          case ('javascript'):
+            return require('@/assets/nodejs-logo.png');
+          case ('html'):
+            return require('@/assets/html5-logo.png');
+          case ('java'):
+            return require('@/assets/java-logo.png');
+          default:
+            return '';
+        }
+      },
+      viewProject(projectId) {
+        this.$router.push(`/project/${projectId}`);
+      },
       viewDojo(dojoId) {
         this.$router.push(`/dojos/${dojoId}`);
       },
@@ -59,9 +81,10 @@
     async created() {
       const userId = this.$route.params.userId;
       
-      // get user and dojo data
+      // get user, dojo and project data
       this.userData = (await userService.getUserData(userId)).body;
       this.usersDojos = (await dojoService.getUsersDojos(userId)).body;
+      this.usersProjects = (await projectService.getProjectsForUser(userId)).body;
     },
   }
 </script>
@@ -148,6 +171,7 @@
         }
       }
       &-text {
+        max-width: 100px;
         padding-top: 8px;
       }
     }

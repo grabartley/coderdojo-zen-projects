@@ -10,6 +10,7 @@ import App from './App'
 import router from './router'
 // include free-for-use font awesome styling
 import './assets/font-awesome/css/fontawesome-all.min.css';
+import 'xterm2/dist/xterm.css';
 
 Vue.config.productionTip = false;
 Vue.config.apiServer = process.env.API_SERVER;
