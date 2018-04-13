@@ -298,9 +298,9 @@ describe('ProjectDetails', () => {
       projectDetails.$cookie = {
         get: (cookieName) => '4567-1238'
       };
-      projectServiceMock.getProjectById.withArgs(projectIdMock).returns(Promise.resolve(projectDataMock));
-      projectServiceMock.getProjectStatisticsById.withArgs(projectIdMock).returns(Promise.resolve(projectStatisticsMock));
-      dojoServiceMock.getDojoByGitHubId.withArgs(projectDataMock.body.github_integration_id).returns(Promise.resolve(dojoDataMock));
+      projectServiceMock.getProjectById.withArgs(projectIdMock).resolves(projectDataMock);
+      projectServiceMock.getProjectStatisticsById.withArgs(projectIdMock).resolves(projectStatisticsMock);
+      dojoServiceMock.getDojoByGitHubId.withArgs(projectDataMock.body.github_integration_id).resolves(dojoDataMock);
       
       // ACT
       await projectDetails.$lifecycleMethods.created();
@@ -378,10 +378,10 @@ describe('ProjectDetails', () => {
       projectDetails.$cookie = {
         get: (cookieName) => '4567-1238'
       };
-      projectServiceMock.getProjectById.withArgs(projectIdMock).returns(Promise.resolve(projectDataMock));
-      projectServiceMock.getProjectStatisticsById.withArgs(projectIdMock).returns(Promise.resolve(projectStatisticsMock));
-      projectServiceMock.incrementProjectPlays.withArgs(projectIdMock).returns(Promise.resolve());
-      dojoServiceMock.getDojoByGitHubId.withArgs(projectDataMock.body.github_integration_id).returns(Promise.resolve(dojoDataMock));
+      projectServiceMock.getProjectById.withArgs(projectIdMock).resolves(projectDataMock);
+      projectServiceMock.getProjectStatisticsById.withArgs(projectIdMock).resolves(projectStatisticsMock);
+      projectServiceMock.incrementProjectPlays.withArgs(projectIdMock).resolves('');
+      dojoServiceMock.getDojoByGitHubId.withArgs(projectDataMock.body.github_integration_id).resolves(dojoDataMock);
       
       // ACT
       await projectDetails.$lifecycleMethods.created();

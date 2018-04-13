@@ -169,10 +169,10 @@ describe('DojoDetails', () => {
         get: sandbox.stub(),
       };
       dojoDetails.$cookie.get.withArgs('loggedIn').returns('5678-1234');
-      dojoServiceMock.getDojoById.withArgs('1234-5678').returns(Promise.resolve(expectedDojoDataResponse));
-      dojoServiceMock.isGitHubIntegrated.withArgs('1234-5678').returns(Promise.resolve(isGitHubIntegratedResponse));
-      userServiceMock.isUserChampion.withArgs('5678-1234', '1234-5678').returns(Promise.resolve(isLoggedInUserChampionResponse));
-      projectServiceMock.getProjectsForDojo.withArgs('1234-5678', false).returns(Promise.resolve(expectedProjectsResponse));
+      dojoServiceMock.getDojoById.withArgs('1234-5678').resolves(expectedDojoDataResponse);
+      dojoServiceMock.isGitHubIntegrated.withArgs('1234-5678').resolves(isGitHubIntegratedResponse);
+      userServiceMock.isUserChampion.withArgs('5678-1234', '1234-5678').resolves(isLoggedInUserChampionResponse);
+      projectServiceMock.getProjectsForDojo.withArgs('1234-5678', false).resolves(expectedProjectsResponse);
       
       // ACT
       await dojoDetails.$lifecycleMethods.created();

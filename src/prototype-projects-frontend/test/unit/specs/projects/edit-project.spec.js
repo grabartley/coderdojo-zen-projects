@@ -128,7 +128,7 @@ describe('EditProject', () => {
         };
         sandbox.stub(editProject, 'isValid').returns(true);
         sandbox.spy(editProject.$router, 'push');
-        projectServiceMock.updateProject.withArgs(expectedUpdatePayload).returns(Promise.resolve('successful update'));
+        projectServiceMock.updateProject.withArgs(expectedUpdatePayload).resolves('successful update');
         
         // ACT
         await editProject.updateProject();
@@ -254,11 +254,11 @@ describe('EditProject', () => {
         editProject.$router = {
           push: () => null,
         };
-        projectServiceMock.deleteProjectById.withArgs(projectIdMock).returns(Promise.resolve({
+        projectServiceMock.deleteProjectById.withArgs(projectIdMock).resolves({
           body: {
             response: 'delete successful',
           }
-        }));
+        });
         sandbox.spy(editProject.$router, 'push');
         
         // ACT
@@ -315,7 +315,7 @@ describe('EditProject', () => {
           projectId: projectIdMock,
         },
       };
-      projectServiceMock.getProjectById.withArgs(projectIdMock).returns(Promise.resolve(projectDataMock));
+      projectServiceMock.getProjectById.withArgs(projectIdMock).resolves(projectDataMock);
       
       // ACT
       await editProject.$lifecycleMethods.created();

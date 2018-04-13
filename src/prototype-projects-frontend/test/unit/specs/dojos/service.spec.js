@@ -18,7 +18,7 @@ describe('DojoService', () => {
         id: '1234-5678',
         name: 'My Local Dojo',
       };
-      sandbox.stub(Vue.http, 'get').withArgs(`${Vue.config.apiServer}/api/2.0/dojos/${dojoIdMock}`).returns(Promise.resolve(dojoMock));
+      sandbox.stub(Vue.http, 'get').withArgs(`${Vue.config.apiServer}/api/2.0/dojos/${dojoIdMock}`).resolves(dojoMock);
       
       // ACT
       const dojo = await DojoService.getDojoById(dojoIdMock);
@@ -32,7 +32,7 @@ describe('DojoService', () => {
       // ARRANGE
       const userIdMock = '1234-5678';
       const usersDojosMock = ['5678-1234'];
-      sandbox.stub(Vue.http, 'get').withArgs(`${Vue.config.apiServer}/api/2.0/dojos/dojos-for-user/${userIdMock}`).returns(Promise.resolve(usersDojosMock));
+      sandbox.stub(Vue.http, 'get').withArgs(`${Vue.config.apiServer}/api/2.0/dojos/dojos-for-user/${userIdMock}`).resolves(usersDojosMock);
       
       // ACT
       const usersDojos = await DojoService.getUsersDojos(userIdMock);
@@ -46,7 +46,7 @@ describe('DojoService', () => {
       // ARRANGE
       const userIdMock = '1234-5678';
       const usersDojosWithGitHubMock = ['5678-1234'];
-      sandbox.stub(Vue.http, 'get').withArgs(`${Vue.config.apiServer}/api/2.0/dojos/dojos-for-user-with-github/${userIdMock}`).returns(Promise.resolve(usersDojosWithGitHubMock));
+      sandbox.stub(Vue.http, 'get').withArgs(`${Vue.config.apiServer}/api/2.0/dojos/dojos-for-user-with-github/${userIdMock}`).resolves(usersDojosWithGitHubMock);
       
       // ACT
       const usersDojosWithGitHub = await DojoService.getUsersDojosWithGitHub(userIdMock);
@@ -63,7 +63,7 @@ describe('DojoService', () => {
         id: '1234-5678',
         name: 'My Local Dojo',
       };
-      sandbox.stub(Vue.http, 'get').withArgs(`${Vue.config.apiServer}/api/2.0/dojos/dojo-by-github-integration/${githubIdMock}`).returns(Promise.resolve(dojoMock));
+      sandbox.stub(Vue.http, 'get').withArgs(`${Vue.config.apiServer}/api/2.0/dojos/dojo-by-github-integration/${githubIdMock}`).resolves(dojoMock);
       
       // ACT
       const dojo = await DojoService.getDojoByGitHubId(githubIdMock);
@@ -76,7 +76,7 @@ describe('DojoService', () => {
     it('should make the correct API call', async () => {
       // ARRANGE
       const dojoIdMock = '1234-5678';
-      sandbox.stub(Vue.http, 'get').withArgs(`${Vue.config.apiServer}/api/2.0/dojos/is-github-integrated/${dojoIdMock}`).returns(Promise.resolve('expectedResponse'));
+      sandbox.stub(Vue.http, 'get').withArgs(`${Vue.config.apiServer}/api/2.0/dojos/is-github-integrated/${dojoIdMock}`).resolves('expectedResponse');
       
       // ACT
       const response = await DojoService.isGitHubIntegrated(dojoIdMock);
@@ -91,7 +91,7 @@ describe('DojoService', () => {
       const dojoIdMock = '1234-5678';
       const userIdMock = '5678-1234';
       const githubDataMock = 'githubData';
-      sandbox.stub(Vue.http, 'post').withArgs(`${Vue.config.apiServer}/api/2.0/dojos/${dojoIdMock}/${userIdMock}/integrations/github`, githubDataMock).returns(Promise.resolve('expectedResponse'));
+      sandbox.stub(Vue.http, 'post').withArgs(`${Vue.config.apiServer}/api/2.0/dojos/${dojoIdMock}/${userIdMock}/integrations/github`, githubDataMock).resolves('expectedResponse');
       
       // ACT
       const response = await DojoService.completeGitHubIntegration(dojoIdMock, userIdMock, githubDataMock);
@@ -104,7 +104,7 @@ describe('DojoService', () => {
     it('should make the correct API call', async () => {
       // ARRANGE
       const dojoIdMock = '1234-5678';
-      sandbox.stub(Vue.http, 'post').withArgs(`${Vue.config.apiServer}/api/2.0/dojos/${dojoIdMock}/remove-github-integration`).returns(Promise.resolve('expectedResponse'));
+      sandbox.stub(Vue.http, 'post').withArgs(`${Vue.config.apiServer}/api/2.0/dojos/${dojoIdMock}/remove-github-integration`).resolves('expectedResponse');
       
       // ACT
       const response = await DojoService.removeGitHubIntegration(dojoIdMock);
