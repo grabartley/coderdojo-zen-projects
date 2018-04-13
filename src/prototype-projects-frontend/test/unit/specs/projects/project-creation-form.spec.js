@@ -25,6 +25,37 @@ describe('ProjectCreationForm', () => {
     sandbox.restore();
   });
 
+  describe('computed', () => {
+    describe('entrypointPlaceholder', () => {
+      it('should return the example entrypoint for each project type (other than html) and the default', () => {
+        // ARRANGE
+        let projectCreationForm = vueUnitHelper(ProjectCreationForm());
+        projectCreationForm.projectType = 'python';
+        
+        // ACT & ASSERT
+        expect(projectCreationForm.entrypointPlaceholder).to.equal('e.g. main');
+        
+        // ARRANGE
+        projectCreationForm.projectType = 'javascript';
+        
+        // ACT & ASSERT
+        expect(projectCreationForm.entrypointPlaceholder).to.equal('e.g. index');
+        
+        // ARRANGE
+        projectCreationForm.projectType = 'java';
+        
+        // ACT & ASSERT
+        expect(projectCreationForm.entrypointPlaceholder).to.equal('e.g. Main');
+        
+        // ARRANGE
+        projectCreationForm.projectType = '';
+        
+        // ACT & ASSERT
+        expect(projectCreationForm.entrypointPlaceholder).to.equal('Main filename (without extension)');
+      });
+    });
+  });
+
   describe('methods', () => {
     describe('isValid', () => {
       it('should return true if there are no form errors', () => {

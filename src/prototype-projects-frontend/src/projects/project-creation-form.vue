@@ -18,10 +18,10 @@
           <div class="project-creation-form__content-section-content">
             <div class="project-creation-form__content-section-content-input">
               <div class="project-creation-form__content-section-content-input-name">
-                <label>Project Name</label>
+                <label>Project Name<span class="error-message">*</span></label>
               </div>
               <div class="project-creation-form__content-section-content-input-field">
-                <input v-validate.initial="'required'" v-model="projectName" name="project name"></input>
+                <input v-validate.initial="'required'" v-model="projectName" name="project name" placeholder="e.g. My First Project"></input>
               </div>
             </div>
             <div class="project-creation-form__content-section-content-error">
@@ -29,7 +29,7 @@
             </div>
             <div class="project-creation-form__content-section-content-input">
               <div class="project-creation-form__content-section-content-input-name">
-                <label>Project Type</label>
+                <label>Project Type<span class="error-message">*</span></label>
               </div>
               <div class="project-creation-form__content-section-content-input-field">
                 <label>
@@ -67,10 +67,10 @@
             </div>
             <div class="project-creation-form__content-section-content-input">
               <div class="project-creation-form__content-section-content-input-name">
-                <label>Project Description</label>
+                <label>Project Description<span class="error-message">*</span></label>
               </div>
               <div class="project-creation-form__content-section-content-input-field">
-                <textarea v-validate.initial="'required'" v-model="projectDescription" name="project description"></textarea>
+                <textarea v-validate.initial="'required'" v-model="projectDescription" name="project description" placeholder="e.g. This is the first project I created on Zen."></textarea>
               </div>
             </div>
             <div class="project-creation-form__content-section-content-error">
@@ -78,7 +78,7 @@
             </div>
             <div class="project-creation-form__content-section-content-input">
               <div class="project-creation-form__content-section-content-input-name">
-                <label>Dojo</label>
+                <label>Dojo<span class="error-message">*</span></label>
               </div>
               <div v-if="usersDojos && usersDojos.length > 0" class="project-creation-form__content-section-content-input-field">
                 <label v-for="dojo in usersDojos">
@@ -99,7 +99,7 @@
                 <label>Project Resource</label>
               </div>
               <div class="project-creation-form__content-section-content-input-field">
-                <input v-validate.initial="'url'" v-model="projectResource" name="project resource"></input>
+                <input v-validate.initial="'url'" v-model="projectResource" name="project resource" placeholder="e.g. kata.coderdojo.com"></input>
               </div>
             </div>
             <div class="project-creation-form__content-section-content-error">
@@ -117,10 +117,10 @@
           <div class="project-creation-form__content-section-content">
             <div class="project-creation-form__content-section-content-input">
               <div class="project-creation-form__content-section-content-input-name">
-                <label>Project main file</label>
+                <label>Project main file<span class="error-message">*</span></label>
               </div>
               <div class="project-creation-form__content-section-content-input-field">
-                <input v-if="projectType !== 'html'" class="project-creation-form__content-section-content-input-field-filename" v-validate.initial="{ required: true, regex: /^([a-zA-Z0-9\-\_])+$/ }" v-model="projectEntrypoint" name="project entrypoint"></input>
+                <input v-if="projectType !== 'html'" class="project-creation-form__content-section-content-input-field-filename" v-validate.initial="{ required: true, regex: /^([a-zA-Z0-9\-\_])+$/ }" v-model="projectEntrypoint" name="project entrypoint" :placeholder="entrypointPlaceholder"></input>
                 <input v-else class="project-creation-form__content-section-content-input-field-filename" v-validate.initial="'required'" v-model="projectEntrypoint" name="project entrypoint" disabled="disabled"></input>
                 <span v-if="projectType" class="project-creation-form__content-section-content-input-field-extension">{{ entrypointExtension }}</span>
               </div>
@@ -130,7 +130,7 @@
             </div>
             <div class="project-creation-form__content-section-content-input">
               <div class="project-creation-form__content-section-content-input-name">
-                <label v-if="!isZip">Please upload your project as a zip file with the project main file at the top level of the zip archive</label>
+                <label v-if="!isZip">Please upload your project as a zip file with the project main file at the top level of the zip archive<span class="error-message">*</span></label>
               </div>
               <div class="project-creation-form__content-section-content-input-field">
                 <label class="project-creation-form__content-section-content-input-file">
@@ -185,6 +185,20 @@ export default {
       filename: null,
       uploadedFile: null,
     };
+  },
+  computed: {
+    entrypointPlaceholder() {
+      switch (this.projectType) {
+        case 'python':
+          return 'e.g. main';
+        case 'javascript':
+          return 'e.g. index';
+        case 'java':
+          return 'e.g. Main';
+        default:
+          return 'Main filename (without extension)';
+      }
+    },
   },
   methods: {
     // check if the form information is valid
