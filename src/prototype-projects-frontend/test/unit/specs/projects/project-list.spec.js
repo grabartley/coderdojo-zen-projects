@@ -122,6 +122,20 @@ describe('ProjectList', () => {
   });
   
   describe('methods', () => {
+    describe('formattedPlays', () => {
+      it('should return the play number formatted for the users locale', () => {
+        // ARRANGE
+        let projectList = vueUnitHelper(ProjectList());
+        const playsMock = '2753432';
+        const expectedPlays = '2,753,432';
+        
+        // ACT
+        const formattedPlays = projectList.formattedPlays(playsMock);
+        
+        // ASSERT
+        expect(formattedPlays).to.equal(expectedPlays);
+      });
+    });
     describe('createProject', () => {
       it('should redirect the user to the Project Creation Form', () => {
         // ARRANGE

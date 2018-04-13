@@ -192,6 +192,19 @@ describe('ProjectDetails', () => {
         expect(projectDetails.githubPagesLink).to.equal(expectedLink);
       });
     });
+    describe('formattedPlays', () => {
+      it('should return the play number formatted for the users locale', () => {
+        // ARRANGE
+        let projectDetails = vueUnitHelper(ProjectDetails());
+        projectDetails.projectData = {
+          plays: '2753432',
+        };
+        const expectedPlays = '2,753,432';
+        
+        // ACT & ASSERT
+        expect(projectDetails.formattedPlays).to.equal(expectedPlays);
+      });
+    });
   });
   describe('methods', () => {
     describe('editProject', () => {

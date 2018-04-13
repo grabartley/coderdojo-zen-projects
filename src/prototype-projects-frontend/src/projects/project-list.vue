@@ -15,7 +15,7 @@
               <li class="project-list__content-groups-box-list-item">
                 <router-link :to="{ name: 'ProjectDetails', params: { projectId: project.project_id } }">{{ project.name }}</router-link>
               </li>
-              <span class="project-list__content-groups-box-list-metadata">{{ project.plays }}</span>
+              <span class="project-list__content-groups-box-list-metadata">{{ formattedPlays(project.plays) }}</span>
             </div>
           </ol>
         </div>
@@ -113,6 +113,9 @@ export default {
     },
   },
   methods: {
+    formattedPlays(plays) {
+      return parseInt(plays).toLocaleString();
+    },
     // redirect the user to the Project Creation Form
     createProject() {
       this.$router.push('/create-project');
