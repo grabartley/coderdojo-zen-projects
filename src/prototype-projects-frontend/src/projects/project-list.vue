@@ -48,8 +48,11 @@
           <span class="project-list__content-projects-search-icon fa fa-search"></span>
         </div>
         <div class="project-list__content-projects-list">
-          <div class="project-list__content-projects-list-message">
+          <div v-if="paginatedProjectData.length > 0" class="project-list__content-projects-list-message">
             Showing {{ firstOnPage }} to {{ lastOnPage }} of {{ projectData.length }} projects
+          </div>
+          <div v-else class="project-list__content-projects-list-message">
+            No projects found!
           </div>
           <div class="project-list__content-projects-list-container">
             <div class="project-list__content-projects-list-items">
