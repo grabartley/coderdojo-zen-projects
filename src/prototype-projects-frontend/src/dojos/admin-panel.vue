@@ -19,8 +19,11 @@
               <span class="admin-panel__content-section-content-projects-search-icon fa fa-search"></span>
             </div>
             <div class="admin-panel__content-section-content-projects-list">
-              <div class="admin-panel__content-section-content-projects-list-message">
+              <div v-if="paginatedProjectData.length > 0" class="admin-panel__content-section-content-projects-list-message">
                 Showing {{ firstOnPage }} to {{ lastOnPage }} of {{ projectData.length }} projects
+              </div>
+              <div v-else class="admin-panel__content-section-content-projects-list-message">
+                No projects found!
               </div>
               <div class="admin-panel__content-section-content-projects-list-container">
                 <div class="admin-panel__content-section-content-projects-list-items">

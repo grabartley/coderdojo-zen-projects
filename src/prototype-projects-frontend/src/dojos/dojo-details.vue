@@ -42,8 +42,11 @@
               <span class="dojo-details__information-content-section-content-search-icon fa fa-search"></span>
             </div>
             <div class="dojo-details__information-content-section-content-list">
-              <div class="dojo-details__information-content-section-content-list-message">
+              <div v-if="paginatedProjectData.length > 0" class="dojo-details__information-content-section-content-list-message">
                 Showing {{ firstOnPage }} to {{ lastOnPage }} of {{ projects.length }} projects
+              </div>
+              <div v-else class="dojo-details__information-content-section-content-list-message">
+                No projects found!
               </div>
               <div class="dojo-details__information-content-section-content-list-container">
                 <div class="dojo-details__information-content-section-content-list-items">
