@@ -115,6 +115,24 @@ function registerEndpoints(app) {
       res.send({});
     }
   });
+  
+  // get projects for user with given user id
+  app.get('/api/2.0/projects/projects-for-user/:userId', async (req, res) => {
+    // log api call
+    console.log('GET /api/2.0/projects/projects-for-user/:userId with ');
+    console.log(req.params);
+    
+    // get the projects for the user with the given user id
+    let projectsForUser = (await dbService.query(`SELECT * FROM projects WHERE user_id='${req.params.userId}'`)).rows;
+    
+    // filter out deleted projects
+    projectsForUser = _.filter(projectsForUser, (project) => {
+      return !project.deleted_at;
+    });
+    
+    // respond with the projects
+    res.send(projectsForUser);
+  });
 
   // creates a project
   app.post('/api/2.0/projects/create-project', async (req, res) => {

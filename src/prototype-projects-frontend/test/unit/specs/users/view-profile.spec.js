@@ -5,6 +5,7 @@ describe('ViewProfile', () => {
   let sandbox;
   let userServiceMock;
   let dojoServiceMock;
+  let projectServiceMock;
   let viewProfileWithMocks;
   beforeEach(() => {
     sandbox = sinon.sandbox.create();
@@ -14,9 +15,17 @@ describe('ViewProfile', () => {
     dojoServiceMock = {
       getUsersDojos: sinon.stub(),
     };
+    projectServiceMock = {
+      getProjectsForUser: sinon.stub(),
+    };
     viewProfileWithMocks = ViewProfile({
       '@/users/service': userServiceMock,
       '@/dojos/service': dojoServiceMock,
+      '@/projects/service': projectServiceMock,
+      '@/assets/python-logo.png': 'pathToPythonLogo',
+      '@/assets/nodejs-logo.png': 'pathToNodeJSLogo',
+      '@/assets/html5-logo.png': 'pathToHtml5Logo',
+      '@/assets/java-logo.png': 'pathToJavaLogo',
     });
   });
   afterEach(() => {
@@ -24,6 +33,56 @@ describe('ViewProfile', () => {
   });
   
   describe('methods', () => {
+    describe('projectTypeImage', () => {
+      it('should return the path of the image for any project type', () => {
+        // ARRANGE
+        let viewProfile = vueUnitHelper(viewProfileWithMocks);
+        let typeMock = 'python';
+        
+        // ACT & ASSERT
+        expect(viewProfile.projectTypeImage(typeMock)).to.equal('pathToPythonLogo');
+        
+        // ARRANGE
+        typeMock = 'javascript';
+        
+        // ACT & ASSERT
+        expect(viewProfile.projectTypeImage(typeMock)).to.equal('pathToNodeJSLogo');
+        
+        // ARRANGE
+        typeMock = 'html';
+        
+        // ACT & ASSERT
+        expect(viewProfile.projectTypeImage(typeMock)).to.equal('pathToHtml5Logo');
+        
+        // ARRANGE
+        typeMock = 'java';
+        
+        // ACT & ASSERT
+        expect(viewProfile.projectTypeImage(typeMock)).to.equal('pathToJavaLogo');
+        
+        // ARRANGE
+        typeMock = 'unknown';
+        
+        // ACT & ASSERT
+        expect(viewProfile.projectTypeImage(typeMock)).to.equal('');
+      });
+    });
+    describe('viewProject', () => {
+      it('should redirect the user to the Project Details page', () => {
+        // ARRANGE
+        let viewProfile = vueUnitHelper(ViewProfile());
+        const projectIdMock = '8765-4321';
+        viewProfile.$router = {
+          push: sandbox.spy(),
+        };
+        
+        // ACT
+        viewProfile.viewProject(projectIdMock);
+        
+        // ASSERT
+        expect(viewProfile.$router.push).to.have.been.calledWith('/project/8765-4321');
+      });
+    });
     describe('viewDojo', () => {
       it('should redirect the user to the Dojo page', () => {
         // ARRANGE
@@ -43,7 +102,7 @@ describe('ViewProfile', () => {
   });
   
   describe('created', () => {
-    it('should get user and dojo data', async () => {
+    it('should get user, dojo and project data', async () => {
       // ARRANGE
       let viewProfile = vueUnitHelper(viewProfileWithMocks);
       viewProfile.$route = {
@@ -59,12 +118,20 @@ describe('ViewProfile', () => {
         'dojo 2',
         'dojo 3',
       ];
+      const expectedUsersProjects = [
+        'project 1',
+        'project 2',
+        'project 3',
+      ];
       userServiceMock.getUserData.withArgs('1234-5678').returns(Promise.resolve({
         body: expectedUserData,
       }));
       dojoServiceMock.getUsersDojos.withArgs('1234-5678').returns(Promise.resolve({
         body: expectedUsersDojos,
       }));
+      projectServiceMock.getProjectsForUser.withArgs('1234-5678').resolves({
+        body: expectedUsersProjects,
+      });
       
       // ACT
       await viewProfile.$lifecycleMethods.created();
@@ -72,8 +139,10 @@ describe('ViewProfile', () => {
       // ASSERT
       expect(userServiceMock.getUserData).to.have.been.calledWith('1234-5678');
       expect(dojoServiceMock.getUsersDojos).to.have.been.calledWith('1234-5678');
+      expect(projectServiceMock.getProjectsForUser).to.have.been.calledWith('1234-5678');
       expect(viewProfile.userData).to.deep.equal(expectedUserData);
       expect(viewProfile.usersDojos).to.deep.equal(expectedUsersDojos);
+      expect(viewProfile.usersProjects).to.deep.equal(expectedUsersProjects);
     });
   });
 });
