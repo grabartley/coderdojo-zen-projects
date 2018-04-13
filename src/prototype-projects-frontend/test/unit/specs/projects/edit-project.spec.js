@@ -67,6 +67,37 @@ describe('EditProject', () => {
         expect(editProject.isFormValidated).to.be.true;
         expect(result).to.be.false;
       });
+      it('should return false if already updating the project', async () => {
+        // ARRANGE
+        let editProject = vueUnitHelper(EditProject());
+        editProject.updatingProject = true;
+        editProject.errors = {
+          any: () => false,
+        };
+        
+        // ACT
+        const result = editProject.isValid();
+        
+        // ASSERT
+        expect(editProject.isFormValidated).to.be.true;
+        expect(result).to.be.false;
+      });
+      it('should return false if updating files and no file uploaded', async () => {
+        // ARRANGE
+        let editProject = vueUnitHelper(EditProject());
+        editProject.filename = 'wrongFileType.png';
+        editProject.isFileUploaded = false;
+        editProject.errors = {
+          any: () => false,
+        };
+        
+        // ACT
+        const result = editProject.isValid();
+        
+        // ASSERT
+        expect(editProject.isFormValidated).to.be.true;
+        expect(result).to.be.false;
+      });
     });
     describe('updateProject', () => {
       it('should make the API call to update the project if form data is valid', async () => {
@@ -126,25 +157,6 @@ describe('EditProject', () => {
         expect(projectServiceMock.updateProject).to.not.have.been.called;
         expect(editProject.$router.push).to.not.have.been.called;
       });
-      it('should not make the API call to update the project if already updating the project', async () => {
-        // ARRANGE
-        let editProject = vueUnitHelper(editProjectWithMocks);
-        editProject.updatingProject = true;
-        editProject.$router = {
-          push: () => null,
-        };
-        sandbox.stub(editProject, 'isValid').returns(true);
-        sandbox.spy(editProject.$router, 'push');
-        
-        // ACT
-        await editProject.updateProject();
-        
-        // ASSERT
-        expect(editProject.isValid).to.have.been.calledOnce;
-        expect(editProject.updatingProject).to.be.true;
-        expect(projectServiceMock.updateProject).to.not.have.been.called;
-        expect(editProject.$router.push).to.not.have.been.called;
-      });
     });
     describe('onFileUpload', () => {
       it('should store a zip file in uploadedFile', () => {
@@ -167,8 +179,8 @@ describe('EditProject', () => {
         editProject.onFileUpload(eMock);
         
         // ASSERT
-        expect(editProject.isZip).to.equal(true);
         expect(editProject.filename).to.equal('test.zip');
+        expect(editProject.isZip).to.equal(true);
       });
       it('should not store other file types in uploadedFile', () => {
         // ARRANGE
@@ -192,9 +204,9 @@ describe('EditProject', () => {
         editProject.onFileUpload(eMock);
         
         // ASSERT
+        expect(editProject.filename).to.equal('test.py');
         expect(editProject.isZip).to.equal(false);
         expect(editProject.isFileUploaded).to.equal(false);
-        expect(editProject.filename).to.equal(null);
         expect(editProject.uploadedFile).to.equal(null);
       });
       it('should do nothing if no files are present', () => {

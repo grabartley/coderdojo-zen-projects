@@ -230,6 +230,7 @@ export default {
           }
         } else {
           this.isZip = false;
+          this.isFileUploaded = false;
         }
       }
     },
