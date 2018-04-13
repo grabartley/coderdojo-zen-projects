@@ -126,11 +126,11 @@
       // check if the form information is valid
       isValid() {
         this.isFormValidated = true;
-        return !this.errors.any();
+        return this.filename ? this.isFileUploaded && !this.updatingProject && !this.errors.any() : !this.updatingProject && !this.errors.any();
       },
       async updateProject() {
-        // if form information is valid and not already updating
-        if (this.isValid() && !this.updatingProject) {
+        // if form information is valid
+        if (this.isValid()) {
           // the project is being updated
           this.updatingProject = true;
           // make API call to update project
@@ -156,11 +156,11 @@
           let file = files[0];
           let fr = new FileReader();
           let vm = this;
+          // store the filename
+          this.filename = file.name;
           // if the file is a zip file
           if (file.type === 'application/zip') {
             this.isZip = true;
-            // store the filename
-            this.filename = file.name;
             // read the file
             fr.readAsDataURL(file);
             // when the file has been read
@@ -171,6 +171,7 @@
             }
           } else {
             this.isZip = false;
+            this.isFileUploaded = false;
           }
         }
       },
