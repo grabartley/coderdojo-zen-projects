@@ -34,6 +34,7 @@
                       </router-link>
                       <div class="admin-panel__content-section-content-projects-list-items-item-information-description">{{ project.description }}</div>
                     </div>
+                    <span v-if="project.deleted_at" class="admin-panel__content-section-content-projects-list-items-item-deleted fas fa-ban"></span>
                     <div class="admin-panel__content-section-content-projects-list-items-item-actions">
                       <button class="admin-panel__content-section-content-projects-list-items-item-actions-button" @click="editProject(project.project_id)">
                         <span class="fas fa-edit"></span>
@@ -263,6 +264,11 @@
                   border-bottom: solid 1px #bdbfbf;
                   &:first-child {
                     border-top: solid 1px #bdbfbf;
+                  }
+                  &-deleted {
+                    margin-right: 16px;
+                    font-size: 18px;
+                    color: #9B1C20;
                   }
                   &-information {
                     flex: 10;
