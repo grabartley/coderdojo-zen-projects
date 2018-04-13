@@ -182,7 +182,7 @@ describe('ProjectList', () => {
         get: sandbox.stub(),
       };
       projectList.$cookie.get.withArgs('loggedIn').returns('1234-5678');
-      userServiceMock.getUserData.withArgs('1234-5678').returns(Promise.resolve(userDataResponseMock));
+      userServiceMock.getUserData.withArgs('1234-5678').resolves(userDataResponseMock);
       
       // ACT
       await projectList.$lifecycleMethods.created();

@@ -95,8 +95,8 @@ describe('ProjectRuntime', () => {
           deleted_at: null
         },
       };
-      projectServiceMock.getProjectById.withArgs('1234-5678').returns(Promise.resolve(projectDataMock));
-      projectServiceMock.incrementProjectPlays.withArgs('1234-5678').returns(Promise.resolve());
+      projectServiceMock.getProjectById.withArgs('1234-5678').resolves(projectDataMock);
+      projectServiceMock.incrementProjectPlays.withArgs('1234-5678').resolves('');
       sandbox.spy(projectRuntime, 'runProject');
       sandbox.spy(projectRuntime.$router, 'push');
       
@@ -143,7 +143,7 @@ describe('ProjectRuntime', () => {
           deleted_at: null
         },
       };
-      projectServiceMock.getProjectById.withArgs('1234-5678').returns(Promise.resolve(projectDataMock));
+      projectServiceMock.getProjectById.withArgs('1234-5678').resolves(projectDataMock);
       sandbox.spy(projectRuntime, 'runProject');
       sandbox.spy(projectRuntime.$router, 'push');
       

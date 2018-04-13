@@ -81,7 +81,7 @@ describe('CommonHeader', () => {
         get: sandbox.stub(),
       };
       commonHeader.$cookie.get.withArgs('loggedIn').returns(userIdMock);
-      userServiceMock.getUserData.withArgs(userIdMock).returns(Promise.resolve(userDataResponseMock));
+      userServiceMock.getUserData.withArgs(userIdMock).resolves(userDataResponseMock);
       
       // ACT
       await commonHeader.$lifecycleMethods.created();

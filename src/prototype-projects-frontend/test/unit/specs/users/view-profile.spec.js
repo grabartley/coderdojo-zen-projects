@@ -123,12 +123,12 @@ describe('ViewProfile', () => {
         'project 2',
         'project 3',
       ];
-      userServiceMock.getUserData.withArgs('1234-5678').returns(Promise.resolve({
+      userServiceMock.getUserData.withArgs('1234-5678').resolves({
         body: expectedUserData,
-      }));
-      dojoServiceMock.getUsersDojos.withArgs('1234-5678').returns(Promise.resolve({
+      });
+      dojoServiceMock.getUsersDojos.withArgs('1234-5678').resolves({
         body: expectedUsersDojos,
-      }));
+      });
       projectServiceMock.getProjectsForUser.withArgs('1234-5678').resolves({
         body: expectedUsersProjects,
       });

@@ -202,7 +202,7 @@ describe('ProjectCreationForm', () => {
         projectCreationForm.$router = {
           push: sandbox.spy(),
         };
-        projectServiceMock.createProject.withArgs(expectedProjectData).returns(Promise.resolve(createProjectResponseMock));
+        projectServiceMock.createProject.withArgs(expectedProjectData).resolves(createProjectResponseMock);
 
         // ACT
         await projectCreationForm.createProject();
@@ -250,7 +250,7 @@ describe('ProjectCreationForm', () => {
           }
         ]
       };
-      dojoServiceMock.getUsersDojosWithGitHub.withArgs('1234-5678').returns(Promise.resolve(usersDojosWithGitHubResponseMock));
+      dojoServiceMock.getUsersDojosWithGitHub.withArgs('1234-5678').resolves(usersDojosWithGitHubResponseMock);
       sandbox.spy(projectCreationForm.$router, 'push');
       
       // ACT

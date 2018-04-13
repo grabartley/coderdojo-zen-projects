@@ -161,7 +161,7 @@ describe('AdminPanel', () => {
         let adminPanel = vueUnitHelper(adminPanelWithMocks);
         const dojoIdMock = '1234-5678';
         adminPanel.removingGitHubIntegration = false;
-        dojoServiceMock.removeGitHubIntegration.withArgs(dojoIdMock).returns(Promise.resolve(''));
+        dojoServiceMock.removeGitHubIntegration.withArgs(dojoIdMock).resolves('');
         adminPanel.$route = {
           params: {
             dojoId: dojoIdMock,
@@ -226,10 +226,10 @@ describe('AdminPanel', () => {
         get: sandbox.stub(),
       };
       adminPanel.$cookie.get.withArgs('loggedIn').returns('4321-5678');
-      userServiceMock.isUserChampion.withArgs('4321-5678', '1234-5678').returns(Promise.resolve(isUserChampionMock));
-      dojoServiceMock.getDojoById.withArgs('1234-5678').returns(Promise.resolve(dojoDataMock));
-      dojoServiceMock.isGitHubIntegrated.withArgs('1234-5678').returns(Promise.resolve(isGitHubIntegratedMock));
-      projectServiceMock.getProjectsForDojo.withArgs('1234-5678', true).returns(Promise.resolve(projectDataMock));
+      userServiceMock.isUserChampion.withArgs('4321-5678', '1234-5678').resolves(isUserChampionMock);
+      dojoServiceMock.getDojoById.withArgs('1234-5678').resolves(dojoDataMock);
+      dojoServiceMock.isGitHubIntegrated.withArgs('1234-5678').resolves(isGitHubIntegratedMock);
+      projectServiceMock.getProjectsForDojo.withArgs('1234-5678', true).resolves(projectDataMock);
       
       // ACT
       await adminPanel.$lifecycleMethods.created();
@@ -274,10 +274,10 @@ describe('AdminPanel', () => {
         get: sandbox.stub(),
       };
       adminPanel.$cookie.get.withArgs('loggedIn').returns('1234-8765');
-      userServiceMock.isUserChampion.withArgs('1234-8765', '1234-5678').returns(Promise.resolve(isUserChampionMock));
-      dojoServiceMock.getDojoById.withArgs('1234-5678').returns(Promise.resolve(dojoDataMock));
-      dojoServiceMock.isGitHubIntegrated.withArgs('1234-5678').returns(Promise.resolve(isGitHubIntegratedMock));
-      projectServiceMock.getProjectsForDojo.withArgs('1234-5678', true).returns(Promise.resolve(projectDataMock));
+      userServiceMock.isUserChampion.withArgs('1234-8765', '1234-5678').resolves(isUserChampionMock);
+      dojoServiceMock.getDojoById.withArgs('1234-5678').resolves(dojoDataMock);
+      dojoServiceMock.isGitHubIntegrated.withArgs('1234-5678').resolves(isGitHubIntegratedMock);
+      projectServiceMock.getProjectsForDojo.withArgs('1234-5678', true).resolves(projectDataMock);
       
       // ACT
       await adminPanel.$lifecycleMethods.created();
@@ -311,9 +311,9 @@ describe('AdminPanel', () => {
         get: sandbox.stub(),
       };
       adminPanel.$cookie.get.withArgs('loggedIn').returns('4321-5678');
-      userServiceMock.isUserChampion.withArgs('4321-5678', '1234-5678').returns(Promise.resolve(isUserChampionMock));
-      dojoServiceMock.getDojoById.withArgs('1234-5678').returns(Promise.resolve(dojoDataMock));
-      dojoServiceMock.isGitHubIntegrated.withArgs('1234-5678').returns(Promise.resolve(isGitHubIntegratedMock));
+      userServiceMock.isUserChampion.withArgs('4321-5678', '1234-5678').resolves(isUserChampionMock);
+      dojoServiceMock.getDojoById.withArgs('1234-5678').resolves(dojoDataMock);
+      dojoServiceMock.isGitHubIntegrated.withArgs('1234-5678').resolves(isGitHubIntegratedMock);
       
       // ACT
       await adminPanel.$lifecycleMethods.created();
