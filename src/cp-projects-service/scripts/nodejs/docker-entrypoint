@@ -1,5 +1,8 @@
 #!/bin/bash
 
 git clone $GITHUB_URL /usr/src/app &> /dev/null
-npm install &> /dev/null
+if [ -e package.json ]
+then
+    npm install &> /dev/null
+fi
 node $ENTRYPOINT
