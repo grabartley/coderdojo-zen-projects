@@ -113,8 +113,8 @@
                     <span class="project-details__information-content-section-content-webpage-information-link-icon fas fa-external-link-alt"></span>
                   </a>
                 </div>
-                <div class="project-details__information-content-section-content-webpage-information-plays">
-                  <span class="project-details__information-content-section-content-webpage-information-plays-number">{{ projectData.plays }}</span>
+                <div v-if="projectData.plays" class="project-details__information-content-section-content-webpage-information-plays">
+                  <span class="project-details__information-content-section-content-webpage-information-plays-number">{{ formattedPlays }}</span>
                   <span class="project-details__information-content-section-content-webpage-information-plays-word">Plays</span>
                 </div>
               </div>
@@ -125,8 +125,8 @@
                 <div class="project-details__information-content-section-content-run-information-message">
                   <span>Click the button below to try out {{ projectData.name }}!</span>
                 </div>
-                <div class="project-details__information-content-section-content-run-information-plays">
-                  <span class="project-details__information-content-section-content-run-information-plays-number">{{ projectData.plays }}</span>
+                <div v-if="projectData.plays" class="project-details__information-content-section-content-run-information-plays">
+                  <span class="project-details__information-content-section-content-run-information-plays-number">{{ formattedPlays }}</span>
                   <span class="project-details__information-content-section-content-run-information-plays-word">Plays</span>
                 </div>
               </div>
@@ -219,6 +219,9 @@
         let githubAccount = this.projectData.github_url.split('/');
         githubAccount = githubAccount[githubAccount.length - 2]
         return `https://${githubAccount}.github.io/${this.projectData.project_id}`;
+      },
+      formattedPlays() {
+        return parseInt(this.projectData.plays).toLocaleString();
       },
     },
     methods: {
