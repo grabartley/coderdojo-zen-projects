@@ -1,5 +1,8 @@
 #!/bin/bash
 
 git clone $GITHUB_URL /usr/src/app &> /dev/null
-pip3 install -r requirements.txt &> /dev/null
+if [ -e requirements.txt ]
+then
+    pip3 install -r requirements.txt &> /dev/null
+fi
 python $ENTRYPOINT
