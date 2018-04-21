@@ -12,11 +12,14 @@ function registerEndpoints(app) {
     console.log('GET /api/2.0/dojos/:dojoId with ');
     console.log(req.params);
     
-    // get the dojos for the given user from the database
-    const dojo = await dbService.query(`SELECT * from dojos WHERE id='${req.params.dojoId}';`);
+    // get the dojo data for this dojo id
+    const dojo = (await dbService.query({
+      text: 'SELECT * from dojos WHERE id=$1;',
+      values: [req.params.dojoId],
+    })).rows[0];
     
     // respond
-    res.send(dojo.rows[0]);
+    res.send(dojo);
   });
   
   // get given users joined Dojos (mock of Zen API)
@@ -26,14 +29,19 @@ function registerEndpoints(app) {
     console.log(req.params);
     
     // get the dojo ids for the given user from the database
-    let dojoIdsForUser = await dbService.query(`SELECT dojos from users WHERE id='${req.params.userId}';`);
-    dojoIdsForUser = dojoIdsForUser.rows[0].dojos;
+    const dojoIdsForUser = (await dbService.query({
+      text: 'SELECT dojos from users WHERE id=$1;',
+      values: [req.params.userId],
+    })).rows[0].dojos;
     let dojosForUser = [];
     
     // for each dojo id, get the dojo data
     for (let i = 0; i < dojoIdsForUser.length; i++) {
-      let dojo = await dbService.query(`SELECT * from dojos WHERE id='${dojoIdsForUser[i]}';`);
-      dojosForUser.push(dojo.rows[0]);
+      const dojo = (await dbService.query({
+        text: 'SELECT * from dojos WHERE id=$1;',
+        values: [dojoIdsForUser[i]],
+      })).rows[0];
+      dojosForUser.push(dojo);
     }
     
     // respond
@@ -47,16 +55,24 @@ function registerEndpoints(app) {
     console.log(req.params);
     
     // get the dojo ids for the given user from the database
-    let dojoIdsForUser = await dbService.query(`SELECT dojos from users WHERE id='${req.params.userId}';`);
-    dojoIdsForUser = dojoIdsForUser.rows[0].dojos;
+    const dojoIdsForUser = (await dbService.query({
+      text: 'SELECT dojos from users WHERE id=$1;',
+      values: [req.params.userId],
+    })).rows[0].dojos;
     let dojosForUser = [];
     
     // for each dojo id, get the dojo data if GitHub is integrated
     for (let i = 0; i < dojoIdsForUser.length; i++) {
-      const githubIntegrationIdResponse = (await dbService.query(`SELECT github_integration_id FROM github_integrations WHERE dojo_id='${dojoIdsForUser[i]}'`)).rows[0];
+      const githubIntegrationIdResponse = (await dbService.query({
+        text: 'SELECT github_integration_id FROM github_integrations WHERE dojo_id=$1;',
+        values: [dojoIdsForUser[i]],
+      })).rows[0];
       if (!!githubIntegrationIdResponse) {
-        const dojo = await dbService.query(`SELECT * from dojos WHERE id='${dojoIdsForUser[i]}';`);
-        dojosForUser.push(dojo.rows[0]);
+        const dojo = (await dbService.query({
+          text: 'SELECT * from dojos WHERE id=$1;',
+          values: [dojoIdsForUser[i]],
+        })).rows[0];
+        dojosForUser.push(dojo);
       }
     }
     
@@ -70,13 +86,20 @@ function registerEndpoints(app) {
     console.log('GET /api/2.0/dojos/dojo-by-github-integration/:githubId with ');
     console.log(req.params);
     
-    // get the dojo data from the database
-    let dojoId = await dbService.query(`SELECT dojo_id from github_integrations WHERE github_integration_id='${req.params.githubId}';`);
-    dojoId = dojoId.rows[0].dojo_id;
-    let dojo = await dbService.query(`SELECT * from dojos WHERE id='${dojoId}';`);
+    // get the dojo id
+    const dojoId = (await dbService.query({
+      text: 'SELECT dojo_id from github_integrations WHERE github_integration_id=$1;',
+      values: [req.params.githubId],
+    })).rows[0].dojo_id;
+    
+    // get the dojo data
+    const dojo = (await dbService.query({
+      text: 'SELECT * from dojos WHERE id=$1;',
+      values: [dojoId],
+    })).rows[0];
     
     // respond
-    res.send(dojo.rows[0]);
+    res.send(dojo);
   });
   
   // check if Dojo has GitHub integration
@@ -86,7 +109,10 @@ function registerEndpoints(app) {
     console.log(req.params);
     
     // check if github integration exists for this dojo
-    const githubIntegrationIdResponse = (await dbService.query(`SELECT github_integration_id FROM github_integrations WHERE dojo_id='${req.params.dojoId}'`)).rows[0];
+    const githubIntegrationIdResponse = (await dbService.query({
+      text: 'SELECT github_integration_id FROM github_integrations WHERE dojo_id=$1;',
+      values: [req.params.dojoId],
+    })).rows[0];
     
     // respond with boolean
     res.send(!!githubIntegrationIdResponse);
@@ -112,7 +138,10 @@ function registerEndpoints(app) {
     
     // store as new github integration
     const githubIntegrationId = uuid();
-    await dbService.insertInto('github_integrations', ['github_integration_id', 'user_id', 'dojo_id', 'github_access_token'], [githubIntegrationId, userId, dojoId, accessToken]);
+    await dbService.query({
+      text: 'INSERT INTO github_integrations (github_integration_id, user_id, dojo_id, github_access_token) VALUES ($1, $2, $3, $4);',
+      values: [githubIntegrationId, userId, dojoId, accessToken],
+    });
     
     // respond
     res.send('Successful integration');
@@ -124,22 +153,36 @@ function registerEndpoints(app) {
     console.log('POST /api/2.0/dojos/:dojoId/remove-github-integration with ');
     console.log(req.params);
     
-    // get data from params
-    const dojoId = req.params.dojoId;
+    // get github integration id
+    const githubIntegrationId = (await dbService.query({
+      text: 'SELECT github_integration_id FROM github_integrations WHERE dojo_id=$1;',
+      values: [req.params.dojoId],
+    })).rows[0].github_integration_id;
     
-    // get github integration id and associated project ids
-    const githubIntegrationId = (await dbService.query(`SELECT github_integration_id FROM github_integrations WHERE dojo_id='${dojoId}'`)).rows[0].github_integration_id;
-    const projectIdResponses = (await dbService.query(`SELECT project_id FROM projects WHERE github_integration_id='${githubIntegrationId}'`)).rows;
+    // get associated project ids
+    const projectIdResponses = (await dbService.query({
+      text: 'SELECT project_id FROM projects WHERE github_integration_id=$1;',
+      values: [githubIntegrationId],
+    })).rows;
     
     // remove associated projects and their statistics
     for (let i = 0; i < projectIdResponses.length; i++) {
       const projectId = projectIdResponses[i].project_id;
-      await dbService.query(`DELETE FROM project_statistics WHERE project_id='${projectId}'`);
-      await dbService.query(`DELETE FROM projects WHERE project_id='${projectId}'`);
+      await dbService.query({
+        text: 'DELETE FROM project_statistics WHERE project_id=$1;',
+        values: [projectId],
+      });
+      await dbService.query({
+        text: 'DELETE FROM projects WHERE project_id=$1;',
+        values: [projectId],
+      });
     }
     
     // remove github integration
-    await dbService.query(`DELETE FROM github_integrations WHERE github_integration_id='${githubIntegrationId}'`);
+    await dbService.query({
+      text: 'DELETE FROM github_integrations WHERE github_integration_id=$1;',
+      values: [githubIntegrationId],
+    });
     
     // respond
     res.send('Integration removed');

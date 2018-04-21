@@ -120,7 +120,6 @@ describe('EditProject', () => {
         const expectedUpdatePayload = {
           projectId: '1234-5678',
           type: 'python',
-          columns: ['name', 'description', 'resource_url', 'entrypoint'],
           values: ['Test Project', 'A test project.', 'http://kata.coderdojo.com/some-page', 'test.py'],
           githubIntegrationId: '8765-4321',
           filename: 'TestProject.zip',

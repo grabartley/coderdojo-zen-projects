@@ -10,8 +10,10 @@ let USER_AGENT;
 // sets up objects to use when making API calls using access token of the given user
 async function setupApiWithAccess(dojoId) {
   // get the access token for this user
-  const tokenResponse = await dbService.query(`SELECT github_access_token FROM github_integrations WHERE dojo_id='${dojoId}';`);
-  API_TOKEN = tokenResponse.rows[0].github_access_token;
+  API_TOKEN = (await dbService.query({
+    text: 'SELECT github_access_token FROM github_integrations WHERE dojo_id=$1;',
+    values: [dojoId],
+  })).rows[0].github_access_token;
   
   // set up the object for v4 API calls
   GITHUB_GRAPHQL_API = new gitHubGraphQLAPI({

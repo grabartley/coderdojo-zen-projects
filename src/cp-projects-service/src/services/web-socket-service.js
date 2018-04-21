@@ -10,7 +10,10 @@ function setupSockets(server) {
     // when a start event is emited by the frontend
     socket.on('start', async (projectId) => {
       // get data for this project id
-      const projectData = (await dbService.query(`SELECT * FROM projects WHERE project_id='${projectId}';`)).rows[0];
+      const projectData = (await dbService.query({
+        text: 'SELECT * FROM projects WHERE project_id=$1;',
+        values: [projectId],
+      })).rows[0];
       // used to signify the first output from the project process
       let firstOutput = true;
       // used to store the tag of the image to pull
