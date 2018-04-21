@@ -9,8 +9,10 @@ function registerEndpoints(app) {
     console.log(req.params);
     
     // get the data for the given user id
-    const userResponse = await dbService.query(`SELECT * FROM users WHERE id='${req.params.userId}';`);
-    const userData = userResponse.rows[0];
+    const userData = (await dbService.query({
+      text: 'SELECT * FROM users WHERE id=$1;',
+      values: [req.params.userId],
+    })).rows[0];
     
     // respond with the data
     res.send(userData);
@@ -23,7 +25,10 @@ function registerEndpoints(app) {
     console.log(req.params);
     
     // check if the user is a champion of the dojo
-    const dojoChampions = (await dbService.query(`SELECT champion_ids FROM dojos WHERE id='${req.params.dojoId}'`)).rows[0].champion_ids;
+    const dojoChampions = (await dbService.query({
+      text: 'SELECT champion_ids FROM dojos WHERE id=$1;',
+      values: [req.params.dojoId],
+    })).rows[0].champion_ids;
     
     // respond with a boolean
     res.send(dojoChampions.includes(req.params.userId));
@@ -36,8 +41,10 @@ function registerEndpoints(app) {
     console.log(req.body);
     
     // get the data for the given user id
-    const userResponse = await dbService.query(`SELECT * FROM users WHERE email='${req.body.email}';`);
-    const userData = userResponse.rows[0];
+    const userData = (await dbService.query({
+      text: 'SELECT * FROM users WHERE email=$1;',
+      values: [req.body.email],
+    })).rows[0];
     
     // respond with what was found
     res.send(userData);

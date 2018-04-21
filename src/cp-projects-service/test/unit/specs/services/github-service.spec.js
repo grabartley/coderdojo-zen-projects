@@ -44,6 +44,10 @@ describe('GitHubService', () => {
         name: '5678-1234',
         description: 'A test project.',
       };
+      const dbQueryMock = {
+        text: 'SELECT github_access_token FROM github_integrations WHERE dojo_id=$1;',
+        values: ['1234-5678'],
+      };
       const dependencyMocks = {
         'node-github-graphql': () => {
           return {
@@ -76,15 +80,15 @@ describe('GitHubService', () => {
           },
         },
         './db-service': {
-          query: async (queryString) => {
-            if (queryString === 'SELECT github_access_token FROM github_integrations WHERE dojo_id=\'1234-5678\';') {
-              return Promise.resolve({
+          query: (query) => {
+            if (JSON.stringify(query) === JSON.stringify(dbQueryMock)) {
+              return {
                 rows: [
                   {
                     github_access_token: '8765-4321',
                   },
                 ],
-              });
+              };
             }
           },
         },
@@ -116,6 +120,10 @@ describe('GitHubService', () => {
         message: commitDataMock.message,
         content: commitDataMock.content,
         branch: commitDataMock.branch,
+      };
+      const dbQueryMock = {
+        text: 'SELECT github_access_token FROM github_integrations WHERE dojo_id=$1;',
+        values: ['1234-5678'],
       };
       const dependencyMocks = {
         'node-github-graphql': () => {
@@ -163,15 +171,15 @@ describe('GitHubService', () => {
           },
         },
         './db-service': {
-          query: async (queryString) => {
-            if (queryString === 'SELECT github_access_token FROM github_integrations WHERE dojo_id=\'1234-5678\';') {
-              return Promise.resolve({
+          query: (query) => {
+            if (JSON.stringify(query) === JSON.stringify(dbQueryMock)) {
+              return {
                 rows: [
                   {
                     github_access_token: '8765-4321',
                   },
                 ],
-              });
+              };
             }
           },
         },
@@ -203,6 +211,10 @@ describe('GitHubService', () => {
         content: commitDataMock.content,
         branch: commitDataMock.branch,
         sha: shaMock
+      };
+      const dbQueryMock = {
+        text: 'SELECT github_access_token FROM github_integrations WHERE dojo_id=$1;',
+        values: ['1234-5678'],
       };
       const dependencyMocks = {
         'node-github-graphql': () => {
@@ -252,15 +264,15 @@ describe('GitHubService', () => {
           },
         },
         './db-service': {
-          query: async (queryString) => {
-            if (queryString === 'SELECT github_access_token FROM github_integrations WHERE dojo_id=\'1234-5678\';') {
-              return Promise.resolve({
+          query: (query) => {
+            if (JSON.stringify(query) === JSON.stringify(dbQueryMock)) {
+              return {
                 rows: [
                   {
                     github_access_token: '8765-4321',
                   },
                 ],
-              });
+              };
             }
           },
         },
@@ -306,6 +318,10 @@ describe('GitHubService', () => {
         base: 'master',
         head: '4321-8765',
         commit_message: 'update',
+      };
+      const dbQueryMock = {
+        text: 'SELECT github_access_token FROM github_integrations WHERE dojo_id=$1;',
+        values: ['5678-1234'],
       };
       const dependencyMocks = {
         'node-github-graphql': () => {
@@ -373,15 +389,15 @@ describe('GitHubService', () => {
           },
         },
         './db-service': {
-          query: async (queryString) => {
-            if (queryString === 'SELECT github_access_token FROM github_integrations WHERE dojo_id=\'5678-1234\';') {
-              return Promise.resolve({
+          query: (query) => {
+            if (JSON.stringify(query) === JSON.stringify(dbQueryMock)) {
+              return {
                 rows: [
                   {
                     github_access_token: '8765-4321',
                   },
                 ],
-              });
+              };
             }
           },
         },

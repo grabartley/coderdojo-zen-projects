@@ -137,7 +137,6 @@
           await projectService.updateProject({
             projectId: this.projectData.project_id,
             type: this.projectData.type,
-            columns: ['name', 'description', 'resource_url', 'entrypoint'],
             values: [this.name, this.description, this.resource, this.entrypoint],
             githubIntegrationId: this.projectData.github_integration_id,
             filename: this.filename,

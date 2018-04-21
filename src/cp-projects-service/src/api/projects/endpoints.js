@@ -16,8 +16,10 @@ function registerEndpoints(app) {
     console.log(req.params);
     
     // get the data for this project id
-    const projectResponse = await dbService.query(`SELECT * FROM projects WHERE project_id='${req.params.projectId}';`);
-    const projectData = projectResponse.rows[0];
+    const projectData = (await dbService.query({
+      text: 'SELECT * FROM projects WHERE project_id=$1;',
+      values: [req.params.projectId],
+    })).rows[0];
     
     // respond with the data
     res.send(projectData);
@@ -30,7 +32,10 @@ function registerEndpoints(app) {
     console.log(req.params);
     
     // get the statistics for this project id
-    const projectStatistics = (await dbService.query(`SELECT * FROM project_statistics WHERE project_id='${req.params.projectId}';`)).rows[0];
+    const projectStatistics = (await dbService.query({
+      text: 'SELECT * FROM project_statistics WHERE project_id=$1;',
+      values: [req.params.projectId],
+    })).rows[0];
     
     // respond with the statistics
     res.send(projectStatistics);
@@ -54,17 +59,26 @@ function registerEndpoints(app) {
     if (sortedBy !== 'undefined') {
       switch (sortedBy) {
         case 'plays':
-          projectData = (await dbService.query(`SELECT * FROM projects INNER JOIN project_statistics ON projects.project_id = project_statistics.project_id ORDER BY plays ${sortOrder};`)).rows;
+          projectData = (await dbService.query({
+            text: 'SELECT * FROM projects INNER JOIN project_statistics ON projects.project_id = project_statistics.project_id ORDER BY plays $1;',
+            values: [sortOrder],
+          })).rows;
           break;
         case 'updated_at':
-          projectData = (await dbService.query(`SELECT * FROM projects ORDER BY updated_at ${sortOrder};`)).rows;
+          projectData = (await dbService.query({
+            text: 'SELECT * FROM projects ORDER BY updated_at $1;',
+            values: [sortOrder],
+          })).rows;
           // filter out projects with null for updated_at
           projectData = _.filter(projectData, (project) => {
             return project.updated_at;
           });
           break;
         case 'created_at':
-          projectData = (await dbService.query(`SELECT * FROM projects ORDER BY created_at ${sortOrder};`)).rows;
+          projectData = (await dbService.query({
+            text: 'SELECT * FROM projects ORDER BY created_at $1;',
+            values: [sortOrder],
+          })).rows;
       }
     } else {
       // if not sorted, get all projects
@@ -98,10 +112,16 @@ function registerEndpoints(app) {
     const deleted = req.query.deleted;
     
     // get the projects for the dojo with the given dojo id
-    const githubIntegrationIdResponse = (await dbService.query(`SELECT github_integration_id FROM github_integrations WHERE dojo_id='${req.params.dojoId}'`)).rows[0];
+    const githubIntegrationIdResponse = (await dbService.query({
+      text: 'SELECT github_integration_id FROM github_integrations WHERE dojo_id=$1;',
+      values: [req.params.dojoId],
+    })).rows[0];
     if (githubIntegrationIdResponse) {
       const githubIntegrationId = githubIntegrationIdResponse.github_integration_id;
-      let projectData = (await dbService.query(`SELECT * FROM projects WHERE github_integration_id='${githubIntegrationId}'`)).rows;
+      let projectData = (await dbService.query({
+        text: 'SELECT * FROM projects WHERE github_integration_id=$1;',
+        values: [githubIntegrationId],
+      })).rows;
       // if we don't want to return projects which have been deleted, filter them out
       if (deleted !== 'true') {
         projectData = _.filter(projectData, (project) => {
@@ -123,7 +143,10 @@ function registerEndpoints(app) {
     console.log(req.params);
     
     // get the projects for the user with the given user id
-    let projectsForUser = (await dbService.query(`SELECT * FROM projects WHERE user_id='${req.params.userId}'`)).rows;
+    let projectsForUser = (await dbService.query({
+      text: 'SELECT * FROM projects WHERE user_id=$1;',
+      values: [req.params.userId],
+    })).rows;
     
     // filter out deleted projects
     projectsForUser = _.filter(projectsForUser, (project) => {
@@ -174,13 +197,17 @@ function registerEndpoints(app) {
     const id = uuid();
     const statisticsId = uuid();
     
-    // get the author's name to store in the db
-    const userResponse = await dbService.query(`SELECT name FROM users WHERE id='${projectData.userId}';`);
-    const author = userResponse.rows[0].name;
+    // get the author's name to store in the db    
+    const author = (await dbService.query({
+      text: 'SELECT name FROM users WHERE id=$1;',
+      values: [projectData.userId],
+    })).rows[0].name;
     
     // get the github integration id for this project to reference access token
-    const githubIntegrationResponse = await dbService.query(`SELECT github_integration_id FROM github_integrations WHERE dojo_id='${projectData.dojoId}';`);
-    const githubIntegrationId = githubIntegrationResponse.rows[0].github_integration_id;
+    const githubIntegrationId = (await dbService.query({
+      text: 'SELECT github_integration_id FROM github_integrations WHERE dojo_id=$1;',
+      values: [projectData.dojoId],
+    })).rows[0].github_integration_id;
     
     // repository data to be used by GitHub
     const repoData = {
@@ -245,10 +272,16 @@ function registerEndpoints(app) {
     };
     
     // add project to the database
-    await dbService.insertInto('projects', ['project_id', 'name', 'type', 'entrypoint', 'description', 'github_url', 'resource_url', 'created_at', 'author', 'user_id', 'github_integration_id'], [metadata.id, metadata.name, metadata.type, metadata.entrypoint, metadata.description, metadata.githubUrl, metadata.resourceUrl, metadata.createdAt, metadata.author, metadata.userId, metadata.githubIntegrationId]);
+    await dbService.query({
+      text: 'INSERT INTO projects (project_id, name, type, entrypoint, description, github_url, resource_url, created_at, author, user_id, github_integration_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11);',
+      values: [metadata.id, metadata.name, metadata.type, metadata.entrypoint, metadata.description, metadata.githubUrl, metadata.resourceUrl, metadata.createdAt, metadata.author, metadata.userId, metadata.githubIntegrationId],
+    });
     
     // add statistics entry for project to the database
-    await dbService.insertInto('project_statistics', ['project_statistics_id', 'project_id'], [statisticsId, id]);
+    await dbService.query({
+      text: 'INSERT INTO project_statistics (project_statistics_id, project_id) VALUES ($1, $2);',
+      values: [statisticsId, id],
+    });
     
     // respond to client with the project id
     res.send(id);
@@ -262,35 +295,21 @@ function registerEndpoints(app) {
     
     // get project data
     const projectData = req.body;
+    let queryValues = projectData.values;
     
-    // if updating the database
-    if (projectData.columns) {
-      // construct db query string and values
-      let queryString = 'UPDATE projects SET';
-      let queryValues = projectData.values;
-      
-      // for each column to be updated, add it to the query string
-      for (let i = 0; i < projectData.columns.length; i++) {
-        let columnName = projectData.columns[i];
-        queryString += ` ${columnName}=\$${i + 1},`;
-      }
-      queryString = queryString.substring(0, queryString.length - 1);
-      queryString += ` WHERE project_id='${projectData.projectId}';`;
-      
-      // ensure resource_url is not malformed
-      if (queryValues[2] && !(queryValues[2].startsWith('http://') || queryValues[2].startsWith('https://'))) {
-        queryValues[2] = `http://${queryValues[2]}`;
-      }
-      
-      // construct query object
-      const query = {
-        text: queryString,
-        values: queryValues,
-      };
-      
-      // execute query
-      await dbService.query(query);
+    // ensure resource_url is not malformed
+    if (queryValues[2] && !(queryValues[2].startsWith('http://') || queryValues[2].startsWith('https://'))) {
+      queryValues[2] = `http://${queryValues[2]}`;
     }
+    
+    // add project id to query values
+    queryValues[4] = projectData.projectId;
+    
+    // execute query
+    await dbService.query({
+      text: 'UPDATE projects SET name=$1, description=$2, resource_url=$3, entrypoint=$4 WHERE project_id=$5;',
+      values: queryValues,
+    });
     
     // if updating project files
     if (projectData.file) {
@@ -298,6 +317,7 @@ function registerEndpoints(app) {
       let file = projectData.file.split(',');
       file = file[1];
       
+      // TODO: use generic filenames rather than variable ones for added security
       // extract project files
       let folderName = 'projectFiles';
       fs.writeFileSync(`./${projectData.filename}`, file, 'base64');
@@ -318,7 +338,10 @@ function registerEndpoints(app) {
       });
       
       // get the dojoId for this project from the db
-      const dojoId = (await dbService.query(`SELECT dojo_id FROM github_integrations WHERE github_integration_id='${projectData.githubIntegrationId}';`)).rows[0].dojo_id;
+      const dojoId = (await dbService.query({
+        text: 'SELECT dojo_id FROM github_integrations WHERE github_integration_id=$1;',
+        values: [projectData.githubIntegrationId],
+      })).rows[0].dojo_id;
       
       // set the branch to use based on project type since HTML projects use GitHub pages
       let branch = 'master';
@@ -339,7 +362,10 @@ function registerEndpoints(app) {
     }
     
     // set updated time
-    await dbService.query(`UPDATE projects SET updated_at='${moment().toISOString()}' WHERE project_id='${projectData.projectId}';`);
+    await dbService.query({
+      text: 'UPDATE projects SET updated_at=$1 WHERE project_id=$2;',
+      values: [moment().toISOString(), projectData.projectId],
+    });
     
     // respond
     res.send('successful project update');
@@ -352,9 +378,15 @@ function registerEndpoints(app) {
     console.log(req.body);
     
     // get and update plays for this project id
-    const currentPlays = (await dbService.query(`SELECT plays FROM project_statistics WHERE project_id='${req.body.projectId}'`)).rows[0].plays;
+    const currentPlays = (await dbService.query({
+      text: 'SELECT plays FROM project_statistics WHERE project_id=$1;',
+      values: [req.body.projectId],
+    })).rows[0].plays;
     const newPlays = parseInt(currentPlays) + 1;
-    await dbService.query(`UPDATE project_statistics SET plays=${newPlays} WHERE project_id='${req.body.projectId}'`);
+    await dbService.query({
+      text: 'UPDATE project_statistics SET plays=$1 WHERE project_id=$2;',
+      values: [newPlays, req.body.projectId],
+    });
     
     // respond
     res.send('plays successfully updated');
@@ -367,7 +399,10 @@ function registerEndpoints(app) {
     console.log(req.body);
     
     // set deleted_at for this project to the current time (soft delete)
-    await dbService.query(`UPDATE projects SET deleted_at='${moment().toISOString()}' WHERE project_id='${req.body.projectId}';`);
+    await dbService.query({
+      text: 'UPDATE projects SET deleted_at=$1 WHERE project_id=$2;',
+      values: [moment().toISOString(), req.body.projectId],
+    });
     
     // respond
     res.send('successful project deletion');
