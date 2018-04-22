@@ -5,10 +5,11 @@
   "main": "lib/server/server.js",
   "author": "Graham Bartley <graham.bartley3@mail.dcu.ie>",
   "scripts": {
-    "build": "babel src db-migrations.js -d lib",
+    "build": "babel src -d lib",
     "start": "npm run build && node ./lib/api/server.js",
-    "unit": "cross-env NODE_ENV=test nyc mocha --require babel-core/register ./test/unit/specs/*/*.spec.js",
-    "test": "npm run unit",
+    "unit": "cross-env NODE_ENV=test mocha --require babel-core/register ./test/unit/**/*.spec.js",
+    "integration": "cross-env NODE_ENV=test mocha --require babel-core/register ./test/integration/**/*.spec.js",
+    "test": "cross-env NODE_ENV=test nyc mocha --require babel-core/register ./test/**/*.spec.js",
     "testdata": "babel db/test-data.js -d lib && node ./lib/db/test-data.js"
   },
   "dependencies": {
@@ -34,6 +35,7 @@
     "babel-preset-es2015": "^6.24.1",
     "body-parser": "^1.18.2",
     "chai": "^4.1.2",
+    "chai-http": "^4.0.0",
     "cross-env": "^5.1.3",
     "mocha": "^5.0.1",
     "nyc": "^11.4.1",
@@ -52,7 +54,6 @@
       "src/**/*.js"
     ],
     "exclude": [
-      "src/api/*",
       "src/services/web-socket-service.js"
     ],
     "reporter": [
@@ -62,6 +63,6 @@
     "extension": [],
     "cache": true,
     "all": true,
-    "report-dir": "./test/unit/coverage"
+    "report-dir": "./test/coverage"
   }
 }
