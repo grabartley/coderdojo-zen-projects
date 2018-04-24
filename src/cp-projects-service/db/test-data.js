@@ -1,4 +1,4 @@
-import dbService from '../lib/services/db-service';
+const dbService = require('../lib/services/db-service');
 
 // removes existing data and loads test data into the database (requires environment variables for db authentication)
 // NOTE: projects are linked to the grahambartley GitHub account which is expected to contain testdata repos.
