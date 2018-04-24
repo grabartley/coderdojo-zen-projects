@@ -1,6 +1,6 @@
 # prototype-projects-frontend
 
-This is the frontend code for my prototype system. When integrating my system into the existing Zen stack, this code will likely become part of the existing Zen frontend (cp-zen-frontend) but for purposes of developing a standalone prototype in the meantime it is separate.
+This is the frontend code for my project system. When integrating my system into the existing Zen stack, this code will likely become part of the existing Zen frontend (cp-zen-frontend) but for purposes of developing a standalone project in the meantime it is separate.
 
 ### Running locally
 
@@ -22,4 +22,18 @@ In order for GitHub OAuth to work you will need to pass the following environmen
 
 ```
   GITHUB_CLIENT_ID: The client id of your GitHub OAuth app
+```
+
+### Running tests
+
+You can run the unit tests and generate a coverage report using the following command:
+
+```
+  npm run unit
+```
+
+You can run all tests and generate a coverage report using the following command:
+
+```
+  npm test
 ```
