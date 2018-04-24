@@ -5,11 +5,12 @@
   "main": "lib/server/server.js",
   "author": "Graham Bartley <graham.bartley3@mail.dcu.ie>",
   "scripts": {
-    "build": "babel src db-migrations.js -d lib",
+    "build": "babel src -d lib",
     "start": "npm run build && node ./lib/api/server.js",
-    "unit": "cross-env NODE_ENV=test nyc mocha --require babel-core/register ./test/unit/specs/*/*.spec.js",
-    "test": "npm run unit",
-    "testdata": "babel db/test-data.js -d lib && node ./lib/db/test-data.js"
+    "unit": "npm run build && cross-env NODE_ENV=test mocha --require babel-core/register ./test/unit/**/*.spec.js",
+    "integration": "npm run build && cross-env NODE_ENV=test mocha --require babel-core/register ./test/integration/**/*.spec.js",
+    "test": "npm run build && cross-env NODE_ENV=test nyc mocha --require babel-core/register ./test/**/*.spec.js",
+    "testdata": "npm run build && node ./db/test-data.js"
   },
   "dependencies": {
     "adm-zip": "^0.4.7",
@@ -38,8 +39,7 @@
     "mocha": "^5.0.1",
     "nyc": "^11.4.1",
     "proxyquire": "^1.8.0",
-    "sinon": "^4.3.0",
-    "sinon-chai": "^2.14.0"
+    "supertest": "^3.0.0"
   },
   "nyc": {
     "per-file": true,
@@ -52,7 +52,6 @@
       "src/**/*.js"
     ],
     "exclude": [
-      "src/api/*",
       "src/services/web-socket-service.js"
     ],
     "reporter": [
@@ -62,6 +61,6 @@
     "extension": [],
     "cache": true,
     "all": true,
-    "report-dir": "./test/unit/coverage"
+    "report-dir": "./test/coverage"
   }
 }
