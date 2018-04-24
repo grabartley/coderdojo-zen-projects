@@ -15,7 +15,7 @@ function registerEndpoints(app) {
     })).rows[0];
     
     // respond with the data
-    res.send(userData);
+    userData ? res.send(userData) : res.status(404).send('Not found');
   });
   
   // checks if the user with the given id is a champion of the dojo with the given id
@@ -24,14 +24,18 @@ function registerEndpoints(app) {
     console.log('GET /api/2.0/users/is-champion/:userId/:dojoId with ');
     console.log(req.params);
     
-    // check if the user is a champion of the dojo
-    const dojoChampions = (await dbService.query({
-      text: 'SELECT champion_ids FROM dojos WHERE id=$1;',
-      values: [req.params.dojoId],
-    })).rows[0].champion_ids;
-    
-    // respond with a boolean
-    res.send(dojoChampions.includes(req.params.userId));
+    try {
+      // check if the user is a champion of the dojo
+      const dojoChampions = (await dbService.query({
+        text: 'SELECT champion_ids FROM dojos WHERE id=$1;',
+        values: [req.params.dojoId],
+      })).rows[0].champion_ids;
+      
+      // respond with a boolean
+      res.send(dojoChampions.includes(req.params.userId));  
+    } catch (err) {
+      res.status(404).send('Not found');
+    }
   });
 
   // mock of the Zen login API call for my prototype (disregards password since it's just a mock)

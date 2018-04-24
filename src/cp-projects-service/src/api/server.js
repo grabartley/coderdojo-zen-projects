@@ -8,35 +8,63 @@ import userEndpoints from './users/endpoints';
 import dojoEndpoints from './dojos/endpoints';
 import webSocketService from '../services/web-socket-service';
 
+// port for the server to listen on
+const PORT = 3000;
+
+function setUpServer() {
+  // set up express server
+  const app = express();
+  const server = http.createServer(app);
+
+  // used to parse POST data with max size 100MB
+  app.use(bodyParser.urlencoded({
+    limit: '100mb',
+    extended: true
+  }));
+  app.use(bodyParser.json({
+    limit: '100mb'
+  }));
+
+  // used for Cross-Origin Resource Sharing (CORS)
+  app.use(cors());
+
+  // set up API endpoints
+  projectEndpoints.registerEndpoints(app);
+  userEndpoints.registerEndpoints(app);
+  dojoEndpoints.registerEndpoints(app);
+
+  // register web socket event handlers and emitters
+  webSocketService.setupSockets(server);
+  
+  // return the server
+  return server;
+}
+
+function startServer(server) {
+  // listen on the given port
+  server.listen(PORT, () => {
+    console.log(`\nServer listening on port ${PORT}!`);
+  });
+}
+
+function stopServer(server) {
+  // stop the server from listening
+  server.close(() => {
+    console.log(`\nServer has closed!`);
+  });
+}
+
 // run database migrations
 migrations.migrate();
 
-// set up express server
-const APP = express();
-const SERVER = http.createServer(APP);
-const PORT = 3000;
+// set up and start the server if not running tests
+if (process.env.NODE_ENV != 'test') {
+  const server = setUpServer();
+  startServer(server);
+}
 
-// used to parse POST data with max size 100MB
-APP.use(bodyParser.urlencoded({
-  limit: '100mb',
-  extended: true
-}));
-APP.use(bodyParser.json({
-  limit: '100mb'
-}));
-
-// used for Cross-Origin Resource Sharing (CORS)
-APP.use(cors());
-
-// listen on the given port
-SERVER.listen(PORT, () => {
-  console.log(`\nServer listening on port ${PORT}!`);
-});
-
-// set up API endpoints
-projectEndpoints.registerEndpoints(APP);
-userEndpoints.registerEndpoints(APP);
-dojoEndpoints.registerEndpoints(APP);
-
-// register web socket event handlers and emitters
-webSocketService.setupSockets(SERVER);
+module.exports = {
+  setUpServer,
+  startServer,
+  stopServer,
+};

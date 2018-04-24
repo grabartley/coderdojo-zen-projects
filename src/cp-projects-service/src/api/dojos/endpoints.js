@@ -19,7 +19,7 @@ function registerEndpoints(app) {
     })).rows[0];
     
     // respond
-    res.send(dojo);
+    dojo ? res.send(dojo) : res.status(404).send('Not found');
   });
   
   // get given users joined Dojos (mock of Zen API)
@@ -86,20 +86,24 @@ function registerEndpoints(app) {
     console.log('GET /api/2.0/dojos/dojo-by-github-integration/:githubId with ');
     console.log(req.params);
     
-    // get the dojo id
-    const dojoId = (await dbService.query({
-      text: 'SELECT dojo_id from github_integrations WHERE github_integration_id=$1;',
-      values: [req.params.githubId],
-    })).rows[0].dojo_id;
-    
-    // get the dojo data
-    const dojo = (await dbService.query({
-      text: 'SELECT * from dojos WHERE id=$1;',
-      values: [dojoId],
-    })).rows[0];
-    
-    // respond
-    res.send(dojo);
+    try {
+      // get the dojo id
+      const dojoId = (await dbService.query({
+        text: 'SELECT dojo_id from github_integrations WHERE github_integration_id=$1;',
+        values: [req.params.githubId],
+      })).rows[0].dojo_id;
+      
+      // get the dojo data
+      const dojo = (await dbService.query({
+        text: 'SELECT * from dojos WHERE id=$1;',
+        values: [dojoId],
+      })).rows[0];
+      
+      // respond
+      res.send(dojo);  
+    } catch (err) {
+      res.status(404).send('Not found');
+    }
   });
   
   // check if Dojo has GitHub integration
@@ -125,26 +129,30 @@ function registerEndpoints(app) {
     console.log(req.params);
     console.log(req.body);
     
-    // get data from body and params and set secret
-    let githubData = req.body;
-    githubData['client_secret'] = GITHUB_CLIENT_SECRET;
-    const dojoId = req.params.dojoId;
-    const userId = req.params.userId;
+    try {
+      // get data from body and params and set secret
+      let githubData = req.body;
+      githubData['client_secret'] = GITHUB_CLIENT_SECRET;
+      const dojoId = req.params.dojoId;
+      const userId = req.params.userId;
     
-    // get access token
-    let data = await githubService.getAccessToken(githubData);
-    data = data.split('&');
-    const accessToken = ((data[0]).split('='))[1];
-    
-    // store as new github integration
-    const githubIntegrationId = uuid();
-    await dbService.query({
-      text: 'INSERT INTO github_integrations (github_integration_id, user_id, dojo_id, github_access_token) VALUES ($1, $2, $3, $4);',
-      values: [githubIntegrationId, userId, dojoId, accessToken],
-    });
-    
-    // respond
-    res.send('Successful integration');
+      // get access token
+      let data = await githubService.getAccessToken(githubData);
+      data = data.split('&');
+      const accessToken = ((data[0]).split('='))[1];
+      
+      // store as new github integration
+      const githubIntegrationId = uuid();
+      await dbService.query({
+        text: 'INSERT INTO github_integrations (github_integration_id, user_id, dojo_id, github_access_token) VALUES ($1, $2, $3, $4);',
+        values: [githubIntegrationId, userId, dojoId, accessToken],
+      });
+      
+      // respond
+      res.send('Successful integration');  
+    } catch (err) {
+      res.status(404).send('Error');
+    }
   });
   
   // removes GitHub integration for dojo with dojoId and deletes all associated projects
@@ -153,39 +161,43 @@ function registerEndpoints(app) {
     console.log('POST /api/2.0/dojos/:dojoId/remove-github-integration with ');
     console.log(req.params);
     
-    // get github integration id
-    const githubIntegrationId = (await dbService.query({
-      text: 'SELECT github_integration_id FROM github_integrations WHERE dojo_id=$1;',
-      values: [req.params.dojoId],
-    })).rows[0].github_integration_id;
-    
-    // get associated project ids
-    const projectIdResponses = (await dbService.query({
-      text: 'SELECT project_id FROM projects WHERE github_integration_id=$1;',
-      values: [githubIntegrationId],
-    })).rows;
-    
-    // remove associated projects and their statistics
-    for (let i = 0; i < projectIdResponses.length; i++) {
-      const projectId = projectIdResponses[i].project_id;
+    try {
+      // get github integration id
+      const githubIntegrationId = (await dbService.query({
+        text: 'SELECT github_integration_id FROM github_integrations WHERE dojo_id=$1;',
+        values: [req.params.dojoId],
+      })).rows[0].github_integration_id;
+      
+      // get associated project ids
+      const projectIdResponses = (await dbService.query({
+        text: 'SELECT project_id FROM projects WHERE github_integration_id=$1;',
+        values: [githubIntegrationId],
+      })).rows;
+      
+      // remove associated projects and their statistics
+      for (let i = 0; i < projectIdResponses.length; i++) {
+        const projectId = projectIdResponses[i].project_id;
+        await dbService.query({
+          text: 'DELETE FROM project_statistics WHERE project_id=$1;',
+          values: [projectId],
+        });
+        await dbService.query({
+          text: 'DELETE FROM projects WHERE project_id=$1;',
+          values: [projectId],
+        });
+      }
+      
+      // remove github integration
       await dbService.query({
-        text: 'DELETE FROM project_statistics WHERE project_id=$1;',
-        values: [projectId],
+        text: 'DELETE FROM github_integrations WHERE github_integration_id=$1;',
+        values: [githubIntegrationId],
       });
-      await dbService.query({
-        text: 'DELETE FROM projects WHERE project_id=$1;',
-        values: [projectId],
-      });
+      
+      // respond
+      res.send('Integration removed');  
+    } catch (err) {
+      res.status(404).send('Not found');
     }
-    
-    // remove github integration
-    await dbService.query({
-      text: 'DELETE FROM github_integrations WHERE github_integration_id=$1;',
-      values: [githubIntegrationId],
-    });
-    
-    // respond
-    res.send('Integration removed');
   });
 }
 

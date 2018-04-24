@@ -4,3 +4,6 @@ test/coverage/
 .nyc_output/
 start
 testdata
+run-integration
+run-unit
+run-tests
