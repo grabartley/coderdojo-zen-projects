@@ -5,12 +5,13 @@ import ProjectDetails from '@/projects/project-details';
 import EditProject from '@/projects/edit-project';
 import ProjectCreationForm from '@/projects/project-creation-form';
 import ProjectRuntime from '@/projects/project-runtime';
-import Acknowledgements from '@/common/acknowledgements';
 import Login from '@/users/login';
 import ViewProfile from '@/users/view-profile';
 import DojoDetails from '@/dojos/dojo-details';
 import AdminPanel from '@/dojos/admin-panel';
 import GitHubCallback from '@/dojos/github-callback';
+import Acknowledgements from '@/common/acknowledgements';
+import NotFound from '@/common/not-found';
 
 Vue.use(Router)
 
@@ -43,11 +44,6 @@ export default new Router({
       component: ProjectRuntime,
     },
     {
-      path: '/acknowledgements',
-      name: 'Acknowledgements',
-      component: Acknowledgements,
-    },
-    {
       path: '/login',
       name: 'Login',
       component: Login,
@@ -71,6 +67,16 @@ export default new Router({
       path: '/dojos/integrations/github',
       name: 'GitHubCallback',
       component: GitHubCallback,
+    },
+    {
+      path: '/acknowledgements',
+      name: 'Acknowledgements',
+      component: Acknowledgements,
+    },
+    {
+      path: '*',
+      name: 'NotFound',
+      component: NotFound,
     },
   ],
 });
