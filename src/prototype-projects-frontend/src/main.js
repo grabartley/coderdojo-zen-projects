@@ -17,8 +17,8 @@ Vue.config.apiServer = process.env.API_SERVER;
 
 // used for GET and POST requests
 Vue.use(VueResource);
-// server socket is on port 3000
-Vue.use(VueSocketIO, 'http://localhost:3000');
+// sockets are at the API server
+Vue.use(VueSocketIO, process.env.API_SERVER);
 // used for form validation
 Vue.use(VeeValidate);
 // used to store and get browser cookies
