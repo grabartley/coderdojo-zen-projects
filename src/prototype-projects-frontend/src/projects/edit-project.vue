@@ -52,7 +52,7 @@
       </div>
       <div class="edit-project__information-input">
         <div class="edit-project__information-input-name">
-          <label>Main file</label>
+          <label>Main filename</label>
         </div>
         <div class="edit-project__information-input-field">
           <input v-validate.initial="{ required: true, regex: /^([a-zA-Z0-9\-\_])+\.([a-zA-Z])+$/ }" v-model="entrypoint" name="entrypoint"></input>
@@ -63,7 +63,7 @@
       </div>
       <div class="edit-project__information-input">
         <div class="edit-project__information-input-name">
-          <label v-if="!isZip">Please upload your project as a zip file with the project main file at the top level of the zip archive</label>
+          <label v-if="!isZip">Source code</label>
         </div>
         <div class="edit-project__information-input-field">
           <label class="edit-project__information-input-file">
@@ -82,9 +82,13 @@
         <span v-if="updatingProject" class="fa fa-spinner fa-spin"></span>
         <span v-else>Update Project</span>
       </button>
-      <button class="danger-button" v-bind:class="{'edit-project__control-spinning': deletingProject}" @click="deleteProject()">
+      <button v-if="!deletingProjectConfirmation" class="danger-button" v-bind:class="{'edit-project__control-spinning': deletingProject}" @click="deletingProjectConfirmation = true">
         <span v-if="deletingProject" class="fa fa-spinner fa-spin"></span>
         <span v-else>Delete Project</span>
+      </button>
+      <button v-else class="danger-button" v-bind:class="{'edit-project__control-spinning': deletingProject}" @click="deleteProject()">
+        <span v-if="deletingProject" class="fa fa-spinner fa-spin"></span>
+        <span v-else>Confirm Delete</span>
       </button>
     </div>
     <div v-else class="edit-project__deleted">
@@ -115,6 +119,7 @@
         isFileUploaded: false,
         isFormValidated: false,
         updatingProject: false,
+        deletingProjectConfirmation: false,
         deletingProject: false,
       };
     },
