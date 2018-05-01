@@ -18,7 +18,7 @@
           <div class="project-creation-form__content-section-content">
             <div class="project-creation-form__content-section-content-input">
               <div class="project-creation-form__content-section-content-input-name">
-                <label>Project Name<span class="error-message">*</span></label>
+                <label>Project Name<span class="project-creation-form__content-section-content-input-name-required">*</span></label>
               </div>
               <div class="project-creation-form__content-section-content-input-field">
                 <input v-validate.initial="'required'" v-model="projectName" name="project name" placeholder="e.g. My First Project"></input>
@@ -29,7 +29,7 @@
             </div>
             <div class="project-creation-form__content-section-content-input">
               <div class="project-creation-form__content-section-content-input-name">
-                <label>Project Type<span class="error-message">*</span></label>
+                <label>Project Type<span class="project-creation-form__content-section-content-input-name-required">*</span></label>
               </div>
               <div class="project-creation-form__content-section-content-input-field">
                 <label>
@@ -67,7 +67,7 @@
             </div>
             <div class="project-creation-form__content-section-content-input">
               <div class="project-creation-form__content-section-content-input-name">
-                <label>Project Description<span class="error-message">*</span></label>
+                <label>Project Description<span class="project-creation-form__content-section-content-input-name-required">*</span></label>
               </div>
               <div class="project-creation-form__content-section-content-input-field">
                 <textarea v-validate.initial="'required'" v-model="projectDescription" name="project description" placeholder="e.g. This is the first project I created on Zen."></textarea>
@@ -78,7 +78,7 @@
             </div>
             <div class="project-creation-form__content-section-content-input">
               <div class="project-creation-form__content-section-content-input-name">
-                <label>Dojo<span class="error-message">*</span></label>
+                <label>Dojo<span class="project-creation-form__content-section-content-input-name-required">*</span></label>
               </div>
               <div v-if="usersDojos && usersDojos.length > 0" class="project-creation-form__content-section-content-input-field">
                 <label v-for="dojo in usersDojos">
@@ -117,7 +117,7 @@
           <div class="project-creation-form__content-section-content">
             <div class="project-creation-form__content-section-content-input">
               <div class="project-creation-form__content-section-content-input-name">
-                <label>Project main file<span class="error-message">*</span></label>
+                <label>Project main filename<span class="project-creation-form__content-section-content-input-name-required">*</span></label>
               </div>
               <div class="project-creation-form__content-section-content-input-field">
                 <input v-if="projectType !== 'html'" class="project-creation-form__content-section-content-input-field-filename" v-validate.initial="{ required: true, regex: /^([a-zA-Z0-9\-\_])+$/ }" v-model="projectEntrypoint" name="project entrypoint" :placeholder="entrypointPlaceholder"></input>
@@ -130,7 +130,7 @@
             </div>
             <div class="project-creation-form__content-section-content-input">
               <div class="project-creation-form__content-section-content-input-name">
-                <label v-if="!isZip">Please upload your project as a zip file with the project main file at the top level of the zip archive<span class="error-message">*</span></label>
+                <label v-if="!isZip">Please create a zip file containing the source code of your project and upload it here!<span class="project-creation-form__content-section-content-input-name-required">*</span></label>
               </div>
               <div class="project-creation-form__content-section-content-input-field">
                 <label class="project-creation-form__content-section-content-input-file">
@@ -146,6 +146,16 @@
             <div class="project-creation-form__content-section-content-error">
               <div class="error-message" v-show="isFormValidated && errors.has('project files')">{{ errors.first('project files') }}</div>
               <div class="error-message" v-show="isFormValidated && !isZip">Project files must be uploaded as a zip archive!</div>
+            </div>
+            <div class="project-creation-form__content-section-content-help">
+              <div class="project-creation-form__content-section-content-help-information">
+                <span class="project-creation-form__content-section-content-help-information-icon fas fa-info-circle"></span>
+                <span class="project-creation-form__content-section-content-help-information-message">The project main file is the file that is run first when running your project.</span>
+              </div>
+              <div class="project-creation-form__content-section-content-help-information">
+                <span class="project-creation-form__content-section-content-help-information-icon fas fa-info-circle"></span>
+                <span class="project-creation-form__content-section-content-help-information-message">The project main file must be at the top level of the zip file that you upload or your project will not run correctly!</span>
+              </div>
             </div>
           </div>
         </div>
@@ -347,6 +357,11 @@ export default {
               text-align: right;
               margin-top: 5px;
               margin-right: 20px;
+              &-required {
+                margin-left: 4px;
+                color: #9B1C20;
+                font-style: italic;
+              }
             }
             &-field {
               flex: 4;
@@ -444,6 +459,21 @@ export default {
           }
           &-error {
             text-align: center;
+          }
+          &-help {
+            margin-top: 48px;
+            &-information {
+              display: flex;
+              align-items: center;
+              margin-top: 8px;
+              &-icon {
+                font-size: 24px;
+                color: #73449B;
+              }
+              &-message {
+                margin-left: 8px;
+              }  
+            }
           }
         }
       }
