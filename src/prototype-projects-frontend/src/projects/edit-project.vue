@@ -82,9 +82,8 @@
         <span v-if="updatingProject" class="fa fa-spinner fa-spin"></span>
         <span v-else>Update Project</span>
       </button>
-      <button v-if="!deletingProjectConfirmation" class="danger-button" v-bind:class="{'edit-project__control-spinning': deletingProject}" @click="deletingProjectConfirmation = true">
-        <span v-if="deletingProject" class="fa fa-spinner fa-spin"></span>
-        <span v-else>Delete Project</span>
+      <button v-if="!deletingProjectConfirmation" class="danger-button" @click="deletingProjectConfirmation = true">
+        <span>Delete Project</span>
       </button>
       <button v-else class="danger-button" v-bind:class="{'edit-project__control-spinning': deletingProject}" @click="deleteProject()">
         <span v-if="deletingProject" class="fa fa-spinner fa-spin"></span>
