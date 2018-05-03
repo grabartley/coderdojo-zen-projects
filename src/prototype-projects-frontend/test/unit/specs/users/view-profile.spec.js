@@ -26,6 +26,7 @@ describe('ViewProfile', () => {
       '@/assets/nodejs-logo.png': 'pathToNodeJSLogo',
       '@/assets/html5-logo.png': 'pathToHtml5Logo',
       '@/assets/java-logo.png': 'pathToJavaLogo',
+      '@/assets/create-project-icon.png': 'pathToCreateProjectIcon',
     });
   });
   afterEach(() => {
@@ -61,6 +62,12 @@ describe('ViewProfile', () => {
         expect(viewProfile.projectTypeImage(typeMock)).to.equal('pathToJavaLogo');
         
         // ARRANGE
+        typeMock = 'new';
+        
+        // ACT & ASSERT
+        expect(viewProfile.projectTypeImage(typeMock)).to.equal('pathToCreateProjectIcon');
+        
+        // ARRANGE
         typeMock = 'unknown';
         
         // ACT & ASSERT
@@ -83,6 +90,21 @@ describe('ViewProfile', () => {
         expect(viewProfile.$router.push).to.have.been.calledWith('/project/8765-4321');
       });
     });
+    describe('createProject', () => {
+      it('should redirect the user to the Project Creation form', () => {
+        // ARRANGE
+        let viewProfile = vueUnitHelper(ViewProfile());
+        viewProfile.$router = {
+          push: sandbox.spy(),
+        };
+        
+        // ACT
+        viewProfile.createProject();
+        
+        // ASSERT
+        expect(viewProfile.$router.push).to.have.been.calledWith('/create-project');
+      });
+    });
     describe('viewDojo', () => {
       it('should redirect the user to the Dojo page', () => {
         // ARRANGE
@@ -102,13 +124,16 @@ describe('ViewProfile', () => {
   });
   
   describe('created', () => {
-    it('should get user, dojo and project data', async () => {
+    it('should get user, dojo and project data and note that the logged in user is viewing their own profile', async () => {
       // ARRANGE
       let viewProfile = vueUnitHelper(viewProfileWithMocks);
       viewProfile.$route = {
         params: {
           userId: '1234-5678',
         },
+      };
+      viewProfile.$cookie = {
+        get: sandbox.stub(),
       };
       const expectedUserData = {
         id: '1234-5678',
@@ -123,6 +148,7 @@ describe('ViewProfile', () => {
         'project 2',
         'project 3',
       ];
+      viewProfile.$cookie.get.withArgs('loggedIn').returns('1234-5678');
       userServiceMock.getUserData.withArgs('1234-5678').resolves({
         body: expectedUserData,
       });
@@ -143,6 +169,50 @@ describe('ViewProfile', () => {
       expect(viewProfile.userData).to.deep.equal(expectedUserData);
       expect(viewProfile.usersDojos).to.deep.equal(expectedUsersDojos);
       expect(viewProfile.usersProjects).to.deep.equal(expectedUsersProjects);
+      expect(viewProfile.$cookie.get).to.have.been.calledWith('loggedIn');
+      expect(viewProfile.isLoggedInUser).to.be.true;
+    });
+    it('should not set isLoggedInUser if no user is logged in', async () => {
+      // ARRANGE
+      let viewProfile = vueUnitHelper(viewProfileWithMocks);
+      viewProfile.$route = {
+        params: {
+          userId: '1234-5678',
+        },
+      };
+      viewProfile.$cookie = {
+        get: sandbox.stub(),
+      };
+      const expectedUserData = {
+        id: '1234-5678',
+      };
+      const expectedUsersDojos = [
+        'dojo 1',
+        'dojo 2',
+        'dojo 3',
+      ];
+      const expectedUsersProjects = [
+        'project 1',
+        'project 2',
+        'project 3',
+      ];
+      viewProfile.$cookie.get.withArgs('loggedIn').returns(null);
+      userServiceMock.getUserData.withArgs('1234-5678').resolves({
+        body: expectedUserData,
+      });
+      dojoServiceMock.getUsersDojos.withArgs('1234-5678').resolves({
+        body: expectedUsersDojos,
+      });
+      projectServiceMock.getProjectsForUser.withArgs('1234-5678').resolves({
+        body: expectedUsersProjects,
+      });
+      
+      // ACT
+      await viewProfile.$lifecycleMethods.created();
+      
+      // ASSERT
+      expect(viewProfile.$cookie.get).to.have.been.calledWith('loggedIn');
+      expect(viewProfile.isLoggedInUser).to.be.false;
     });
   });
 });
