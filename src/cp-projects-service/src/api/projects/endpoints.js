@@ -169,6 +169,13 @@ function registerEndpoints(app) {
         projectData.resourceUrl = null;
       }
       
+      // ensure entrypoint is not malformed
+      if (!(/^([a-zA-Z0-9\-\_])+\.([a-zA-Z])+$/.test(projectData.entrypoint))) {
+        throw {
+          message: 'Error',
+        };
+      }
+      
       // remove header information from file data
       let file = projectData.file.split(',');
       file = file[1];
@@ -307,6 +314,13 @@ function registerEndpoints(app) {
       // get project data
       const projectData = req.body;
       let queryValues = projectData.values;
+      
+      // ensure entrypoint is not malformed
+      if (!(/^([a-zA-Z0-9\-\_])+\.([a-zA-Z])+$/.test(projectData.entrypoint))) {
+        throw {
+          message: 'Error',
+        };
+      }
       
       // ensure resource_url is not malformed
       if (queryValues[2] && !(queryValues[2].startsWith('http://') || queryValues[2].startsWith('https://'))) {
