@@ -141,6 +141,7 @@
             }
           });
           this.projects = newProjectData;
+          this.$refs.pagination.setPage(1);
         },
       },
     },

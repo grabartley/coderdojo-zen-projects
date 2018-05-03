@@ -184,6 +184,7 @@
             }
           });
           this.projectData = newProjectData;
+          this.$refs.pagination.setPage(1);
         },
       },
     },
