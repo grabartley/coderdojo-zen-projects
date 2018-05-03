@@ -85,7 +85,7 @@
           <button class="project-details__information-content-actions-button" @click="isSharing = !isSharing" v-bind:class="{'project-details__information-content-actions-button-sharing': isSharing}">
             <span class="fas fa-share-alt"></span>
           </button>
-          <button v-if="currentUser" class="project-details__information-content-actions-button" @click="editProject()">
+          <button v-if="currentUser || isLoggedInUserCDFAdmin" class="project-details__information-content-actions-button" @click="editProject()">
             <span class="fas fa-edit"></span>
           </button>
         </div>
@@ -168,6 +168,7 @@
   import moment from 'moment';
   import projectService from '@/projects/service';
   import dojoService from '@/dojos/service';
+  import userService from '@/users/service';
 
   export default {
     name: 'ProjectDetails',
@@ -176,6 +177,7 @@
         projectData: null,
         dojoData: null,
         currentUser: null,
+        isLoggedInUserCDFAdmin: false,
         fullUrl: window.location.href,
         isSharing: false,
       };
@@ -249,10 +251,12 @@
       // get dojo data using the GitHub integration id
       this.dojoData = (await dojoService.getDojoByGitHubId(this.projectData.github_integration_id)).body;
       
+      // check if the logged in user owns this project or is CDF Admin
       const loggedInUserId = this.$cookie.get('loggedIn');
       if (this.projectData.user_id === loggedInUserId) {
         this.currentUser = loggedInUserId;
-      } 
+      }
+      this.isLoggedInUserCDFAdmin = (await userService.isUserCDFAdmin(loggedInUserId)).body;
     },
   }
 </script>

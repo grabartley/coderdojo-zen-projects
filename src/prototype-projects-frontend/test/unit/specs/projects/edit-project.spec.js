@@ -4,6 +4,7 @@ import vueUnitHelper from 'vue-unit-helper';
 describe('EditProject', () => {
   let sandbox;
   let projectServiceMock;
+  let userServiceMock;
   let editProjectWithMocks;
   beforeEach(() => {
     sandbox = sinon.sandbox.create();
@@ -12,8 +13,12 @@ describe('EditProject', () => {
       updateProject: sinon.stub(),
       deleteProjectById: sinon.stub(),
     };
+    userServiceMock = {
+      isUserCDFAdmin: sinon.stub(),
+    };
     editProjectWithMocks = EditProject({
       '@/projects/service': projectServiceMock,
+      '@/users/service': userServiceMock,
     });
   });
   afterEach(() => {
@@ -288,7 +293,7 @@ describe('EditProject', () => {
     });
   });
   describe('created', () => {
-    it('should get the data for this project', async () => {
+    it('should get the data for this project and allow authorized user', async () => {
       // ARRANGE
       let editProject = vueUnitHelper(editProjectWithMocks);
       const projectIdMock = '1234-5678';
@@ -309,22 +314,83 @@ describe('EditProject', () => {
           deleted_at: null,
         }
       };
+      const isLoggedInUserCDFAdminMock = {
+        body: false,
+      };
       editProject.$route = {
         params: {
           projectId: projectIdMock,
         },
       };
+      editProject.$cookie = {
+        get: sandbox.stub(),
+      };
+      editProject.$router = {
+        push: sandbox.spy(),
+      };
+      editProject.$cookie.get.withArgs('loggedIn').returns('5678-1234');
       projectServiceMock.getProjectById.withArgs(projectIdMock).resolves(projectDataMock);
+      userServiceMock.isUserCDFAdmin.withArgs('5678-1234').resolves(isLoggedInUserCDFAdminMock);
       
       // ACT
       await editProject.$lifecycleMethods.created();
       
       // ASSERT
       expect(editProject.projectData).to.equal(projectDataMock.body);
+      expect(editProject.currentUser).to.equal('5678-1234');
+      expect(editProject.isLoggedInUserCDFAdmin).to.equal(false);
+      expect(editProject.$router.push).to.not.have.been.called;
       expect(editProject.name).to.equal('Test Project');
       expect(editProject.description).to.equal('A test project.');
       expect(editProject.resource).to.equal('http://kata.coderdojo.com/some-page');
       expect(editProject.entrypoint).to.equal('TestProject.py');
+    });
+    it('should redirect away unauthorized user', async () => {
+      // ARRANGE
+      let editProject = vueUnitHelper(editProjectWithMocks);
+      const projectIdMock = '1234-5678';
+      const projectDataMock = {
+        body: {
+          project_id: projectIdMock,
+          name: 'Test Project',
+          type: 'python',
+          entrypoint: 'TestProject.py',
+          description: 'A test project.',
+          github: 'https://github.com/championone/1234-5678',
+          resource_url: 'http://kata.coderdojo.com/some-page',
+          created_at: '2018-02-21T16:02:14.821Z',
+          updated_at: null,
+          author: 'Champion One',
+          user_id: '5678-1234',
+          github_integration_id: '8765-4321',
+          deleted_at: null,
+        }
+      };
+      const isLoggedInUserCDFAdminMock = {
+        body: false,
+      };
+      editProject.$route = {
+        params: {
+          projectId: projectIdMock,
+        },
+      };
+      editProject.$cookie = {
+        get: sandbox.stub(),
+      };
+      editProject.$router = {
+        push: sandbox.spy(),
+      };
+      editProject.$cookie.get.withArgs('loggedIn').returns('8765-4321');
+      projectServiceMock.getProjectById.withArgs(projectIdMock).resolves(projectDataMock);
+      userServiceMock.isUserCDFAdmin.withArgs('8765-4321').resolves(isLoggedInUserCDFAdminMock);
+      
+      // ACT
+      await editProject.$lifecycleMethods.created();
+      
+      // ASSERT
+      expect(editProject.currentUser).to.equal(null);
+      expect(editProject.isLoggedInUserCDFAdmin).to.equal(false);
+      expect(editProject.$router.push).to.have.been.calledWith('/');
     });
   });
 });

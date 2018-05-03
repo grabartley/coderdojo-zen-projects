@@ -170,13 +170,14 @@
 <script>
 import projectService from '@/projects/service';
 import dojoService from '@/dojos/service';
+import userService from '@/users/service';
 
 export default {
   name: 'ProjectCreationForm',
   data() {
     return {
       creatingProject: false,
-      loggedInUser: null,
+      loggedInUserId: null,
       usersDojos: null,
       projectName: null,
       projectType: null,
@@ -272,11 +273,22 @@ export default {
     }
   },
   async created() {
-    // get the logged in user's joined dojos
-    this.loggedInUser = this.$cookie.get('loggedIn');
-    if (this.loggedInUser) {
-      this.usersDojos = (await dojoService.getUsersDojosWithGitHub(this.loggedInUser)).body;
+    // get logged in user id
+    this.loggedInUserId = this.$cookie.get('loggedIn');
+    // if logged in
+    if (this.loggedInUserId) {
+      // get the user type
+      const userType = (await userService.getUserData(this.loggedInUserId)).body.type;
+      // if logged in user is not a youth
+      if (userType !== 'youth-o13') {
+        // shouldn't be here, so send them away
+        this.$router.push('/');
+      } else {
+        // get the logged in users joined dojos
+        this.usersDojos = (await dojoService.getUsersDojosWithGitHub(this.loggedInUserId)).body;
+      }
     } else {
+      // shouldn't be here, so send them away
       this.$router.push('/');
     }
   },

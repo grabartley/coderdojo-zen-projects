@@ -5,6 +5,7 @@ describe('ProjectCreationForm', () => {
   let sandbox;
   let projectServiceMock;
   let dojoServiceMock;
+  let userServiceMock;
   let projectCreationFormWithMocks;
   
   beforeEach(() => {
@@ -15,9 +16,13 @@ describe('ProjectCreationForm', () => {
     dojoServiceMock = {
       getUsersDojosWithGitHub: sinon.stub(),
     };
+    userServiceMock = {
+      getUserData: sinon.stub(),
+    };
     projectCreationFormWithMocks = ProjectCreationForm({
       '@/projects/service': projectServiceMock,
       '@/dojos/service': dojoServiceMock,
+      '@/users/service': userServiceMock,
     });
   });
   
@@ -231,16 +236,19 @@ describe('ProjectCreationForm', () => {
     });
   });
   describe('created', () => {
-    it('should get the logged in users joined dojos with GitHub integrations', async () => {
+    it('should get the logged in youth users joined dojos with GitHub integrations', async () => {
       // ARRANGE
       const projectCreationForm = vueUnitHelper(projectCreationFormWithMocks);
-      projectCreationForm.usersDojos = null;
-      projectCreationForm.loggedInUser = null;
       projectCreationForm.$cookie = {
-        get: (cookieName) => '1234-5678',
+        get: sandbox.stub(),
       };
       projectCreationForm.$router = {
-        push: () => null,
+        push: sandbox.spy(),
+      };
+      const userDataResponseMock = {
+        body: {
+          type: 'youth-o13',
+        }
       };
       const usersDojosWithGitHubResponseMock = {
         body: [
@@ -250,39 +258,67 @@ describe('ProjectCreationForm', () => {
           }
         ]
       };
+      projectCreationForm.$cookie.get.withArgs('loggedIn').returns('1234-5678');
+      userServiceMock.getUserData.withArgs('1234-5678').resolves(userDataResponseMock);
       dojoServiceMock.getUsersDojosWithGitHub.withArgs('1234-5678').resolves(usersDojosWithGitHubResponseMock);
-      sandbox.spy(projectCreationForm.$router, 'push');
       
       // ACT
       await projectCreationForm.$lifecycleMethods.created();
       
       // ASSERT
-      expect(projectCreationForm.loggedInUser).to.equal('1234-5678');
+      expect(projectCreationForm.loggedInUserId).to.equal('1234-5678');
+      expect(userServiceMock.getUserData).to.have.been.calledWith('1234-5678');
+      expect(projectCreationForm.$router.push).to.not.have.been.called;
       expect(dojoServiceMock.getUsersDojosWithGitHub).to.have.been.calledWith('1234-5678');
       expect(projectCreationForm.usersDojos).to.deep.equal(usersDojosWithGitHubResponseMock.body);
-      expect(projectCreationForm.$router.push).to.not.have.been.called;
     });
-    it('should redirect back to project list if not logged in', async () => {
+    it('should redirect away if not logged in', async () => {
       // ARRANGE
-      const projectCreationForm = vueUnitHelper(ProjectCreationForm());
-      projectCreationForm.usersDojos = null;
-      projectCreationForm.loggedInUser = null;
+      const projectCreationForm = vueUnitHelper(projectCreationFormWithMocks);
       projectCreationForm.$cookie = {
-        get: (cookieName) => null,
+        get: sandbox.stub(),
       };
       projectCreationForm.$router = {
-        push: () => null,
+        push: sandbox.spy(),
       };
-      sandbox.spy(projectCreationForm.$router, 'push');
+      projectCreationForm.$cookie.get.withArgs('loggedIn').returns(null);
       
       // ACT
       await projectCreationForm.$lifecycleMethods.created();
       
       // ASSERT
-      expect(projectCreationForm.loggedInUser).to.equal(null);
-      expect(dojoServiceMock.getUsersDojosWithGitHub).to.not.have.been.called;
-      expect(projectCreationForm.usersDojos).to.equal(null);
+      expect(projectCreationForm.loggedInUserId).to.equal(null);
       expect(projectCreationForm.$router.push).to.have.been.calledWith('/');
+      expect(userServiceMock.getUserData).to.not.have.been.called;
+      expect(dojoServiceMock.getUsersDojosWithGitHub).to.to.not.have.been.called;
+      expect(projectCreationForm.usersDojos).to.equal(null);
+    });
+    it('should redirect away if not a youth', async () => {
+      // ARRANGE
+      const projectCreationForm = vueUnitHelper(projectCreationFormWithMocks);
+      projectCreationForm.$cookie = {
+        get: sandbox.stub(),
+      };
+      projectCreationForm.$router = {
+        push: sandbox.spy(),
+      };
+      const userDataResponseMock = {
+        body: {
+          type: 'parent-guardian',
+        }
+      };
+      projectCreationForm.$cookie.get.withArgs('loggedIn').returns('5678-1234');
+      userServiceMock.getUserData.withArgs('5678-1234').resolves(userDataResponseMock);
+      
+      // ACT
+      await projectCreationForm.$lifecycleMethods.created();
+      
+      // ASSERT
+      expect(projectCreationForm.loggedInUserId).to.equal('5678-1234');
+      expect(userServiceMock.getUserData).to.have.been.calledWith('5678-1234');
+      expect(projectCreationForm.$router.push).to.have.been.calledWith('/');
+      expect(dojoServiceMock.getUsersDojosWithGitHub).to.to.not.have.been.called;
+      expect(projectCreationForm.usersDojos).to.equal(null);
     });
   });
   

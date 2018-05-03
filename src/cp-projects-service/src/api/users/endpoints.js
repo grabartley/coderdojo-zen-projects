@@ -34,7 +34,27 @@ function registerEndpoints(app) {
       // respond with a boolean
       res.send(dojoChampions.includes(req.params.userId));  
     } catch (err) {
-      res.status(404).send('Not found');
+      res.send(false);
+    }
+  });
+  
+  // checks if the user with the given id is a CDF Admin
+  app.get('/api/2.0/users/is-cdf-admin/:userId', async (req, res) => {
+    // log api call
+    console.log('GET /api/2.0/users/is-cdf-admin/:userId with ');
+    console.log(req.params);
+    
+    try {
+      // get the type for this user id
+      const userType = (await dbService.query({
+        text: 'SELECT type FROM users WHERE id=$1;',
+        values: [req.params.userId],
+      })).rows[0].type;
+      
+      // respond with a boolean
+      res.send(userType === 'cdf-admin');  
+    } catch (err) {
+      res.send(false);
     }
   });
 

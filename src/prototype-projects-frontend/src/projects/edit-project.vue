@@ -102,6 +102,7 @@
 </template>
 <script>
   import projectService from '@/projects/service';
+  import userService from '@/users/service';
 
   export default {
     name: 'EditProject',
@@ -120,6 +121,8 @@
         updatingProject: false,
         deletingProjectConfirmation: false,
         deletingProject: false,
+        currentUser: null,
+        isLoggedInUserCDFAdmin: false,
       };
     },
     methods: {
@@ -195,6 +198,17 @@
       const projectId = this.$route.params.projectId;
       // get project data based on id
       this.projectData = (await projectService.getProjectById(projectId)).body;
+      // check if the logged in user owns this project or is CDF Admin
+      const loggedInUserId = this.$cookie.get('loggedIn');
+      if (this.projectData.user_id === loggedInUserId) {
+        this.currentUser = loggedInUserId;
+      }
+      this.isLoggedInUserCDFAdmin = (await userService.isUserCDFAdmin(loggedInUserId)).body;
+      // redirect away if not authorized to be here
+      if (!(this.currentUser || this.isLoggedInUserCDFAdmin)) {
+        this.$router.push('/');
+      }
+      // set field values based on current values
       this.name = this.projectData.name;
       this.description = this.projectData.description;
       this.resource = this.projectData.resource_url;
