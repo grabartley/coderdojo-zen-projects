@@ -194,6 +194,11 @@ describe('DojoDetails', () => {
       it('should filter project data based on the new search query', () => {
         // ARRANGE
         let dojoDetails = vueUnitHelper(DojoDetails());
+        dojoDetails.$refs = {
+          pagination: {
+            setPage: sandbox.spy(),
+          },
+        };
         const fullProjectDataMock = [
           {
             name: 'Chess',
@@ -248,6 +253,7 @@ describe('DojoDetails', () => {
         
         // ASSERT
         expect(dojoDetails.projects).to.deep.equal(expectedProjectData);
+        expect(dojoDetails.$refs.pagination.setPage).to.have.been.calledWith(1);
       });
     });
   });

@@ -332,6 +332,11 @@ describe('AdminPanel', () => {
       it('should filter project data based on the new search query', () => {
         // ARRANGE
         let adminPanel = vueUnitHelper(AdminPanel());
+        adminPanel.$refs = {
+          pagination: {
+            setPage: sandbox.spy(),
+          },
+        };
         const fullProjectDataMock = [
           {
             name: 'Chess',
@@ -386,6 +391,7 @@ describe('AdminPanel', () => {
         
         // ASSERT
         expect(adminPanel.projectData).to.deep.equal(expectedProjectData);
+        expect(adminPanel.$refs.pagination.setPage).to.have.been.calledWith(1);
       });
     });
   });

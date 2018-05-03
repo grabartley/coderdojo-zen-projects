@@ -238,6 +238,11 @@ describe('ProjectList', () => {
       it('should filter project data based on the new search query', () => {
         // ARRANGE
         let projectList = vueUnitHelper(ProjectList());
+        projectList.$refs = {
+          pagination: {
+            setPage: sandbox.spy(),
+          },
+        };
         const fullProjectDataMock = [
           {
             name: 'Chess',
@@ -292,6 +297,7 @@ describe('ProjectList', () => {
         
         // ASSERT
         expect(projectList.projectData).to.deep.equal(expectedProjectData);
+        expect(projectList.$refs.pagination.setPage).to.have.been.calledWith(1);
       });
     });
   });
