@@ -51,6 +51,11 @@ function setupSockets(server) {
         // kill the running process
         projectProcess.destroy();
       });
+      // when the connection is lost
+      socket.on('disconnect', () => {
+        // kill the running process
+        projectProcess.destroy();
+      });
     });
   });  
 }
