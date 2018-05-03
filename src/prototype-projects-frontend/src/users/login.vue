@@ -3,7 +3,7 @@
     <div class="login__title">
       <label>Log in to Zen</label>
     </div>
-    <div class="login__form">
+    <div class="login__form" @keyup.enter="login()">
       <div class="login__form-input">
         <input class="login__form-input-field" v-model="email" v-validate.initial="'required|email'" name="email" type="email" placeholder="Email"></input>
         <div class="login__form-error error-message" v-show="isFormValidated && errors.has('email')">{{ errors.first('email') }}</div>
