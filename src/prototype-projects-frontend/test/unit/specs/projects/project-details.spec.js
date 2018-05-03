@@ -6,6 +6,7 @@ describe('ProjectDetails', () => {
   let sandbox;
   let projectServiceMock;
   let dojoServiceMock;
+  let userServiceMock;
   let projectDetailsWithMocks;
   beforeEach(() => {
     sandbox = sinon.sandbox.create();
@@ -17,9 +18,13 @@ describe('ProjectDetails', () => {
     dojoServiceMock = {
       getDojoByGitHubId: sinon.stub(),
     };
+    userServiceMock = {
+      isUserCDFAdmin: sinon.stub(),
+    };
     projectDetailsWithMocks = ProjectDetails({
       '@/projects/service': projectServiceMock,
       '@/dojos/service': dojoServiceMock,
+      '@/users/service': userServiceMock,
       '@/assets/python-logo.png': 'pathToPythonLogo',
       '@/assets/nodejs-logo.png': 'pathToNodeJSLogo',
       '@/assets/html5-logo.png': 'pathToHtml5Logo',
@@ -244,7 +249,7 @@ describe('ProjectDetails', () => {
     });
   });
   describe('created', () => {
-    it('should get the data for this project (including Dojo data) and check if the logged in user owns it', async () => {
+    it('should get the data for this project (including Dojo data) and check if the logged in user owns it or is CDF Admin', async () => {
       // ARRANGE
       let projectDetails = vueUnitHelper(projectDetailsWithMocks);
       const projectIdMock = '1234-5678';
@@ -275,6 +280,9 @@ describe('ProjectDetails', () => {
           name: 'Test Dojo',
         }
       };
+      const isLoggedInUserCDFAdminMock = {
+        body: false,
+      };
       const expectedProjectData = {
         project_id: projectIdMock,
         name: 'Test Project',
@@ -301,6 +309,7 @@ describe('ProjectDetails', () => {
       projectServiceMock.getProjectById.withArgs(projectIdMock).resolves(projectDataMock);
       projectServiceMock.getProjectStatisticsById.withArgs(projectIdMock).resolves(projectStatisticsMock);
       dojoServiceMock.getDojoByGitHubId.withArgs(projectDataMock.body.github_integration_id).resolves(dojoDataMock);
+      userServiceMock.isUserCDFAdmin.withArgs('4567-1238').resolves(isLoggedInUserCDFAdminMock);
       
       // ACT
       await projectDetails.$lifecycleMethods.created();
@@ -312,11 +321,14 @@ describe('ProjectDetails', () => {
       expect(projectServiceMock.incrementProjectPlays).to.not.have.been.called;
       expect(projectDetails.dojoData).to.equal(dojoDataMock.body);
       expect(projectDetails.currentUser).to.equal(null);
+      expect(userServiceMock.isUserCDFAdmin).to.have.been.calledWith('4567-1238');
+      expect(projectDetails.isLoggedInUserCDFAdmin).to.equal(false);
       
       // ARRANGE
       projectDetails.$cookie = {
         get: (cookieName) => '5678-1234'
       };
+      userServiceMock.isUserCDFAdmin.withArgs('5678-1234').resolves(isLoggedInUserCDFAdminMock);
       
       // ACT
       await projectDetails.$lifecycleMethods.created();
@@ -355,6 +367,9 @@ describe('ProjectDetails', () => {
           name: 'Test Dojo',
         }
       };
+      const isLoggedInUserCDFAdminMock = {
+        body: false,
+      };
       const expectedProjectData = {
         project_id: projectIdMock,
         name: 'Test Project',
@@ -382,6 +397,8 @@ describe('ProjectDetails', () => {
       projectServiceMock.getProjectStatisticsById.withArgs(projectIdMock).resolves(projectStatisticsMock);
       projectServiceMock.incrementProjectPlays.withArgs(projectIdMock).resolves('');
       dojoServiceMock.getDojoByGitHubId.withArgs(projectDataMock.body.github_integration_id).resolves(dojoDataMock);
+      userServiceMock.isUserCDFAdmin.withArgs('4567-1238').resolves(isLoggedInUserCDFAdminMock);
+
       
       // ACT
       await projectDetails.$lifecycleMethods.created();

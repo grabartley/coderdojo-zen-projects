@@ -20,6 +20,7 @@ describe('AdminPanel', () => {
     };
     userServiceMock = {
       isUserChampion: sinon.stub(),
+      isUserCDFAdmin: sinon.stub(),
     };
     adminPanelWithMocks = AdminPanel({
       '@/dojos/service': dojoServiceMock,
@@ -199,11 +200,14 @@ describe('AdminPanel', () => {
   });
   
   describe('created', () => {
-    it('should check if the user is champion of the dojo, get dojo and project data, check if GitHub is integrated and register pagination event handler', async () => {
+    it('should check if the user is champion of the dojo or CDF Admin, get dojo and project data, check if GitHub is integrated and register pagination event handler', async () => {
       // ARRANGE
       let adminPanel = vueUnitHelper(adminPanelWithMocks);
       const isUserChampionMock = {
         body: true,
+      };
+      const isUserCDFAdminMock = {
+        body: false,
       };
       const dojoDataMock = {
         body: 'expectedDojoData',
@@ -227,6 +231,7 @@ describe('AdminPanel', () => {
       };
       adminPanel.$cookie.get.withArgs('loggedIn').returns('4321-5678');
       userServiceMock.isUserChampion.withArgs('4321-5678', '1234-5678').resolves(isUserChampionMock);
+      userServiceMock.isUserCDFAdmin.withArgs('4321-5678').resolves(isUserCDFAdminMock);
       dojoServiceMock.getDojoById.withArgs('1234-5678').resolves(dojoDataMock);
       dojoServiceMock.isGitHubIntegrated.withArgs('1234-5678').resolves(isGitHubIntegratedMock);
       projectServiceMock.getProjectsForDojo.withArgs('1234-5678', true).resolves(projectDataMock);
@@ -238,6 +243,8 @@ describe('AdminPanel', () => {
       expect(adminPanel.$cookie.get).to.have.been.calledWith('loggedIn');
       expect(userServiceMock.isUserChampion).to.have.been.calledWith('4321-5678', '1234-5678');
       expect(adminPanel.isLoggedInUserChampion).to.be.true;
+      expect(userServiceMock.isUserCDFAdmin).to.have.been.calledWith('4321-5678');
+      expect(adminPanel.isLoggedInUserCDFAdmin).to.be.false;
       expect(adminPanel.$router.push).to.not.have.been.called;
       expect(dojoServiceMock.getDojoById).to.have.been.calledWith('1234-5678');
       expect(adminPanel.dojoData).to.equal(dojoDataMock.body);
@@ -247,10 +254,13 @@ describe('AdminPanel', () => {
       expect(adminPanel.projectData).to.equal(projectDataMock.body);
       expect(adminPanel.fullProjectData).to.equal(adminPanel.projectData);
     });
-    it('should redirect the user away if they are not a champion of this Dojo', async () => {
+    it('should redirect the user away if they are not a champion of this Dojo or a CDF Admin', async () => {
       // ARRANGE
       let adminPanel = vueUnitHelper(adminPanelWithMocks);
       const isUserChampionMock = {
+        body: false,
+      };
+      const isUserCDFAdminMock = {
         body: false,
       };
       const dojoDataMock = {
@@ -275,6 +285,7 @@ describe('AdminPanel', () => {
       };
       adminPanel.$cookie.get.withArgs('loggedIn').returns('1234-8765');
       userServiceMock.isUserChampion.withArgs('1234-8765', '1234-5678').resolves(isUserChampionMock);
+      userServiceMock.isUserCDFAdmin.withArgs('1234-8765').resolves(isUserCDFAdminMock);
       dojoServiceMock.getDojoById.withArgs('1234-5678').resolves(dojoDataMock);
       dojoServiceMock.isGitHubIntegrated.withArgs('1234-5678').resolves(isGitHubIntegratedMock);
       projectServiceMock.getProjectsForDojo.withArgs('1234-5678', true).resolves(projectDataMock);
@@ -285,6 +296,8 @@ describe('AdminPanel', () => {
       // ASSERT
       expect(userServiceMock.isUserChampion).to.have.been.calledWith('1234-8765', '1234-5678');
       expect(adminPanel.isLoggedInUserChampion).to.be.false;
+      expect(userServiceMock.isUserCDFAdmin).to.have.been.calledWith('1234-8765');
+      expect(adminPanel.isLoggedInUserCDFAdmin).to.be.false;
       expect(adminPanel.$router.push).to.have.been.calledWith('/');
     });
     it('should not get project data if GitHub is not integrated', async () => {
@@ -292,6 +305,9 @@ describe('AdminPanel', () => {
       let adminPanel = vueUnitHelper(adminPanelWithMocks);
       const isUserChampionMock = {
         body: true,
+      };
+      const isUserCDFAdminMock = {
+        body: false,
       };
       const dojoDataMock = {
         body: 'expectedDojoData',
@@ -312,6 +328,7 @@ describe('AdminPanel', () => {
       };
       adminPanel.$cookie.get.withArgs('loggedIn').returns('4321-5678');
       userServiceMock.isUserChampion.withArgs('4321-5678', '1234-5678').resolves(isUserChampionMock);
+      userServiceMock.isUserCDFAdmin.withArgs('4321-5678').resolves(isUserCDFAdminMock);
       dojoServiceMock.getDojoById.withArgs('1234-5678').resolves(dojoDataMock);
       dojoServiceMock.isGitHubIntegrated.withArgs('1234-5678').resolves(isGitHubIntegratedMock);
       

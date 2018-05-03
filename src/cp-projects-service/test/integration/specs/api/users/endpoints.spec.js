@@ -80,14 +80,55 @@ describe('Users API', () => {
           done();
         });
     });
-    it('should return an error for an invalid dojo id', (done) => {
+    it('should return false for an invalid dojo id', (done) => {
       const userIdMock = 'ff67df02-6cbd-29c6-b2df-283e5136afec';
       const dojoIdMock = '1234-5678';
       request(serverInstance)
         .get(`/api/2.0/users/is-champion/${userIdMock}/${dojoIdMock}`)
-        .expect(404)
+        .expect(200)
         .expect((res) => {
-          expect(res.error.text).to.equal('Not found');
+          expect(res.body).to.be.false;
+        })
+        .end((err, res) => {
+          if (err) return done(err);
+          done();
+        });
+    });
+  });
+  describe('GET /api/2.0/users/is-cdf-admin/:userId', () => {
+    it('should return true for a CDF Admin', (done) => {
+      const userIdMock = '464301e1-4b30-48ae-860f-d7de502ec7c9';
+      request(serverInstance)
+        .get(`/api/2.0/users/is-cdf-admin/${userIdMock}`)
+        .expect(200)
+        .expect((res) => {
+          expect(res.body).to.be.true;
+        })
+        .end((err, res) => {
+          if (err) return done(err);
+          done();
+        });
+    });
+    it('should return false if not a CDF Admin', (done) => {
+      const userIdMock = '12a4df02-6cbd-40b0-b2df-2531b136afec';
+      request(serverInstance)
+        .get(`/api/2.0/users/is-cdf-admin/${userIdMock}`)
+        .expect(200)
+        .expect((res) => {
+          expect(res.body).to.be.false;
+        })
+        .end((err, res) => {
+          if (err) return done(err);
+          done();
+        });
+    });
+    it('should return false for an invalid user id', (done) => {
+      const userIdMock = '1234-5678';
+      request(serverInstance)
+        .get(`/api/2.0/users/is-cdf-admin/${userIdMock}`)
+        .expect(200)
+        .expect((res) => {
+          expect(res.body).to.be.false;
         })
         .end((err, res) => {
           if (err) return done(err);

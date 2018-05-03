@@ -39,6 +39,20 @@ describe('UserService', () => {
       expect(result).to.equal('expectedResponse');
     });
   });
+  describe('isUserCDFAdmin', () => {
+    it('should make the correct API call', async () => {
+      // ARRANGE
+      sandbox.stub(Vue.http, 'get');
+      const userIdMock = '1234-5678';
+      Vue.http.get.withArgs(`${Vue.config.apiServer}/api/2.0/users/is-cdf-admin/${userIdMock}`).returns('expectedResponse');
+      
+      // ACT
+      const result = await UserService.isUserCDFAdmin(userIdMock);
+      
+      // ASSERT
+      expect(result).to.equal('expectedResponse');
+    });
+  });
   describe('login', () => {
     it('should make the correct API call', async () => {
       // ARRANGE

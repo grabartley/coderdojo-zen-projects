@@ -47,6 +47,7 @@
         this.loggedIn = false;
         this.profileDropdown = false;
         this.$router.push('/');
+        this.$router.go();
       },
     },
     async created() {

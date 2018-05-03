@@ -16,6 +16,7 @@ describe('DojoDetails', () => {
     };
     userServiceMock = {
       isUserChampion: sinon.stub(),
+      isUserCDFAdmin: sinon.stub(),
     };
     projectServiceMock = {
       getProjectsForDojo: sinon.stub(),
@@ -145,7 +146,7 @@ describe('DojoDetails', () => {
   });
   
   describe('created', () => {
-    it('should get Dojo and project data, check if GitHub is integrated, check if logged in user is a champion of this Dojo and set up pagination event handler', async () => {
+    it('should get Dojo and project data, check if GitHub is integrated, check if logged in user is a champion of this Dojo or CDF Admin and set up pagination event handler', async () => {
       // ARRANGE
       let dojoDetails = vueUnitHelper(dojoDetailsWithMocks);
       const expectedDojoDataResponse = {
@@ -156,6 +157,9 @@ describe('DojoDetails', () => {
       };
       const isLoggedInUserChampionResponse = {
         body: true,
+      };
+      const isLoggedInUserCDFAdminResponse = {
+        body: false,
       };
       const expectedProjectsResponse = {
         body: 'expectedProjects',
@@ -172,6 +176,7 @@ describe('DojoDetails', () => {
       dojoServiceMock.getDojoById.withArgs('1234-5678').resolves(expectedDojoDataResponse);
       dojoServiceMock.isGitHubIntegrated.withArgs('1234-5678').resolves(isGitHubIntegratedResponse);
       userServiceMock.isUserChampion.withArgs('5678-1234', '1234-5678').resolves(isLoggedInUserChampionResponse);
+      userServiceMock.isUserCDFAdmin.withArgs('5678-1234').resolves(isLoggedInUserCDFAdminResponse);
       projectServiceMock.getProjectsForDojo.withArgs('1234-5678', false).resolves(expectedProjectsResponse);
       
       // ACT
@@ -181,9 +186,11 @@ describe('DojoDetails', () => {
       expect(dojoServiceMock.getDojoById).to.have.been.calledWith('1234-5678');
       expect(dojoServiceMock.isGitHubIntegrated).to.have.been.calledWith('1234-5678');
       expect(userServiceMock.isUserChampion).to.have.been.calledWith('5678-1234', '1234-5678');
+      expect(dojoDetails.isLoggedInUserChampion).to.be.true;
+      expect(userServiceMock.isUserCDFAdmin).to.have.been.calledWith('5678-1234');
+      expect(dojoDetails.isLoggedInUserCDFAdmin).to.be.false;
       expect(dojoDetails.dojoData).to.equal('expectedDojoData');
       expect(dojoDetails.isGitHubIntegrated).to.be.true;
-      expect(dojoDetails.isLoggedInUserChampion).to.be.true;
       expect(dojoDetails.projects).to.equal('expectedProjects');
       expect(dojoDetails.fullProjectData).to.equal(dojoDetails.projects);
     });

@@ -20,7 +20,7 @@
       </div>
       <div class="dojo-details__information-content">
         <div class="dojo-details__information-content-actions">
-          <button v-if="isLoggedInUserChampion" class="dojo-details__information-content-actions-button" @click="adminPanel">
+          <button v-if="isLoggedInUserChampion || isLoggedInUserCDFAdmin" class="dojo-details__information-content-actions-button" @click="adminPanel">
             <span class="fas fa-chart-pie"></span>
           </button>
         </div>
@@ -83,6 +83,7 @@
         dojoData: null,
         isGitHubIntegrated: false,
         isLoggedInUserChampion: false,
+        isLoggedInUserCDFAdmin: false,
         projects: [],
         fullProjectData: [],
         projectsPerPage: 6,
@@ -122,6 +123,7 @@
       // check is the logged in user a champion of this dojo
       const loggedInUserId = this.$cookie.get('loggedIn');
       this.isLoggedInUserChampion = (await userService.isUserChampion(loggedInUserId, dojoId)).body;
+      this.isLoggedInUserCDFAdmin = (await userService.isUserCDFAdmin(loggedInUserId)).body;
       // get projects for this Dojo
       this.projects = (await projectService.getProjectsForDojo(dojoId, false)).body;
       this.fullProjectData = this.projects;

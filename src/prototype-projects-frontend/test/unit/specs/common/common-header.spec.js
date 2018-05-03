@@ -48,6 +48,7 @@ describe('CommonHeader', () => {
         };
         commonHeader.$router = {
           push: sandbox.spy(),
+          go: sandbox.spy(),
         };
         commonHeader.loggedInUser = {
           id: '1234-5678',
@@ -63,6 +64,7 @@ describe('CommonHeader', () => {
         expect(commonHeader.loggedIn).to.be.false;
         expect(commonHeader.profileDropdown).to.be.false;
         expect(commonHeader.$router.push).to.have.been.calledWith('/');
+        expect(commonHeader.$router.go).to.have.been.called;
       });
     });
   });
