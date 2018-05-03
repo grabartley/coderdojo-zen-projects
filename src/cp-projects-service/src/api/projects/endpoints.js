@@ -3,6 +3,7 @@ import uuid from 'uuid/v4';
 import fs from 'file-system';
 import zip from 'adm-zip';
 import _ from 'lodash';
+import fileType from 'file-type';
 import dbService from '../../services/db-service';
 import fileSystemService from '../../services/file-system-service';
 import githubService from '../../services/github-service';
@@ -172,6 +173,14 @@ function registerEndpoints(app) {
       let file = projectData.file.split(',');
       file = file[1];
       
+      // ensure file is a zip
+      const fileBuffer = Buffer.from(file, 'base64');
+      if (fileType(fileBuffer).ext !== 'zip') {
+        throw {
+          message: 'Must be a zip file!',
+        };
+      }
+      
       // extract project files
       let folderName = 'projectFiles';
       fs.writeFileSync(`./${projectData.filename}`, file, 'base64');
@@ -319,7 +328,14 @@ function registerEndpoints(app) {
         let file = projectData.file.split(',');
         file = file[1];
         
-        // TODO: use generic filenames rather than variable ones for added security
+        // ensure file is a zip
+        const fileBuffer = Buffer.from(file, 'base64');
+        if (fileType(fileBuffer).ext !== 'zip') {
+          throw {
+            message: 'Must be a zip file!',
+          };
+        }
+        
         // extract project files
         let folderName = 'projectFiles';
         fs.writeFileSync(`./${projectData.filename}`, file, 'base64');
