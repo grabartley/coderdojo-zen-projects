@@ -16,14 +16,18 @@
         </div>
       </div>
       <div class="view-profile__information-content">
-        <div v-if="userData.type === 'youth-o13' && usersProjects" class="view-profile__information-content-section">
+        <div v-if="userData.type === 'youth-o13'" class="view-profile__information-content-section">
           <div class="view-profile__information-content-section-title">
             Projects
           </div>
           <div class="view-profile__information-content-section-content" style="text-align: center;">
-            <div v-for="project in usersProjects" class="view-profile__bubble" @click="viewProject(project.project_id)">
+            <div v-if="usersProjects" v-for="project in usersProjects" class="view-profile__bubble" @click="viewProject(project.project_id)">
               <img :src="projectTypeImage(project.type)" alt="Project Technology" class="view-profile__bubble-image"></img>
               <span class="view-profile__bubble-text">{{ project.name }}</span>
+            </div>
+            <div v-if="isLoggedInUser" class="view-profile__bubble" @click="createProject()">
+              <img :src="projectTypeImage('new')" alt="Create a Project icon" class="view-profile__bubble-image"></img>
+              <span class="view-profile__bubble-text">Create a Project</span>
             </div>
           </div>
         </div>
@@ -54,6 +58,7 @@
         userData: null,
         usersDojos: null,
         usersProjects: null,
+        isLoggedInUser: false,
       };
     },
     methods: {
@@ -67,12 +72,17 @@
             return require('@/assets/html5-logo.png');
           case ('java'):
             return require('@/assets/java-logo.png');
+          case ('new'):
+            return require('@/assets/create-project-icon.png');
           default:
             return '';
         }
       },
       viewProject(projectId) {
         this.$router.push(`/project/${projectId}`);
+      },
+      createProject() {
+        this.$router.push('/create-project');
       },
       viewDojo(dojoId) {
         this.$router.push(`/dojos/${dojoId}`);
@@ -85,6 +95,12 @@
       this.userData = (await userService.getUserData(userId)).body;
       this.usersDojos = (await dojoService.getUsersDojos(userId)).body;
       this.usersProjects = (await projectService.getProjectsForUser(userId)).body;
+      
+      // check if logged in user is viewing their own profile
+      const loggedInUserId = this.$cookie.get('loggedIn');
+      if (loggedInUserId) {
+        this.isLoggedInUser = loggedInUserId === userId;
+      }
     },
   }
 </script>
