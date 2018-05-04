@@ -1,4 +1,4 @@
-# prototype-projects-frontend
+# cp-projects-frontend
 
 This is the frontend code for my project system. When integrating my system into the existing Zen stack, this code will likely become part of the existing Zen frontend (cp-zen-frontend) but for purposes of developing a standalone project in the meantime it is separate.
 
@@ -7,7 +7,7 @@ This is the frontend code for my project system. When integrating my system into
 In order to run the frontend locally for development:
 
 ```
-  cd src/prototype-projects-frontend
+  cd src/cp-projects-frontend
   npm install
   npm start
 ```
