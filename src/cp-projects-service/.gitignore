@@ -1,7 +1,10 @@
+# directories
 node_modules/
 lib/
 test/coverage/
 .nyc_output/
+
+# scripts
 start
 testdata
 run-integration
