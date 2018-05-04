@@ -8,7 +8,7 @@
         <div class="dojo-details__information-sidebar-item">
           <div class="dojo-details__information-sidebar-item-header">
             <span class="fab fa-github"></span>
-            <span>github integration</span>
+            <span>github</span>
           </div>
           <div v-if="isGitHubIntegrated" class="dojo-details__information-sidebar-item-data">
             GitHub is integrated for this Dojo!
@@ -29,7 +29,7 @@
             Dojo Information
           </div>
           <div class="dojo-details__information-content-section-content">
-            Dojo information goes here!
+            This Dojo runs every Wednesday and Saturday from 10am to 12pm GMT! Come along for our sessions on Scratch, HTML, JavaScript, hardware and more advanced topics like Android app programming.
           </div>
         </div>
         <div v-if="projects" class="dojo-details__information-content-section">
