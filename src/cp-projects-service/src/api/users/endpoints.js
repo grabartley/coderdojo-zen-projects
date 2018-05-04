@@ -58,7 +58,7 @@ function registerEndpoints(app) {
     }
   });
 
-  // mock of the Zen login API call for my prototype (disregards password since it's just a mock)
+  // mock of the Zen login API call for my system (disregards password since it's just a mock)
   app.post('/api/2.0/users/login', async (req, res) => {
     // log api call
     console.log('POST /api/2.0/users/login with ');

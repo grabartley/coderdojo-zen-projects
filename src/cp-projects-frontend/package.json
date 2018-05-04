@@ -1,7 +1,7 @@
 {
-  "name": "prototype-projects-frontend",
+  "name": "cp-projects-frontend",
   "version": "1.0.0",
-  "description": "Prototype frontend for cp-projects-service",
+  "description": "Frontend for cp-projects-service",
   "author": "Graham Bartley <graham.bartley3@mail.dcu.ie>",
   "private": true,
   "scripts": {
