@@ -37,10 +37,12 @@
       };
     },
     methods: {
+      // redirects to the logged in users profile
       myProfile() {
         this.$router.push(`/view-profile/${this.loggedInUser.id}`);
         this.profileDropdown = false;
       },
+      // logs the logged in user out
       logout() {
         this.$cookie.remove('loggedIn');
         this.loggedInUser = {};
@@ -54,7 +56,7 @@
       // get logged in user (if there is one)
       const userId = this.$cookie.get('loggedIn');
       if (userId) {
-        this.loggedInUser = (await userService.getUserData(userId)).body;
+        this.loggedInUser = (await userService.getUserById(userId)).body;
         this.loggedIn = true;
       }
     },
@@ -72,9 +74,6 @@
       margin-left: 16px;
       text-decoration: none;
       color: #2c3e50;
-      &:hover {
-        color: #2c3e50;
-      }
       &-icon {
         width: 45px;
         height: 45px;

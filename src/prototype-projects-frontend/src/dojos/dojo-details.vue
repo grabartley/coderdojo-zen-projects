@@ -95,14 +95,17 @@
       Pagination,
     },
     computed: {
+      // project data to display on this page
       paginatedProjectData() {
         const firstIndex = (this.currentPage - 1) * this.projectsPerPage;
         const lastIndex = firstIndex + this.projectsPerPage;
         return this.projects.slice(firstIndex, lastIndex);
       },
+      // number of first on page
       firstOnPage() {
         return 1 + (this.projectsPerPage * (this.currentPage - 1));
       },
+      // number of last on page
       lastOnPage() {
         let result = this.firstOnPage + (this.projectsPerPage - 1);
         return result <= this.projects.length ? result : this.projects.length;
@@ -134,14 +137,18 @@
     },
     watch: {
       searchQuery: {
+        // when a new search query is entered
         handler(newSearchQuery, prevSearchQuery) {
+          // searches are not case sensitive
           const searchQuery = newSearchQuery.toUpperCase();
           let newProjectData = [];
+          // find relevant projects and push them to newProjectData
           this.fullProjectData.forEach((project) => {
             if (project.name.toUpperCase().includes(searchQuery) || project.description.toUpperCase().includes(searchQuery)) {
               newProjectData.push(project);
             }
           });
+          // set projects to the found projects and reset pagination
           this.projects = newProjectData;
           this.$refs.pagination.setPage(1);
         },

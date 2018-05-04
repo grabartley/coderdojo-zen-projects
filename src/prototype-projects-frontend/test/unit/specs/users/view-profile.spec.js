@@ -10,7 +10,7 @@ describe('ViewProfile', () => {
   beforeEach(() => {
     sandbox = sinon.sandbox.create();
     userServiceMock = {
-      getUserData: sinon.stub(),
+      getUserById: sinon.stub(),
     };
     dojoServiceMock = {
       getUsersDojos: sinon.stub(),
@@ -149,7 +149,7 @@ describe('ViewProfile', () => {
         'project 3',
       ];
       viewProfile.$cookie.get.withArgs('loggedIn').returns('1234-5678');
-      userServiceMock.getUserData.withArgs('1234-5678').resolves({
+      userServiceMock.getUserById.withArgs('1234-5678').resolves({
         body: expectedUserData,
       });
       dojoServiceMock.getUsersDojos.withArgs('1234-5678').resolves({
@@ -163,7 +163,7 @@ describe('ViewProfile', () => {
       await viewProfile.$lifecycleMethods.created();
       
       // ASSERT
-      expect(userServiceMock.getUserData).to.have.been.calledWith('1234-5678');
+      expect(userServiceMock.getUserById).to.have.been.calledWith('1234-5678');
       expect(dojoServiceMock.getUsersDojos).to.have.been.calledWith('1234-5678');
       expect(projectServiceMock.getProjectsForUser).to.have.been.calledWith('1234-5678');
       expect(viewProfile.userData).to.deep.equal(expectedUserData);
@@ -197,7 +197,7 @@ describe('ViewProfile', () => {
         'project 3',
       ];
       viewProfile.$cookie.get.withArgs('loggedIn').returns(null);
-      userServiceMock.getUserData.withArgs('1234-5678').resolves({
+      userServiceMock.getUserById.withArgs('1234-5678').resolves({
         body: expectedUserData,
       });
       dojoServiceMock.getUsersDojos.withArgs('1234-5678').resolves({

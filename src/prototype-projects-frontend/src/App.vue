@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <common-header></common-header>
+    <common-header/>
     <router-view :key="$route.fullPath"/>
-    <common-footer></common-footer>
+    <common-footer/>
   </div>
 </template>
 <script>

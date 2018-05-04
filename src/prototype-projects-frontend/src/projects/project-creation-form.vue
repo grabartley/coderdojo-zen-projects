@@ -198,6 +198,7 @@ export default {
     };
   },
   computed: {
+    // returns the placeholder for the entrypoint field based on project type
     entrypointPlaceholder() {
       switch (this.projectType) {
         case 'python':
@@ -278,7 +279,7 @@ export default {
     // if logged in
     if (this.loggedInUserId) {
       // get the user type
-      const userType = (await userService.getUserData(this.loggedInUserId)).body.type;
+      const userType = (await userService.getUserById(this.loggedInUserId)).body.type;
       // if logged in user is not a youth
       if (userType !== 'youth-o13') {
         // shouldn't be here, so send them away
@@ -294,6 +295,7 @@ export default {
   },
   watch: {
     projectType: {
+      // when the project type changes, update associated values
       handler(newProjectType, prevProjectType) {
         this.isPythonSelected = false;
         this.isNodeJSSelected = false;

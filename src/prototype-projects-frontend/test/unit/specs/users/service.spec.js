@@ -10,7 +10,7 @@ describe('UserService', () => {
     sandbox.restore();
   });
   
-  describe('getUserData', () => {
+  describe('getUserById', () => {
     it('should make the correct API call', async () => {
       // ARRANGE
       sandbox.stub(Vue.http, 'get');
@@ -18,7 +18,7 @@ describe('UserService', () => {
       Vue.http.get.withArgs(`${Vue.config.apiServer}/api/2.0/profiles/load-user-profile/${userIdMock}`).returns('expectedResponse');
       
       // ACT
-      const result = await UserService.getUserData(userIdMock);
+      const result = await UserService.getUserById(userIdMock);
       
       // ASSERT
       expect(result).to.equal('expectedResponse');

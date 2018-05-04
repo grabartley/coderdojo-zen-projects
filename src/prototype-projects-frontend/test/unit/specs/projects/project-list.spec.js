@@ -19,7 +19,7 @@ describe('ProjectList', () => {
       getProjectData: sinon.stub(),
     };
     userServiceMock = {
-      getUserData: sinon.stub(),
+      getUserById: sinon.stub(),
     };
     projectListWithMocks = ProjectList({
       'vue-pagination-2': vuePagination2Mock,
@@ -182,7 +182,7 @@ describe('ProjectList', () => {
         get: sandbox.stub(),
       };
       projectList.$cookie.get.withArgs('loggedIn').returns('1234-5678');
-      userServiceMock.getUserData.withArgs('1234-5678').resolves(userDataResponseMock);
+      userServiceMock.getUserById.withArgs('1234-5678').resolves(userDataResponseMock);
       
       // ACT
       await projectList.$lifecycleMethods.created();
@@ -195,7 +195,7 @@ describe('ProjectList', () => {
       expect(projectList.recentlyUpdatedProjects).to.equal('recentlyUpdatedProjects');
       expect(projectList.newlyCreatedProjects).to.equal('newlyCreatedProjects');
       expect(projectList.$cookie.get).to.have.been.calledWith('loggedIn');
-      expect(userServiceMock.getUserData).to.have.been.calledWith('1234-5678');
+      expect(userServiceMock.getUserById).to.have.been.calledWith('1234-5678');
       expect(projectList.loggedInUser).to.equal(userDataResponseMock.body);
       expect(vuePagination2Mock.PaginationEvent.$on).to.have.been.calledOnce;
     });
@@ -228,7 +228,7 @@ describe('ProjectList', () => {
       
       // ASSERT
       expect(projectList.$cookie.get).to.have.been.calledWith('loggedIn');
-      expect(userServiceMock.getUserData).to.not.have.been.called;
+      expect(userServiceMock.getUserById).to.not.have.been.called;
       expect(projectList.loggedInUser).to.equal(null);
     });
   });

@@ -317,7 +317,7 @@ describe('GitHubService', () => {
       const expectedApiMergeData = {
         base: 'master',
         head: '4321-8765',
-        commit_message: 'update',
+        commit_message: 'Merge update',
       };
       const dbQueryMock = {
         text: 'SELECT github_access_token FROM github_integrations WHERE dojo_id=$1;',

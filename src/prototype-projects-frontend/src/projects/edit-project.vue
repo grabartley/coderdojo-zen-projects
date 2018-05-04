@@ -135,6 +135,7 @@
         this.isFormValidated = true;
         return this.filename ? this.isFileUploaded && !this.updatingProject && !this.errors.any() : !this.updatingProject && !this.errors.any();
       },
+      // updates the project
       async updateProject() {
         // if form information is valid
         if (this.isValid()) {
@@ -181,6 +182,7 @@
           }
         }
       },
+      // deletes the project
       async deleteProject() {
         // if not already deleting
         if (!this.deletingProject) {

@@ -5,7 +5,7 @@ const projectService = {
   getProjectById: projectId => Vue.http.get(`${Vue.config.apiServer}/api/2.0/projects/project/${projectId}`),
   // returns project statistics for the given project id
   getProjectStatisticsById: projectId => Vue.http.get(`${Vue.config.apiServer}/api/2.0/projects/project-statistics/${projectId}`),
-  // returns project data
+  // returns project data based on given params
   getProjectData: (deleted, sortedBy, sortOrder, limit) => Vue.http.get(`${Vue.config.apiServer}/api/2.0/projects/project-data?deleted=${deleted}&sortedBy=${sortedBy}&sortOrder=${sortOrder}&limit=${limit}`),
   // returns projects for the Dojo with the given Dojo id
   getProjectsForDojo: (dojoId, deleted) => Vue.http.get(`${Vue.config.apiServer}/api/2.0/projects/projects-for-dojo/${dojoId}?deleted=${deleted}`),

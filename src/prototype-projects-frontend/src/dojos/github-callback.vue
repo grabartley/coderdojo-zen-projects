@@ -13,18 +13,22 @@
       };
     },
     computed: {
+      // returns the Dojo id from the route query
       dojoId() {
         return this.$route.query.dojoId;
       },
+      // returns the GitHub callback code from the route query
       callbackCode() {
         return this.$route.query.code;
       },
+      // returns the id of the logged in user
       loggedInUserId() {
         return this.$cookie.get('loggedIn');
       },
     },
     methods: {
-      async getAccessToken() {
+      // completes the GitHub integration for the given data
+      async integrateGitHub() {
         const githubData = {
           client_id: this.githubClientId,
           code: this.callbackCode,
@@ -33,7 +37,7 @@
       },
     },
     async created() {
-      await this.getAccessToken();
+      await this.integrateGitHub();
       this.$router.push(`/admin-panel/${this.dojoId}`);
     },
   }

@@ -8,7 +8,7 @@ describe('CommonHeader', () => {
   beforeEach(() => {
     sandbox = sinon.sandbox.create();
     userServiceMock = {
-      getUserData: sinon.stub(),
+      getUserById: sinon.stub(),
     };
     commonHeaderWithMocks = CommonHeader({
       '@/users/service': userServiceMock,
@@ -83,14 +83,14 @@ describe('CommonHeader', () => {
         get: sandbox.stub(),
       };
       commonHeader.$cookie.get.withArgs('loggedIn').returns(userIdMock);
-      userServiceMock.getUserData.withArgs(userIdMock).resolves(userDataResponseMock);
+      userServiceMock.getUserById.withArgs(userIdMock).resolves(userDataResponseMock);
       
       // ACT
       await commonHeader.$lifecycleMethods.created();
       
       // ASSERT
       expect(commonHeader.$cookie.get).to.have.been.calledWith('loggedIn');
-      expect(userServiceMock.getUserData).to.have.been.calledWith(userIdMock);
+      expect(userServiceMock.getUserById).to.have.been.calledWith(userIdMock);
       expect(commonHeader.loggedInUser).to.equal(userDataResponseMock.body);
       expect(commonHeader.loggedIn).to.be.true;
     });
@@ -107,7 +107,7 @@ describe('CommonHeader', () => {
       
       // ASSERT
       expect(commonHeader.$cookie.get).to.have.been.calledWith('loggedIn');
-      expect(userServiceMock.getUserData).to.not.have.been.called;
+      expect(userServiceMock.getUserById).to.not.have.been.called;
       expect(commonHeader.loggedInUser).to.deep.equal({});
       expect(commonHeader.loggedIn).to.be.false;
     });
