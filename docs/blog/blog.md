@@ -4,6 +4,84 @@
 
 ****
 
+## Second User Evaluation & Finishing Development
+
+Since my last post I've been working on **finishing up development** to move on to writing documentation and preparing for my demonstration. I also carried out **another user evaluation** on a more general user group with **more participants** than the first one. I will go into detail on the user evaluation further on in this post. I've made a lot of **changes and improvements** to my code so I wont be able to talk about all of them in this post but I will talk about the **main changes**. For a full list of my changes, please check my commits as I give fairly comprehensive descriptions in my commit messages.
+
+Not long after my last post, I implemented and styled the **administrator panel** for Champions and CDF Admins. This allows these administrative users to do the following:
+
+  * **Integrate a GitHub account** with their Dojo (previously happened on the Edit Profile page)
+  * **Remove a GitHub integration** from their Dojo (also permanently deletes all associated projects and requires confirmation step)
+  * **View all projects** related to their Dojo (existing and deleted)
+  * **Edit all projects** related to their Dojo (existing and deleted)
+  
+Screenshots of the administrator panel can be seen below.
+
+**Admin Panel with no GitHub integration**
+![Admin Panel with no GitHub integration](./images/admin-panel-no-github.png)
+
+**Admin Panel with GitHub integration and projects**
+![Admin Panel with GitHub integration and projects](./images/admin-panel-github-and-projects.png)
+
+For the purposes of allowing access to the administrator panel I also **created a page for each Dojo** in my system which allows access to Champions and CDF Admins through a button in the top right corner. This Dojo page represents an **existing page on Zen** where I will place this button when integrating but for my standalone project I have my own page to help visualize it. It also includes and indication on whether GitHub is integrated or not for that Dojo and a list of all projects related to that Dojo (not including deleted projects). These features will all be added to the existing Zen page during integration.
+
+**Dojo Details page representation**
+![Dojo Details page representation](./images/dojo-details-github-and-projects.png)
+
+After creating the administrator panel, I made **several improvements and additions to the frontend** of my project. As I said above, I wont list all of the changes here but the following are some of the more important changes I made:
+
+  * **Project Search**: The project search bars which exist across the system now have functionality behind them allowing users to search for projects by name and description. The lists update in real time without a need to activate the search.
+  * **Runtime Styling & Loading**: Addressing some of the feedback from my first user evaluation, I added some colour to the project runtime terminal and the HTML5 project iframe container. I also added a loading spinner and loading message to the runtime page and a transition animation to spawn the terminal once loading is complete. Loading is considered complete once the project has some text to display in the terminal.
+  * **Login & Logout Fixes**: I changed the package I use to manage cookies because the one I was using had issues with deleting cookies. I also reload the page after logging in and out now in order to re-render everything.
+  * **Project Creation Form Improvements**: I refactored the project creation form from two components into a single component which allowed me to then set the entrypoint file extension based on the selected project type. This will make it easier for users to understand and less likely for them to make a mistake when inputting the filename. I also renamed entrypoint to "main filename" to make it more clear and added placeholder information in the input fields as an example of what they should contain.
+  * **User and Dojo Project Lists**: I added project lists for both users and Dojos (as seen above for Dojos) which show all projects related to them. The Dojo project list is paginated and searchable in the same fashion as the overall project list and the one on the administrator panel whereas the user project list is done in "bubbles" since they are not likely to have as many projects as a Dojo.
+  * **404 Page**: I added a 404 page to show if the user navigates to a route that doesn't exist in my frontend. It shows a message explaining that the page was not found and a signpost image which can be clicked to return to the project list page.
+  
+The following screenshots show some of these changes.
+
+**Runtime loading message**
+![Runtime loading message](./images/runtime-loading-message.png)
+
+**Runtime terminal**
+![Runtime terminal](./images/runtime-terminal.png)
+
+**Project Creation Form with Java selected**
+![Project Creation Form with Java selected](./images/project-creation-form-java-entrypoint.png)
+
+**User project list**
+![User project list](./images/view-profile-with-projects.png)
+
+**404 Page**
+![404 Page](./images/404-page.png)
+
+Following on from these changes, I moved on to **increasing my backend test coverage** since I had not yet written tests for any of my endpoints. Testing endpoints was something I had **not done before** and after some research I decided it would be best to write **integration tests** for them which would require the tests to interact directly with my local database and with GitHub in order to be effective. Since this was the case, I decided to spend a **considerable amount of time** adding project and GitHub integration data into my **test data** so that it would be suitable for these tests and could be loaded into the database before running each test. This approach ensures that each test is **independent** of the others so if one test deletes something from the database, the data is reset again for the next test. I hadn't originally included project or GitHub integration data into my test data because it requires a GitHub account to be linked to the data to work. In order to make this possible I have decided to set the **grahambartley GitHub account** (not my main GitHub account) as a **test data account** containing only repositories related to the test data for my project. In future, this can be changed to a repository owned by the CDF if they so choose.
+
+So, with the test data containing all the data I needed, I was able to write **integration tests for my endpoints** which reset the test data before each one ran. However, I realised there was another problem. If I tested endpoints that interacted with GitHub there was **no way to remove the data they added to GitHub** after the test was complete. This wouldn't be a big problem in the short term but **long term** this would cause a lot of data to be added to the test data GitHub account which would have to be **manually removed** on a regular basis by a developer. Since I didn't want my tests to leave any data behind (to keep **independence** and keep it **maintainable**) I decided I would be **unable to write integration tests for the endpoints that interact with GitHub**. Although this does affect my test coverage (75% statement coverage on backend vs. 97% statement coverage on frontend) I think it is preferrable to having artifacts left behind by tests which have to be manually removed every time they are run. Also, although the statement coverage is affected, I am still covering **93% of the functions** on the backend since only three endpoints actually interact with GitHub. I may think of a solution to this problem going forward but for now this is what I have decided to do.
+
+After integration testing I moved on to improving the **security of my backend** and making other **general improvements** to it. These were some of the most important changes I made:
+
+  * **Parametrized Queries**: I rewrote all of my plaintext database queries to be parametrized queries in order to prevent vulnerability to SQL injection attacks. It is no longer possible to inject SQL into my database.
+  * **Unnecessary Dependencies**: I prevented Python 3 and NodeJS projects from attempting to install dependencies where none are given through either requirements.txt or package.json respectively. This should increase the speed of runtimes where no dependencies are necessary.
+  * **Container Termination**: Project runtime containers will now terminate when the websocket connection is lost. This will force containers to stop when a user runs them and then exits their browser or leaves the page via other external means such as shutting down their computer.
+  * **Enforced File Type**: Uploaded source code is now checked on the backend to ensure the file is actually a zip file before being extracted to prevent other file types making it through from the frontend.
+  * **Enforced Entrypoint Regex**: The form of the entrypoint value is now checked to ensure it is a filename with an extension using only valid characters and no escape characters. This will prevent users from attempting bash injection through the entrypoint value.
+  * **CDF Admin Access Rights**: I allowed CDF Admins access to the administrator panel for every Dojo and the edit project page for every project so that they can manage projects across the platform. This mostly involved frontend changes but I put it with these changes since it's security related and involved creation of a new endpoint on the backend.
+  
+Another **major** part of my project which I spent a lot of time preparing, executing and writing up since the last blog post was the **second user evaluation**. My first user evaluation aimed to gather feedback from youths over 13 years of age who are actively involved in a Dojo each week. This evaluation was aimed at a **variety of users** of **different ages** and **technical backgrounds** in order to get a **variety of views of my system** representative of all other user types which the first evaluation did not cover. Also, instead of showing mockups to the participants like I did in the first user evaluation, I was able to allow these participants **access to my system** by **hosting it publicly** for them since a lot of the coding had been done by this point.
+
+Hosting the project was a **learning curve** since I had to set up my own **Apache server** on a **fresh Fedora install** and configure it correctly, build my project for a **small-scale "production" environment**, tailor the **test data** to be used by participants in my user evaluation and point a **domain** at the running server. However, I noticed a few improvements I could make to my code to **help with deployment** which I was then able to make so I think it was a useful learning curve and it only took two days. Once I had hosted my project I prepared a **feedback form** using **Google Forms** and I sent it out to as many people as I could. I managed to get **18 responses over four days** with some really **useful feedback** so I was very happy with this. The **full results** of both of my user evaluations can be found in the **docs/testing/user-evaluation** folder of my repo.
+
+Based on the feedback I received, I was able to make the following **changes which were requested by users**:
+
+  * **Project Creation Form Information**: I improved the visibility of the required fields asterisks and added useful tooltips to the bottom of the form to clarify confusion regarding the project files section.
+  * **Project Deletion Confirmation**: I added a second step to project deletion to confirm the deletion before it takes place to prevent accidental deletions. This is the same as the confirmation I have on removing GitHub integrations.
+  * **Create Project from Profile Page**: This was a highly requested feature, and rightly so I think. I added a button to the users profile page allowing them to navigate to the Project Creation Form from their profile page since their projects are displayed there and it's where they're sent after they login. This is only visible when viewing your own profile page as a youth user.
+  * **Login on Enter/Return**: The login function is now triggered on press of the Enter or Return key on the login page so you no longer need to click the Login button to trigger it. This helps to make the login more intuitive.
+  
+Finally, after implementing these features I began **writing the user manual** and finishing up coding by doing a **review of my code** and ensuring it is all well **laid out** and well **commented**. I also decided to rename prototype-projects-frontend to **cp-projects-frontend** since it is no longer a prototype. It is difficult to determine when the code should be considered "finished" in terms of CA400 but at this point I have **achieved everything I set out to** at the beginning of the project as far as the code is concerned. Although there is more I would like to add to it I believe these will be additions that can be made **going forward** as my code is integrated into Zen and are **out of scope** for CA400 since I have limited time. I am **half way through** writing my user manual now and will be moving on to the **technical specification** and **video walkthrough** next.
+
+****
+
 ## Project Play Tracking, Sharing and Resource & Project List Styling
 #### 5th April 2018
 
