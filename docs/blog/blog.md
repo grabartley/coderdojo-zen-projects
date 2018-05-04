@@ -5,6 +5,7 @@
 ****
 
 ## Second User Evaluation & Finishing Development
+#### 4th May 2018
 
 Since my last post I've been working on **finishing up development** to move on to writing documentation and preparing for my demonstration. I also carried out **another user evaluation** on a more general user group with **more participants** than the first one. I will go into detail on the user evaluation further on in this post. I've made a lot of **changes and improvements** to my code so I wont be able to talk about all of them in this post but I will talk about the **main changes**. For a full list of my changes, please check my commits as I give fairly comprehensive descriptions in my commit messages.
 
