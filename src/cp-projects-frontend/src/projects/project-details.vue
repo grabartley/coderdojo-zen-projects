@@ -144,14 +144,6 @@
             {{ projectData.description }}
           </div>
         </div>
-        <div class="project-details__information-content-section">
-          <div class="project-details__information-content-section-title">
-            Badges
-          </div>
-          <div class="project-details__information-content-section-content">
-            Badges have not been integrated yet!
-          </div>
-        </div>
       </div>
     </div>
     <div v-else class="project-details__deleted">
