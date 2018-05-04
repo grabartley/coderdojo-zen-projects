@@ -7,9 +7,9 @@ let GITHUB_REST_API;
 let API_TOKEN;
 let USER_AGENT;
 
-// sets up objects to use when making API calls using access token of the given user
+// sets up objects to use when making API calls using access token of the given dojo
 async function setupApiWithAccess(dojoId) {
-  // get the access token for this user
+  // get the access token for this dojo
   API_TOKEN = (await dbService.query({
     text: 'SELECT github_access_token FROM github_integrations WHERE dojo_id=$1;',
     values: [dojoId],
@@ -21,7 +21,7 @@ async function setupApiWithAccess(dojoId) {
   });
   
   // get the user agent (username) for this user
-  let userAgentResponse = await GITHUB_GRAPHQL_API.query(`
+  const userAgentResponse = await GITHUB_GRAPHQL_API.query(`
   {
       viewer {
         login
@@ -33,7 +33,7 @@ async function setupApiWithAccess(dojoId) {
   // set up the object for v3 API calls
   GITHUB_REST_API = axios.create({
     baseURL: 'https://api.github.com',
-    timeout: 5000,
+    timeout: 10000,
     headers: {
       'Content-Type': 'application/json',
       'User-Agent': USER_AGENT,
@@ -46,7 +46,7 @@ async function setupApiWithAccess(dojoId) {
 async function getAccessToken(githubData) {
   const GITHUB_REST_API = axios.create({
     baseURL: 'https://github.com',
-    timeout: 5000,
+    timeout: 10000,
     headers: {
       'Content-Type': 'application/json',
     }
@@ -147,7 +147,7 @@ async function pushTreeToRepo(treeData) {
   
   // data to POST to commit endpoint
   const apiCommitData = {
-    message: 'update',
+    message: 'Update',
     tree: treeResponse.data.sha,
     parents: [branchResponse.data.commit.sha],
   };
@@ -159,7 +159,7 @@ async function pushTreeToRepo(treeData) {
   const apiMergeData = {
     base: treeData.branch,
     head: commitResponse.data.sha,
-    commit_message: 'update',
+    commit_message: 'Merge update',
   };
   
   // merge the tree into the branch

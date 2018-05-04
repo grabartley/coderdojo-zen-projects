@@ -115,27 +115,32 @@
       Pagination,
     },
     computed: {
-      // url to start GitHub integration (localhost for now)
+      // url to start GitHub integration (redirect_uri is specified when creating the OAuth app on GitHub)
       githubAuthUrl() {
         return `https://github.com/login/oauth/authorize?scope=public_repo&client_id=${this.githubClientId}&redirect_uri=http://localhost:8080/dojos/integrations/github?dojoId=${this.$route.params.dojoId}`;
       },
+      // project data to display on this page
       paginatedProjectData() {
         const firstIndex = (this.currentPage - 1) * this.projectsPerPage;
         const lastIndex = firstIndex + this.projectsPerPage;
         return this.projectData.slice(firstIndex, lastIndex);
       },
+      // number of first on page
       firstOnPage() {
         return 1 + (this.projectsPerPage * (this.currentPage - 1));
       },
+      // number of last on page
       lastOnPage() {
         let result = this.firstOnPage + (this.projectsPerPage - 1);
         return result <= this.projectData.length ? result : this.projectData.length;
       },
     },
     methods: {
+      // redirects to the edit project page for the project with the given project id
       editProject(projectId) {
         this.$router.push(`/edit-project/${projectId}`);
       },
+      // removes the GitHub integration from this Dojo
       async removeGitHubIntegration() {
         // if not already removing GitHub integration
         if (!this.removingGitHubIntegration) {
@@ -147,29 +152,23 @@
     },
     async created() {
       const dojoId = this.$route.params.dojoId;
-      
       // check is the logged in user a champion of this dojo
       const loggedInUserId = this.$cookie.get('loggedIn');
       this.isLoggedInUserChampion = (await userService.isUserChampion(loggedInUserId, dojoId)).body;
       this.isLoggedInUserCDFAdmin = (await userService.isUserCDFAdmin(loggedInUserId)).body;
-      
       // redirect user away if they are not authorized to be here
       if (!(this.isLoggedInUserChampion || this.isLoggedInUserCDFAdmin)) {
         this.$router.push('/');
       }
-      
       // get the dojo data
       this.dojoData = (await dojoService.getDojoById(dojoId)).body;
-      
       // check if GitHub has been integrated for this dojo
       this.isGitHubIntegrated = (await dojoService.isGitHubIntegrated(dojoId)).body;
-      
       // get the projects for this dojo
       if (this.isGitHubIntegrated) {
         this.projectData = (await projectService.getProjectsForDojo(dojoId, true)).body;
         this.fullProjectData = this.projectData;
       }
-      
       // pagination event handler
       PaginationEvent.$on('vue-pagination::projects-pagination', (page) => {
         this.currentPage = page;
@@ -177,14 +176,18 @@
     },
     watch: {
       searchQuery: {
+        // when a new search query is entered
         handler(newSearchQuery, prevSearchQuery) {
+          // searches are not case sensitive
           const searchQuery = newSearchQuery.toUpperCase();
           let newProjectData = [];
+          // find relevant projects and push them to newProjectData
           this.fullProjectData.forEach((project) => {
             if (project.name.toUpperCase().includes(searchQuery) || project.description.toUpperCase().includes(searchQuery)) {
               newProjectData.push(project);
             }
           });
+          // set projectData to the found projects and reset pagination
           this.projectData = newProjectData;
           this.$refs.pagination.setPage(1);
         },

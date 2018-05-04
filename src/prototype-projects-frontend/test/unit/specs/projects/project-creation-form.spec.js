@@ -17,7 +17,7 @@ describe('ProjectCreationForm', () => {
       getUsersDojosWithGitHub: sinon.stub(),
     };
     userServiceMock = {
-      getUserData: sinon.stub(),
+      getUserById: sinon.stub(),
     };
     projectCreationFormWithMocks = ProjectCreationForm({
       '@/projects/service': projectServiceMock,
@@ -259,7 +259,7 @@ describe('ProjectCreationForm', () => {
         ]
       };
       projectCreationForm.$cookie.get.withArgs('loggedIn').returns('1234-5678');
-      userServiceMock.getUserData.withArgs('1234-5678').resolves(userDataResponseMock);
+      userServiceMock.getUserById.withArgs('1234-5678').resolves(userDataResponseMock);
       dojoServiceMock.getUsersDojosWithGitHub.withArgs('1234-5678').resolves(usersDojosWithGitHubResponseMock);
       
       // ACT
@@ -267,7 +267,7 @@ describe('ProjectCreationForm', () => {
       
       // ASSERT
       expect(projectCreationForm.loggedInUserId).to.equal('1234-5678');
-      expect(userServiceMock.getUserData).to.have.been.calledWith('1234-5678');
+      expect(userServiceMock.getUserById).to.have.been.calledWith('1234-5678');
       expect(projectCreationForm.$router.push).to.not.have.been.called;
       expect(dojoServiceMock.getUsersDojosWithGitHub).to.have.been.calledWith('1234-5678');
       expect(projectCreationForm.usersDojos).to.deep.equal(usersDojosWithGitHubResponseMock.body);
@@ -289,7 +289,7 @@ describe('ProjectCreationForm', () => {
       // ASSERT
       expect(projectCreationForm.loggedInUserId).to.equal(null);
       expect(projectCreationForm.$router.push).to.have.been.calledWith('/');
-      expect(userServiceMock.getUserData).to.not.have.been.called;
+      expect(userServiceMock.getUserById).to.not.have.been.called;
       expect(dojoServiceMock.getUsersDojosWithGitHub).to.to.not.have.been.called;
       expect(projectCreationForm.usersDojos).to.equal(null);
     });
@@ -308,14 +308,14 @@ describe('ProjectCreationForm', () => {
         }
       };
       projectCreationForm.$cookie.get.withArgs('loggedIn').returns('5678-1234');
-      userServiceMock.getUserData.withArgs('5678-1234').resolves(userDataResponseMock);
+      userServiceMock.getUserById.withArgs('5678-1234').resolves(userDataResponseMock);
       
       // ACT
       await projectCreationForm.$lifecycleMethods.created();
       
       // ASSERT
       expect(projectCreationForm.loggedInUserId).to.equal('5678-1234');
-      expect(userServiceMock.getUserData).to.have.been.calledWith('5678-1234');
+      expect(userServiceMock.getUserById).to.have.been.calledWith('5678-1234');
       expect(projectCreationForm.$router.push).to.have.been.calledWith('/');
       expect(dojoServiceMock.getUsersDojosWithGitHub).to.to.not.have.been.called;
       expect(projectCreationForm.usersDojos).to.equal(null);

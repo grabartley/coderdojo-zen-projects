@@ -183,6 +183,7 @@
       };
     },
     computed: {
+      // returns the path to the image for each project type
       projectTypeImage() {
         switch (this.projectData.type) {
           case ('python'):
@@ -197,6 +198,7 @@
             return '';
         }
       },
+      // returns the type name for each project type
       projectType() {
         switch (this.projectData.type) {
           case ('python'):
@@ -211,25 +213,31 @@
             return '';
         }
       },
+      // returns the projects last updated time in a readable format in the users timezone
       lastUpdatedTime() {
         return moment(this.projectData.updated_at || this.projectData.created_at).add(moment().utcOffset(), 'minutes').format('h:mma');
       },
+      // returns the projects last updated date in a readable format in the users timezone
       lastUpdatedDate() {
         return moment(this.projectData.updated_at || this.projectData.created_at).add(moment().utcOffset(), 'minutes').format('Do of MMMM YYYY');
       },
+      // returns the link to this project on GitHub pages (for HTML5 projects)
       githubPagesLink() {
         let githubAccount = this.projectData.github_url.split('/');
         githubAccount = githubAccount[githubAccount.length - 2]
         return `https://${githubAccount}.github.io/${this.projectData.project_id}`;
       },
+      // returns the number of plays formatted for viewing in the users locale
       formattedPlays() {
         return parseInt(this.projectData.plays).toLocaleString();
       },
     },
     methods: {
+      // redirects to the edit project page for this project
       editProject() {
         this.$router.push(`/edit-project/${this.projectData.project_id}`);
       },
+      // redirects to the Dojo details page for the given Dojo id
       viewDojo(dojoId) {
         this.$router.push(`/dojos/${dojoId}`);
       },
@@ -238,19 +246,15 @@
       // get project data by id
       const projectId = this.$route.params.projectId;
       this.projectData = (await projectService.getProjectById(projectId)).body;
-      
       // get project plays by id
       const projectStatistics = (await projectService.getProjectStatisticsById(projectId)).body;
       this.projectData.plays = projectStatistics.plays;
-      
       // if the project is a HTML5 project, increment the plays for the project
       if (this.projectData.type === 'html') {
         await projectService.incrementProjectPlays(projectId);
       }
-      
       // get dojo data using the GitHub integration id
       this.dojoData = (await dojoService.getDojoByGitHubId(this.projectData.github_integration_id)).body;
-      
       // check if the logged in user owns this project or is CDF Admin
       const loggedInUserId = this.$cookie.get('loggedIn');
       if (this.projectData.user_id === loggedInUserId) {

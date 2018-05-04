@@ -52,6 +52,7 @@ export default {
     },
   },
   methods: {
+    // tells the backend to spawn project container and sets up terminal
     runProject() {
       // tell the backend to spawn a container for this project
       this.$socket.emit('start', this.projectData.project_id);

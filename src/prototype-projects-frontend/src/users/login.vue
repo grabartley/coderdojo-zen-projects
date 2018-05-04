@@ -39,11 +39,11 @@
       // if all fields are valid, make the API call to login the user and if successful, give them a login cookie to emulate login and redirect them
       async login() {
         if (this.isValid()) {
-          let loginData = {
+          const loginData = {
             email: this.email,
             password: this.password,
           };
-          let response = await userService.login(loginData);
+          const response = await userService.login(loginData);
           if (response.body) {
             this.loginFailed = false;
             this.$cookie.set('loggedIn', response.body.id);

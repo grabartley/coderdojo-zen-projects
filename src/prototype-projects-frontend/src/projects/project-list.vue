@@ -102,20 +102,24 @@ export default {
     Pagination,
   },
   computed: {
+    // project data to display on this page
     paginatedProjectData() {
       const firstIndex = (this.currentPage - 1) * this.projectsPerPage;
       const lastIndex = firstIndex + this.projectsPerPage;
       return this.projectData.slice(firstIndex, lastIndex);
     },
+    // number of first on page
     firstOnPage() {
       return 1 + (this.projectsPerPage * (this.currentPage - 1));
     },
+    // number of last on page
     lastOnPage() {
       let result = this.firstOnPage + (this.projectsPerPage - 1);
       return result <= this.projectData.length ? result : this.projectData.length;
     },
   },
   methods: {
+    // returns the number of plays formatted for viewing in the users locale
     formattedPlays(plays) {
       return parseInt(plays).toLocaleString();
     },
@@ -127,25 +131,19 @@ export default {
   async created() {
     // get the project data to display in the list
     this.projectData = (await projectService.getProjectData()).body;
-    
     // backup the project data for use in searching
     this.fullProjectData = this.projectData;
-    
     // get the most played projects
     this.mostPlayedProjects = (await projectService.getProjectData(false, 'plays', 'desc', 5)).body;
-    
     // get the recently updated projects
     this.recentlyUpdatedProjects = (await projectService.getProjectData(false, 'updated_at', 'desc', 5)).body;
-    
     // get the newly created projects
     this.newlyCreatedProjects = (await projectService.getProjectData(false, 'created_at', 'desc', 5)).body;
-    
     // get the logged in user (if there is one)
     const userId = this.$cookie.get('loggedIn');
     if (userId) {
-      this.loggedInUser = (await userService.getUserData(userId)).body;
+      this.loggedInUser = (await userService.getUserById(userId)).body;
     }
-    
     // pagination event handler
     PaginationEvent.$on('vue-pagination::projects-pagination', (page) => {
       this.currentPage = page;
@@ -153,14 +151,18 @@ export default {
   },
   watch: {
     searchQuery: {
+      // when a new search query is entered
       handler(newSearchQuery, prevSearchQuery) {
+        // searches are not case sensitive
         const searchQuery = newSearchQuery.toUpperCase();
         let newProjectData = [];
+        // find relevant projects and push them to newProjectData
         this.fullProjectData.forEach((project) => {
           if (project.name.toUpperCase().includes(searchQuery) || project.description.toUpperCase().includes(searchQuery)) {
             newProjectData.push(project);
           }
         });
+        // set projectData to the found projects and reset pagination
         this.projectData = newProjectData;
         this.$refs.pagination.setPage(1);
       },

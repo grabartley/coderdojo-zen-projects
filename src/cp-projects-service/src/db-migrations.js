@@ -1,5 +1,6 @@
 import Postgrator from 'postgrator';
 
+// run all database migrations that have not already been run
 function migrate() {
   const postgrator = new Postgrator({
     migrationDirectory: './db/migrations',

@@ -66,8 +66,8 @@ describe('GitHubCallback', () => {
   });
 
   describe('methods', () => {
-    describe('getAccessToken', () => {
-      it('should call the dojo service function to get the access token', () => {
+    describe('integrateGitHub', () => {
+      it('should call the dojo service function to complete GitHub integration', () => {
         // ARRANGE
         let githubCallback = vueUnitHelper(githubCallbackWithMocks);
         githubCallback.githubClientId = 'testClientId';
@@ -80,7 +80,7 @@ describe('GitHubCallback', () => {
         };
         
         // ACT
-        githubCallback.getAccessToken();
+        githubCallback.integrateGitHub();
         
         // ASSERT
         expect(dojoServiceMock.completeGitHubIntegration).to.have.been.calledWith('testDojoId', 'testLoggedInUserId', expectedGitHubData);
@@ -89,20 +89,20 @@ describe('GitHubCallback', () => {
   });
   
   describe('created', () => {
-    it('should call getAccessToken and redirect to the dojo admin panel', async () => {
+    it('should call integrateGitHub and redirect to the dojo admin panel', async () => {
       // ARRANGE
       let githubCallback = vueUnitHelper(GitHubCallback());
       githubCallback.dojoId = '5678-1234';
       githubCallback.$router = {
         push: sandbox.spy(),
       };
-      sandbox.stub(githubCallback, 'getAccessToken');
+      sandbox.stub(githubCallback, 'integrateGitHub');
       
       // ACT
       await githubCallback.$lifecycleMethods.created();
       
       // ASSERT
-      expect(githubCallback.getAccessToken).to.have.been.calledOnce;
+      expect(githubCallback.integrateGitHub).to.have.been.calledOnce;
       expect(githubCallback.$router.push).to.have.been.calledWith('/admin-panel/5678-1234');
     });
   });

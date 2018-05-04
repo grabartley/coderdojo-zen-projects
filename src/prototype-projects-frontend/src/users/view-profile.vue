@@ -62,6 +62,7 @@
       };
     },
     methods: {
+      // returns the path to the image for the given project type
       projectTypeImage(type) {
         switch (type) {
           case ('python'):
@@ -78,24 +79,25 @@
             return '';
         }
       },
+      // redirects to the project details page for the given project id
       viewProject(projectId) {
         this.$router.push(`/project/${projectId}`);
       },
+      // redirects to the project creation form
       createProject() {
         this.$router.push('/create-project');
       },
+      // redirects to the Dojo details page for the given Dojo id
       viewDojo(dojoId) {
         this.$router.push(`/dojos/${dojoId}`);
       },
     },
     async created() {
       const userId = this.$route.params.userId;
-      
       // get user, dojo and project data
-      this.userData = (await userService.getUserData(userId)).body;
+      this.userData = (await userService.getUserById(userId)).body;
       this.usersDojos = (await dojoService.getUsersDojos(userId)).body;
       this.usersProjects = (await projectService.getProjectsForUser(userId)).body;
-      
       // check if logged in user is viewing their own profile
       const loggedInUserId = this.$cookie.get('loggedIn');
       if (loggedInUserId) {
