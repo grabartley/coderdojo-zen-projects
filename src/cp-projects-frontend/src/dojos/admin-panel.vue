@@ -5,6 +5,11 @@
       <div class="admin-panel__banner-subtitle">Administrator Panel</div>
     </div>
     <div class="admin-panel__content">
+      <div class="admin-panel__content-actions">
+        <button class="admin-panel__content-actions-button" @click="viewDojo">
+          <span class="fas fa-eye"></span>
+        </button>
+      </div>
       <div v-if="projectData" class="admin-panel__content-section">
         <div class="admin-panel__content-section-title">
           Manage Projects
@@ -136,6 +141,10 @@
       },
     },
     methods: {
+      // redirects to the Dojo details page for this Dojo
+      viewDojo() {
+        this.$router.push(`/dojos/${this.$route.params.dojoId}`);
+      },
       // redirects to the edit project page for the project with the given project id
       editProject(projectId) {
         this.$router.push(`/edit-project/${projectId}`);
@@ -210,8 +219,25 @@
       }
     }
     &__content {
-      padding: 40px 30px 10px 30px;
+      padding: 20px 30px 10px 30px;
       text-align: left;
+      &-actions {
+        text-align: right;
+        &-button {
+          width: 50px;
+          height: 30px;
+          font-size: 16px;
+          color: #73449B;
+          background-color: #FFFFFF;
+          border: solid 1px #73449B;
+          border-radius: 4px;
+          &:hover {
+            cursor: pointer;
+            color: #FFFFFF;
+            background-color: #73449B;
+          }
+        }
+      }
       &-section {
         margin-bottom: 40px;
         &-title {

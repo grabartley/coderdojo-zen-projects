@@ -140,6 +140,26 @@ describe('AdminPanel', () => {
   });
   
   describe('methods', () => {
+    describe('viewDojo', () => {
+      it('should redirect the user to the Dojo details page for this Dojo', () => {
+        // ARRANGE
+        let adminPanel = vueUnitHelper(adminPanelWithMocks);
+        adminPanel.$route = {
+          params: {
+            dojoId: '1234-5678',
+          },
+        };
+        adminPanel.$router = {
+          push: sandbox.spy(),
+        };
+        
+        // ACT
+        adminPanel.viewDojo();
+        
+        // ASSERT
+        expect(adminPanel.$router.push).to.have.been.calledWith('/dojos/1234-5678');
+      });
+    });
     describe('editProject', () => {
       it('should redirect the user to edit the project with the given project id', () => {
         // ARRANGE
