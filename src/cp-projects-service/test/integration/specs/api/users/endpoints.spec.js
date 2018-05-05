@@ -36,7 +36,7 @@ describe('Users API', () => {
           if (err) return done(err);
           done();
         });
-    });
+    }).timeout(10000);
     it('should not get the profile for a user id which doesn\'t exist', (done) => {
       const userIdMock = '1234-5678';
       request(serverInstance)
@@ -49,7 +49,7 @@ describe('Users API', () => {
           if (err) return done(err);
           done();
         });
-    });
+    }).timeout(10000);
   });
   describe('GET /api/2.0/users/is-champion/:userId/:dojoId', () => {
     it('should return true for a champion', (done) => {
@@ -65,7 +65,7 @@ describe('Users API', () => {
           if (err) return done(err);
           done();
         });
-    });
+    }).timeout(10000);
     it('should return false if not a champion', (done) => {
       const userIdMock = 'ff67df02-6cbd-29c6-b2df-283e5136afec';
       const dojoIdMock = '18d376b4-22a4-ed8d-7355-9034bb7b0034';
@@ -79,7 +79,7 @@ describe('Users API', () => {
           if (err) return done(err);
           done();
         });
-    });
+    }).timeout(10000);
     it('should return false for an invalid dojo id', (done) => {
       const userIdMock = 'ff67df02-6cbd-29c6-b2df-283e5136afec';
       const dojoIdMock = '1234-5678';
@@ -93,7 +93,7 @@ describe('Users API', () => {
           if (err) return done(err);
           done();
         });
-    });
+    }).timeout(10000);
   });
   describe('GET /api/2.0/users/is-cdf-admin/:userId', () => {
     it('should return true for a CDF Admin', (done) => {
@@ -108,7 +108,7 @@ describe('Users API', () => {
           if (err) return done(err);
           done();
         });
-    });
+    }).timeout(10000);
     it('should return false if not a CDF Admin', (done) => {
       const userIdMock = '12a4df02-6cbd-40b0-b2df-2531b136afec';
       request(serverInstance)
@@ -121,7 +121,7 @@ describe('Users API', () => {
           if (err) return done(err);
           done();
         });
-    });
+    }).timeout(10000);
     it('should return false for an invalid user id', (done) => {
       const userIdMock = '1234-5678';
       request(serverInstance)
@@ -134,7 +134,7 @@ describe('Users API', () => {
           if (err) return done(err);
           done();
         });
-    });
+    }).timeout(10000);
   });
   describe('POST /api/2.0/users/login', () => {
     it('should return user data for the given user id', (done) => {
@@ -158,6 +158,6 @@ describe('Users API', () => {
           if (err) return done(err);
           done();
         });
-    });
+    }).timeout(10000);
   });
 });

@@ -44,7 +44,7 @@ describe('Projects API', () => {
           if (err) return done(err);
           done();
         });
-    });
+    }).timeout(10000);
     it('should not get project data for an invalid project id', (done) => {
       const projectIdMock = '1234-5678';
       request(serverInstance)
@@ -57,7 +57,7 @@ describe('Projects API', () => {
           if (err) return done(err);
           done();
         });
-    });
+    }).timeout(10000);
   });
   describe('GET /api/2.0/projects/project-statistics/:projectId', () => {
     it('should get the project statistics data for a given project id', (done) => {
@@ -76,7 +76,7 @@ describe('Projects API', () => {
           if (err) return done(err);
           done();
         });
-    });
+    }).timeout(10000);
     it('should not get project statistics data for an invalid project id', (done) => {
       const projectIdMock = '1234-5678';
       request(serverInstance)
@@ -89,7 +89,7 @@ describe('Projects API', () => {
           if (err) return done(err);
           done();
         });
-    });
+    }).timeout(10000);
   });
   describe('GET /api/2.0/projects/project-data', () => {
     it('should get all project data', (done) => {
@@ -314,7 +314,7 @@ describe('Projects API', () => {
           if (err) return done(err);
           done();
         });
-    });
+    }).timeout(10000);
     it('should get sorted project data', (done) => {
       let deletedMock = false;
       let sortedByMock = 'plays';
@@ -500,7 +500,7 @@ describe('Projects API', () => {
           if (err) return done(err);
           done();
         });
-    });
+    }).timeout(10000);
   });
   describe('GET /api/2.0/projects/projects-for-dojo/:dojoId', () => {
     it('should get the project data for a given dojo id', (done) => {
@@ -726,7 +726,7 @@ describe('Projects API', () => {
           if (err) return done(err);
           done();
         });
-    });
+    }).timeout(10000);
     it('should not get project data for an invalid dojo id', (done) => {
       const dojoIdMock = '1234-5678';
       request(serverInstance)
@@ -739,7 +739,7 @@ describe('Projects API', () => {
           if (err) return done(err);
           done();
         });
-    });
+    }).timeout(10000);
   });
   describe('GET /api/2.0/projects/projects-for-user/:userId', () => {
     it('should get the projects for a given user id', (done) => {
@@ -815,7 +815,7 @@ describe('Projects API', () => {
           if (err) return done(err);
           done();
         });
-    });
+    }).timeout(10000);
     it('should not get projects for an invalid user id', (done) => {
       const userIdMock = '1234-5678';
       request(serverInstance)
@@ -828,7 +828,7 @@ describe('Projects API', () => {
           if (err) return done(err);
           done();
         });
-    });
+    }).timeout(10000);
   });
   describe('POST /api/2.0/projects/create-project', () => {
     it('should not create a project with invalid data', (done) => {
@@ -846,7 +846,7 @@ describe('Projects API', () => {
           if (err) return done(err);
           done();
         });
-    });
+    }).timeout(10000);
   });
   describe('POST /api/2.0/projects/update-project', () => {
     it('should not create a project with invalid data', (done) => {
@@ -864,7 +864,7 @@ describe('Projects API', () => {
           if (err) return done(err);
           done();
         });
-    });
+    }).timeout(10000);
   });
   describe('POST /api/2.0/projects/increment-project-plays', () => {
     it('should increment the project plays by 1 for a project id', (done) => {
@@ -882,7 +882,7 @@ describe('Projects API', () => {
           if (err) return done(err);
           done();
         });
-    });
+    }).timeout(10000);
     it('should not increment the project plays for an invalid project id', (done) => {
       const payload = {
         projectId: '1234-5678',
@@ -898,7 +898,7 @@ describe('Projects API', () => {
           if (err) return done(err);
           done();
         });
-    });
+    }).timeout(10000);
   });
   describe('POST /api/2.0/projects/delete-project', () => {
     it('should set deleted at time for the given project id', (done) => {
@@ -916,6 +916,6 @@ describe('Projects API', () => {
           if (err) return done(err);
           done();
         });
-    });
+    }).timeout(10000);
   });
 });
