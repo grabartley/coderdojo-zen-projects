@@ -34,7 +34,7 @@ describe('Dojos API', () => {
           if (err) return done(err);
           done();
         });
-    });
+    }).timeout(10000);
     it('should not get the dojo data for a dojo id which doesn\'t exist', (done) => {
       const dojoIdMock = '1234-5678';
       request(serverInstance)
@@ -47,7 +47,7 @@ describe('Dojos API', () => {
           if (err) return done(err);
           done();
         });
-    });
+    }).timeout(10000);
   });
   describe('GET /api/2.0/dojos/dojos-for-user/:userId', () => {
     it('should return the dojo data for the joined dojos of the given user', (done) => {
@@ -68,7 +68,7 @@ describe('Dojos API', () => {
           if (err) return done(err);
           done();
         });
-    });
+    }).timeout(10000);
   });
   describe('GET /api/2.0/dojos/dojos-for-user-with-github/:userId', () => {
     it('should return the dojo data for the joined dojos of the given user which have GitHub integrated', (done) => {
@@ -89,7 +89,7 @@ describe('Dojos API', () => {
           if (err) return done(err);
           done();
         });
-    });
+    }).timeout(10000);
   });
   describe('GET /api/2.0/dojos/dojo-by-github-integration/:githubId', () => {
     it('should return the dojo data for the given github integration id', (done) => {
@@ -108,7 +108,7 @@ describe('Dojos API', () => {
           if (err) return done(err);
           done();
         });
-    });
+    }).timeout(10000);
     it('should not return dojo data for a github integration id that doesn\'t exist', (done) => {
       const githubIdMock = '1234-5678';
       request(serverInstance)
@@ -121,7 +121,7 @@ describe('Dojos API', () => {
           if (err) return done(err);
           done();
         });
-    });
+    }).timeout(10000);
   });
   describe('GET /api/2.0/dojos/is-github-integrated/:dojoId', () => {
     it('should return true for dojo which has github integrated', (done) => {
@@ -136,7 +136,7 @@ describe('Dojos API', () => {
           if (err) return done(err);
           done();
         });
-    });
+    }).timeout(10000);
     it('should return false for dojo which does not have github integrated', (done) => {
       const dojoIdMock = '7382a5ff-bce6-9200-b3d2-aa76b12106b5';
       request(serverInstance)
@@ -149,7 +149,7 @@ describe('Dojos API', () => {
           if (err) return done(err);
           done();
         });
-    });
+    }).timeout(10000);
   });
   describe('POST /api/2.0/dojos/:dojoId/:userId/integrations/github', () => {
     it('should not create a github integration for an invalid payload', (done) => {
@@ -186,6 +186,6 @@ describe('Dojos API', () => {
           if (err) return done(err);
           done();
         });
-    });
+    }).timeout(10000);
   });
 });
