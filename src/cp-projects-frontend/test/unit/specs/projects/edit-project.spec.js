@@ -5,6 +5,7 @@ describe('EditProject', () => {
   let sandbox;
   let projectServiceMock;
   let userServiceMock;
+  let dojoServiceMock;
   let editProjectWithMocks;
   beforeEach(() => {
     sandbox = sinon.sandbox.create();
@@ -14,11 +15,16 @@ describe('EditProject', () => {
       deleteProjectById: sinon.stub(),
     };
     userServiceMock = {
+      isUserChampion: sinon.stub(),
       isUserCDFAdmin: sinon.stub(),
+    };
+    dojoServiceMock = {
+      getDojoByGitHubId: sinon.stub(),
     };
     editProjectWithMocks = EditProject({
       '@/projects/service': projectServiceMock,
       '@/users/service': userServiceMock,
+      '@/dojos/service': dojoServiceMock,
     });
   });
   afterEach(() => {
@@ -314,6 +320,14 @@ describe('EditProject', () => {
           deleted_at: null,
         }
       };
+      const dojoDataMock = {
+        body: {
+          id: '4321-5678',
+        },
+      };
+      const isLoggedInUserChampionMock = {
+        body: false,
+      };
       const isLoggedInUserCDFAdminMock = {
         body: false,
       };
@@ -330,6 +344,8 @@ describe('EditProject', () => {
       };
       editProject.$cookie.get.withArgs('loggedIn').returns('5678-1234');
       projectServiceMock.getProjectById.withArgs(projectIdMock).resolves(projectDataMock);
+      dojoServiceMock.getDojoByGitHubId.withArgs('8765-4321').resolves(dojoDataMock);
+      userServiceMock.isUserChampion.withArgs('5678-1234', '4321-5678').resolves(isLoggedInUserChampionMock);
       userServiceMock.isUserCDFAdmin.withArgs('5678-1234').resolves(isLoggedInUserCDFAdminMock);
       
       // ACT
@@ -338,6 +354,7 @@ describe('EditProject', () => {
       // ASSERT
       expect(editProject.projectData).to.equal(projectDataMock.body);
       expect(editProject.currentUser).to.equal('5678-1234');
+      expect(editProject.isLoggedInUserChampion).to.equal(false);
       expect(editProject.isLoggedInUserCDFAdmin).to.equal(false);
       expect(editProject.$router.push).to.not.have.been.called;
       expect(editProject.name).to.equal('Test Project');
@@ -366,6 +383,14 @@ describe('EditProject', () => {
           deleted_at: null,
         }
       };
+      const dojoDataMock = {
+        body: {
+          id: '4321-5678',
+        },
+      };
+      const isLoggedInUserChampionMock = {
+        body: false,
+      };
       const isLoggedInUserCDFAdminMock = {
         body: false,
       };
@@ -382,6 +407,8 @@ describe('EditProject', () => {
       };
       editProject.$cookie.get.withArgs('loggedIn').returns('8765-4321');
       projectServiceMock.getProjectById.withArgs(projectIdMock).resolves(projectDataMock);
+      dojoServiceMock.getDojoByGitHubId.withArgs('8765-4321').resolves(dojoDataMock);
+      userServiceMock.isUserChampion.withArgs('8765-4321', '4321-5678').resolves(isLoggedInUserChampionMock);
       userServiceMock.isUserCDFAdmin.withArgs('8765-4321').resolves(isLoggedInUserCDFAdminMock);
       
       // ACT
@@ -389,6 +416,7 @@ describe('EditProject', () => {
       
       // ASSERT
       expect(editProject.currentUser).to.equal(null);
+      expect(editProject.isLoggedInUserChampion).to.equal(false);
       expect(editProject.isLoggedInUserCDFAdmin).to.equal(false);
       expect(editProject.$router.push).to.have.been.calledWith('/');
     });

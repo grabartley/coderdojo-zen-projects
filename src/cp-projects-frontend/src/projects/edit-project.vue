@@ -103,6 +103,7 @@
 <script>
   import projectService from '@/projects/service';
   import userService from '@/users/service';
+  import dojoService from '@/dojos/service';
 
   export default {
     name: 'EditProject',
@@ -122,6 +123,7 @@
         deletingProjectConfirmation: false,
         deletingProject: false,
         currentUser: null,
+        isLoggedInUserChampion: false,
         isLoggedInUserCDFAdmin: false,
       };
     },
@@ -200,14 +202,16 @@
       const projectId = this.$route.params.projectId;
       // get project data based on id
       this.projectData = (await projectService.getProjectById(projectId)).body;
-      // check if the logged in user owns this project or is CDF Admin
+      // check if the logged in user is authorized to be here
       const loggedInUserId = this.$cookie.get('loggedIn');
       if (this.projectData.user_id === loggedInUserId) {
         this.currentUser = loggedInUserId;
       }
+      const dojoId = (await dojoService.getDojoByGitHubId(this.projectData.github_integration_id)).body.id;
+      this.isLoggedInUserChampion = (await userService.isUserChampion(loggedInUserId, dojoId)).body;
       this.isLoggedInUserCDFAdmin = (await userService.isUserCDFAdmin(loggedInUserId)).body;
       // redirect away if not authorized to be here
-      if (!(this.currentUser || this.isLoggedInUserCDFAdmin)) {
+      if (!(this.currentUser || this.isLoggedInUserChampion || this.isLoggedInUserCDFAdmin)) {
         this.$router.push('/');
       }
       // set field values based on current values
