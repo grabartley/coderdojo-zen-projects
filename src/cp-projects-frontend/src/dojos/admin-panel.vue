@@ -39,9 +39,12 @@
                       </router-link>
                       <div class="admin-panel__content-section-content-projects-list-items-item-information-description">{{ project.description }}</div>
                     </div>
-                    <span v-if="project.deleted_at" class="admin-panel__content-section-content-projects-list-items-item-deleted fas fa-ban"></span>
                     <div class="admin-panel__content-section-content-projects-list-items-item-actions">
-                      <button class="admin-panel__content-section-content-projects-list-items-item-actions-button" @click="editProject(project.project_id)">
+                      <div v-if="project.deleted_at" class="admin-panel__content-section-content-projects-list-items-item-actions-deleted">
+                        <span class="fas fa-ban"></span>
+                        <span>Deleted</span>
+                      </div>
+                      <button v-else class="admin-panel__content-section-content-projects-list-items-item-actions-button" @click="editProject(project.project_id)">
                         <span class="fas fa-edit"></span>
                       </button>
                     </div>
@@ -297,11 +300,6 @@
                   &:first-child {
                     border-top: solid 1px #bdbfbf;
                   }
-                  &-deleted {
-                    margin-right: 16px;
-                    font-size: 18px;
-                    color: #9B1C20;
-                  }
                   &-information {
                     flex: 10;
                     margin-right: 30px;
@@ -318,7 +316,10 @@
                     }
                   }
                   &-actions {
-                    flex: 1;
+                    &-deleted {
+                      color: #9B1C20;
+                      font-size: 18px;
+                    }
                     &-button {
                       width: 50px;
                       height: 30px;
