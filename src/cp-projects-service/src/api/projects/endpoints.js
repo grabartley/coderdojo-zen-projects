@@ -316,7 +316,7 @@ function registerEndpoints(app) {
       let queryValues = projectData.values;
       
       // ensure entrypoint is not malformed
-      if (!(/^([a-zA-Z0-9\-\_])+\.([a-zA-Z])+$/.test(projectData.entrypoint))) {
+      if (!(/^([a-zA-Z0-9\-\_])+\.([a-zA-Z])+$/.test(queryValues[3]))) {
         throw {
           message: 'Error',
         };
