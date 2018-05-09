@@ -11,10 +11,10 @@
             <span>github</span>
           </div>
           <div v-if="isGitHubIntegrated" class="dojo-details__information-sidebar-item-data">
-            GitHub is integrated for this Dojo!
+            <span class="dojo-details__information-sidebar-item-data-github dojo-details__information-sidebar-item-data-github--yes fas fa-check"></span>
           </div>
           <div v-else class="dojo-details__information-sidebar-item-data">
-            GitHub has not been integrated for this Dojo!
+            <span class="dojo-details__information-sidebar-item-data-github dojo-details__information-sidebar-item-data-github--no fas fa-times"></span>
           </div>
         </div>
       </div>
@@ -183,6 +183,17 @@
           }
           &-data {
             margin-top: 4px;
+            &-github {
+              margin-top: 8px;
+              margin-left: 24px;
+              font-size: 32px;
+              &--yes {
+                color: #2eb82e;
+              }
+              &--no {
+                color: #9B1C20;
+              }
+            }
           }
         }
       }
