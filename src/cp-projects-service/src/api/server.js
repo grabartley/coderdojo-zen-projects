@@ -2,7 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import http from 'http';
-import migrations from '../db-migrations';
+import migrations from '../../db/db-migrations';
 import projectEndpoints from './projects/endpoints';
 import userEndpoints from './users/endpoints';
 import dojoEndpoints from './dojos/endpoints';

@@ -1,11 +1,24 @@
 import chai from 'chai';
+import sinon from 'sinon';
 import request from 'supertest';
+import proxyquire from 'proxyquire';
 import server from '../../../../../src/api/server';
 import testData from '../../../../../db/test-data';
 const expect = chai.expect;
 
 describe('Dojos API', () => {
   let serverInstance;
+  const endpointsDependencyMocks = {
+    '../../services/github-service': {
+      getAccessToken: sinon.stub(),
+    },
+  };
+  endpointsDependencyMocks['../../services/github-service'].getAccessToken.returns('data=exampleAccessToken&data');
+  const endpoints = proxyquire('../../../../../src/api/dojos/endpoints', endpointsDependencyMocks);
+  const serverDependencyMocks = {
+    './dojos/endpoints': endpoints,
+  };
+  const server = proxyquire('../../../../../src/api/server', serverDependencyMocks);
   before(() => {
     serverInstance = server.setUpServer();
     server.startServer(serverInstance);
@@ -152,8 +165,25 @@ describe('Dojos API', () => {
     }).timeout(10000);
   });
   describe('POST /api/2.0/dojos/:dojoId/:userId/integrations/github', () => {
-    it('should not create a github integration for an invalid payload', (done) => {
+    it('should create a github integration for a valid payload', (done) => {
       const dojoIdMock = '18d376b4-22a4-ed8d-7355-9034bb7b0034';
+      const userIdMock = '836473b4-4889-221a-9100-201994ff392d';
+      const payload = {
+        client_id: '8765-4321',
+        code: '1234-5678',
+        client_secret: '5678-1234',
+      };
+      request(serverInstance)
+        .post(`/api/2.0/dojos/${dojoIdMock}/${userIdMock}/integrations/github`)
+        .send(payload)
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err);
+          done();
+        });
+    }).timeout(20000);
+    it('should not create a github integration for an invalid payload', (done) => {
+      const dojoIdMock = '1234-5678';
       const userIdMock = '836473b4-4889-221a-9100-201994ff392d';
       const payload = {
         client_id: '8765-4321',
@@ -171,9 +201,19 @@ describe('Dojos API', () => {
           if (err) return done(err);
           done();
         });
-    }).timeout(10000);
+    }).timeout(20000);
   });
   describe('POST /api/2.0/dojos/:dojoId/remove-github-integration', () => {
+    it('should remove a github integration for a valid dojo id', (done) => {
+      const dojoIdMock = '54b7f667-6c3c-acbd-bb4c-0911a6e7cd5d';
+      request(serverInstance)
+        .post(`/api/2.0/dojos/${dojoIdMock}/remove-github-integration`)
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err);
+          done();
+        });
+    }).timeout(10000);
     it('should not remove a github integration for an invalid dojo id', (done) => {
       const dojoIdMock = '1234-5678';
       request(serverInstance)

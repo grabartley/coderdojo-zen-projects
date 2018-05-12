@@ -1,4 +1,4 @@
-import Postgrator from 'postgrator';
+const Postgrator = require('postgrator');
 
 // run all database migrations that have not already been run
 function migrate() {

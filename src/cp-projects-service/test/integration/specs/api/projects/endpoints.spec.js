@@ -1,11 +1,32 @@
 import chai from 'chai';
+import sinon from 'sinon';
 import request from 'supertest';
-import server from '../../../../../src/api/server';
+import proxyquire from 'proxyquire';
 import testData from '../../../../../db/test-data';
 const expect = chai.expect;
 
 describe('Projects API', () => {
   let serverInstance;
+  const endpointsDependencyMocks = {
+    '../../services/github-service': {
+      createRepo: sinon.stub(),
+      commitFileToRepo: () => null,
+      pushTreeToRepo: () => null,
+    },
+  };
+  endpointsDependencyMocks['../../services/github-service'].createRepo.returns({
+    data: {
+      html_url: 'exampleUrl',
+      owner: {
+        login: 'exampleLogin',
+      },
+    },
+  });
+  const endpoints = proxyquire('../../../../../src/api/projects/endpoints', endpointsDependencyMocks);
+  const serverDependencyMocks = {
+    './projects/endpoints': endpoints,
+  };
+  const server = proxyquire('../../../../../src/api/server', serverDependencyMocks);
   before(() => {
     serverInstance = server.setUpServer();
     server.startServer(serverInstance);
@@ -443,7 +464,7 @@ describe('Projects API', () => {
       deletedMock = false;
       sortedByMock = 'created_at';
       sortOrderMock = 'asc';
-      limitMock = 3;
+      limitMock = 'undefined';
       request(serverInstance)
         .get(`/api/2.0/projects/project-data?deleted=${deletedMock}&sortedBy=${sortedByMock}&sortOrder=${sortOrderMock}&limit=${limitMock}`)
         .expect(200)
@@ -491,6 +512,171 @@ describe('Projects API', () => {
                   "updated_at": "2018-04-14T22:20:56.232Z",
                   "author": "Youth One",
                   "user_id": "12a4df02-6cbd-40b0-b2df-2531b136afec",
+                  "github_integration_id": "b301386a-75cc-438d-873b-7fb8f937a9a0",
+                  "deleted_at": null
+              },
+              {
+                  "project_id": "82208249-1b5f-4334-80ff-8d88d8332bc1",
+                  "name": "Hello, World!",
+                  "type": "javascript",
+                  "entrypoint": "hello-world.js",
+                  "description": "A simple hello world program written in NodeJS.",
+                  "github_url": "https://github.com/grahambartley/82208249-1b5f-4334-80ff-8d88d8332bc1",
+                  "resource_url": null,
+                  "created_at": "2018-03-31T19:06:08.841Z",
+                  "updated_at": null,
+                  "author": "Youth Four",
+                  "user_id": "fe281cd2-cc45-1930-0011-a67c329f91d2",
+                  "github_integration_id": "b301386a-75cc-438d-873b-7fb8f937a9a0",
+                  "deleted_at": null
+              },
+              {
+                  "project_id": "80491c66-3e0e-412b-adea-a385773443cc",
+                  "name": "Shopping List",
+                  "type": "python",
+                  "entrypoint": "ShoppingList.py",
+                  "description": "A simple shopping list program.",
+                  "github_url": "https://github.com/grahambartley/80491c66-3e0e-412b-adea-a385773443cc",
+                  "resource_url": null,
+                  "created_at": "2018-03-31T19:07:15.403Z",
+                  "updated_at": "2018-04-10T07:21:12.440Z",
+                  "author": "Youth Four",
+                  "user_id": "fe281cd2-cc45-1930-0011-a67c329f91d2",
+                  "github_integration_id": "b301386a-75cc-438d-873b-7fb8f937a9a0",
+                  "deleted_at": null
+              },
+              {
+                  "project_id": "4fc3eb1c-abf6-4df2-8dc0-e7b3b9b3977a",
+                  "name": "Bank",
+                  "type": "python",
+                  "entrypoint": "Withdraw.py",
+                  "description": "A simple bank account program used to demonstrate OOP in Python.",
+                  "github_url": "https://github.com/grahambartley/4fc3eb1c-abf6-4df2-8dc0-e7b3b9b3977a",
+                  "resource_url": null,
+                  "created_at": "2018-03-31T19:08:45.409Z",
+                  "updated_at": "2018-04-01T14:10:43.820Z",
+                  "author": "Youth Four",
+                  "user_id": "fe281cd2-cc45-1930-0011-a67c329f91d2",
+                  "github_integration_id": "b301386a-75cc-438d-873b-7fb8f937a9a0",
+                  "deleted_at": null
+              },
+              {
+                  "project_id": "d508227e-263a-4af8-ac9d-249a4a7dbe3f",
+                  "name": "Django Project",
+                  "type": "python",
+                  "entrypoint": "test.py",
+                  "description": "Prints out the current version of Django being used.",
+                  "github_url": "https://github.com/grahambartley/d508227e-263a-4af8-ac9d-249a4a7dbe3f",
+                  "resource_url": null,
+                  "created_at": "2018-03-31T19:09:55.570Z",
+                  "updated_at": null,
+                  "author": "Youth One",
+                  "user_id": "12a4df02-6cbd-40b0-b2df-2531b136afec",
+                  "github_integration_id": "b301386a-75cc-438d-873b-7fb8f937a9a0",
+                  "deleted_at": null
+              },
+              {
+                  "project_id": "16433d6f-ea35-4119-9a1e-8e34222631bd",
+                  "name": "Castle Escape",
+                  "type": "java",
+                  "entrypoint": "Main.java",
+                  "description": "Castle Escape is a text-based adventure-puzzle game. The objective of the game is to escape the castle you find yourself in. There are various different rooms to the castle which you can travel through on your adventure. You may find items as you go along which you can collect. These will aid you in your escape! Items can only be used under specific circumstances, so think about when each item may be needed. It can be very useful to draw a map as you journey through the castle as its easy to get lost. Pay close attention to room and item descriptions as they may provide hints on what to do! Also be careful to only provide input when asked for it, otherwise glitches may occur which cause you to lose progress! Other than that, its up to you! Good luck escaping the castle!",
+                  "github_url": "https://github.com/grahambartley/16433d6f-ea35-4119-9a1e-8e34222631bd",
+                  "resource_url": "https://coderdojo.gitbooks.io/beginner-java/content/en/coin_toss.html",
+                  "created_at": "2018-03-31T19:10:48.910Z",
+                  "updated_at": "2018-04-20T13:32:10.143Z",
+                  "author": "Youth Four",
+                  "user_id": "fe281cd2-cc45-1930-0011-a67c329f91d2",
+                  "github_integration_id": "b301386a-75cc-438d-873b-7fb8f937a9a0",
+                  "deleted_at": null
+              },
+              {
+                  "project_id": "c0d419d6-1d08-4052-ba27-30fb5acdf48f",
+                  "name": "Test 1",
+                  "type": "java",
+                  "entrypoint": "Main.java",
+                  "description": "Test",
+                  "github_url": "https://github.com/grahambartley/c0d419d6-1d08-4052-ba27-30fb5acdf48f",
+                  "resource_url": "http://www.google.ie",
+                  "created_at": "2018-04-01T14:40:08.981Z",
+                  "updated_at": null,
+                  "author": "Youth Four",
+                  "user_id": "fe281cd2-cc45-1930-0011-a67c329f91d2",
+                  "github_integration_id": "b301386a-75cc-438d-873b-7fb8f937a9a0",
+                  "deleted_at": null
+              },
+              {
+                  "project_id": "e93dba14-62c9-4776-bddf-1530fc940168",
+                  "name": "My Second Website",
+                  "type": "html",
+                  "entrypoint": "index.html",
+                  "description": "The second website I made with Awesome Dojo!",
+                  "github_url": "https://github.com/grahambartley/e93dba14-62c9-4776-bddf-1530fc940168",
+                  "resource_url": "http://coderdojo.gitbooks.io/beginner-html-css/content/en/",
+                  "created_at": "2018-04-01T19:49:15.515Z",
+                  "updated_at": null,
+                  "author": "Youth Four",
+                  "user_id": "fe281cd2-cc45-1930-0011-a67c329f91d2",
+                  "github_integration_id": "b301386a-75cc-438d-873b-7fb8f937a9a0",
+                  "deleted_at": null
+              },
+              {
+                  "project_id": "00876274-42af-465a-b251-0a5ab2b2b5fd",
+                  "name": "My Awesome Project",
+                  "type": "java",
+                  "entrypoint": "SquareNum.java",
+                  "description": "I hope this works.",
+                  "github_url": "https://github.com/grahambartley/00876274-42af-465a-b251-0a5ab2b2b5fd",
+                  "resource_url": null,
+                  "created_at": "2018-04-10T11:20:43.888Z",
+                  "updated_at": null,
+                  "author": "Youth Four",
+                  "user_id": "fe281cd2-cc45-1930-0011-a67c329f91d2",
+                  "github_integration_id": "b301386a-75cc-438d-873b-7fb8f937a9a0",
+                  "deleted_at": null
+              },
+              {
+                  "project_id": "db66d80f-0de1-4a89-ab03-4e71a3ecb26d",
+                  "name": "Square Numbers",
+                  "type": "java",
+                  "entrypoint": "SquareNum.java",
+                  "description": "Squares numbers given in input until a -1 is given!",
+                  "github_url": "https://github.com/grahambartley/db66d80f-0de1-4a89-ab03-4e71a3ecb26d",
+                  "resource_url": null,
+                  "created_at": "2018-04-11T17:19:44.999Z",
+                  "updated_at": null,
+                  "author": "Youth Four",
+                  "user_id": "fe281cd2-cc45-1930-0011-a67c329f91d2",
+                  "github_integration_id": "b301386a-75cc-438d-873b-7fb8f937a9a0",
+                  "deleted_at": null
+              },
+              {
+                  "project_id": "d0578aa0-96d9-4736-ad03-fcf568e5dc5b",
+                  "name": "Square Numbers",
+                  "type": "java",
+                  "entrypoint": "SquareNum.java",
+                  "description": "Squares given numbers.",
+                  "github_url": "https://github.com/grahambartley/d0578aa0-96d9-4736-ad03-fcf568e5dc5b",
+                  "resource_url": null,
+                  "created_at": "2018-04-13T11:47:45.961Z",
+                  "updated_at": null,
+                  "author": "Youth Four",
+                  "user_id": "fe281cd2-cc45-1930-0011-a67c329f91d2",
+                  "github_integration_id": "b301386a-75cc-438d-873b-7fb8f937a9a0",
+                  "deleted_at": null
+              },
+              {
+                  "project_id": "d9f1e025-d87d-41bb-8c1e-1f25b1890a1a",
+                  "name": "Sample Project",
+                  "type": "python",
+                  "entrypoint": "main.py",
+                  "description": "Hello World!",
+                  "github_url": "https://github.com/grahambartley/d9f1e025-d87d-41bb-8c1e-1f25b1890a1a",
+                  "resource_url": null,
+                  "created_at": "2018-04-17T11:59:56.026Z",
+                  "updated_at": null,
+                  "author": "Youth Four",
+                  "user_id": "fe281cd2-cc45-1930-0011-a67c329f91d2",
                   "github_integration_id": "b301386a-75cc-438d-873b-7fb8f937a9a0",
                   "deleted_at": null
               }
@@ -831,40 +1017,243 @@ describe('Projects API', () => {
     }).timeout(10000);
   });
   describe('POST /api/2.0/projects/create-project', () => {
-    it('should not create a project with invalid data', (done) => {
-      const payload = {
-        dojoId: '1234-5678',
+    it('should create a project given a valid payload', (done) => {
+      const payload = { 
+        "name": "Lots of Sentences!!",
+        "type": "java",
+        "description": "Prints lots of sentences!",
+        "dojoId": "54b7f667-6c3c-acbd-bb4c-0911a6e7cd5d",
+        "resourceUrl": null,
+        "entrypoint": "LotsOfSentences.java",
+        "filename": "LotsOfSentences.zip",
+        "file": "data:application/zip;base64,UEsDBBQACAAIADi3h0wAAAAAAAAAAMIAAAAUACAATG90c09mU2VudGVuY2VzLmphdmFVVA0AB9w+yVrcPsla3T7JWnV4CwABBOgDAAAE6AMAAE2OwQrCMAyG73uK3506BqOep28geKg38VBnNwNbO5ZMENm727IhfoT8OXwJGed7Tw2a3jLjFITPrXFenG8c45MhMq4Ki5UYr0APDJa8MjKR76432KnjYpMTbZigyAsIR+g6xgF7rdNUlv9iwrxZ3FCFWaox3pPeq/zyJEYsC95+2SXyov6tLtnal+wLUEsHCDruhleMAAAAwgAAAFBLAQIUAxQACAAIADi3h0w67oZXjAAAAMIAAAAUACAAAAAAAAAAAACkgQAAAABMb3RzT2ZTZW50ZW5jZXMuamF2YVVUDQAH3D7JWtw+yVrdPsladXgLAAEE6AMAAAToAwAAUEsFBgAAAAABAAEAYgAAAO4AAAAAAA==",
+        "userId": "12a4df02-6cbd-40b0-b2df-2531b136afec" 
+      };
+      request(serverInstance)
+        .post(`/api/2.0/projects/create-project`)
+        .send(payload)
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err);
+          done();
+        });
+    }).timeout(20000);
+    it('should handle null strings for resource url', (done) => {
+      const payload = { 
+        "name": "Lots of Sentences!!",
+        "type": "java",
+        "description": "Prints lots of sentences!",
+        "dojoId": "54b7f667-6c3c-acbd-bb4c-0911a6e7cd5d",
+        "resourceUrl": 'null',
+        "entrypoint": "LotsOfSentences.java",
+        "filename": "LotsOfSentences.zip",
+        "file": "data:application/zip;base64,UEsDBBQACAAIADi3h0wAAAAAAAAAAMIAAAAUACAATG90c09mU2VudGVuY2VzLmphdmFVVA0AB9w+yVrcPsla3T7JWnV4CwABBOgDAAAE6AMAAE2OwQrCMAyG73uK3506BqOep28geKg38VBnNwNbO5ZMENm727IhfoT8OXwJGed7Tw2a3jLjFITPrXFenG8c45MhMq4Ki5UYr0APDJa8MjKR76432KnjYpMTbZigyAsIR+g6xgF7rdNUlv9iwrxZ3FCFWaox3pPeq/zyJEYsC95+2SXyov6tLtnal+wLUEsHCDruhleMAAAAwgAAAFBLAQIUAxQACAAIADi3h0w67oZXjAAAAMIAAAAUACAAAAAAAAAAAACkgQAAAABMb3RzT2ZTZW50ZW5jZXMuamF2YVVUDQAH3D7JWtw+yVrdPsladXgLAAEE6AMAAAToAwAAUEsFBgAAAAABAAEAYgAAAO4AAAAAAA==",
+        "userId": "12a4df02-6cbd-40b0-b2df-2531b136afec" 
+      };
+      request(serverInstance)
+        .post(`/api/2.0/projects/create-project`)
+        .send(payload)
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err);
+          done();
+        });
+    }).timeout(20000);
+    it('should handle malformed entrypoint value', (done) => {
+      const payload = { 
+        "name": "Lots of Sentences!!",
+        "type": "java",
+        "description": "Prints lots of sentences!",
+        "dojoId": "54b7f667-6c3c-acbd-bb4c-0911a6e7cd5d",
+        "resourceUrl": null,
+        "entrypoint": "LotsOfSentences",
+        "filename": "LotsOfSentences.zip",
+        "file": "data:application/zip;base64,UEsDBBQACAAIADi3h0wAAAAAAAAAAMIAAAAUACAATG90c09mU2VudGVuY2VzLmphdmFVVA0AB9w+yVrcPsla3T7JWnV4CwABBOgDAAAE6AMAAE2OwQrCMAyG73uK3506BqOep28geKg38VBnNwNbO5ZMENm727IhfoT8OXwJGed7Tw2a3jLjFITPrXFenG8c45MhMq4Ki5UYr0APDJa8MjKR76432KnjYpMTbZigyAsIR+g6xgF7rdNUlv9iwrxZ3FCFWaox3pPeq/zyJEYsC95+2SXyov6tLtnal+wLUEsHCDruhleMAAAAwgAAAFBLAQIUAxQACAAIADi3h0w67oZXjAAAAMIAAAAUACAAAAAAAAAAAACkgQAAAABMb3RzT2ZTZW50ZW5jZXMuamF2YVVUDQAH3D7JWtw+yVrdPsladXgLAAEE6AMAAAToAwAAUEsFBgAAAAABAAEAYgAAAO4AAAAAAA==",
+        "userId": "12a4df02-6cbd-40b0-b2df-2531b136afec" 
       };
       request(serverInstance)
         .post(`/api/2.0/projects/create-project`)
         .send(payload)
         .expect(404)
-        .expect((res) => {
-          expect(res.error.text).to.equal('Error');
-        })
         .end((err, res) => {
           if (err) return done(err);
           done();
         });
-    }).timeout(10000);
+    }).timeout(20000);
+    it('should handle other file types than zip', (done) => {
+      const payload = { 
+        "name": "Lots of Sentences!!",
+        "type": "java",
+        "description": "Prints lots of sentences!",
+        "dojoId": "54b7f667-6c3c-acbd-bb4c-0911a6e7cd5d",
+        "resourceUrl": null,
+        "entrypoint": "LotsOfSentences.java",
+        "filename": "LotsOfSentences.zip",
+        "file": "data:text/plain;base64,VGhpcyBpcyBhIHNpbXBsZSB0ZXh0IGZpbGUgdXNlZCBhcyBhIHRlc3QuCg==","userId": "12a4df02-6cbd-40b0-b2df-2531b136afec"  
+      };
+      request(serverInstance)
+        .post(`/api/2.0/projects/create-project`)
+        .send(payload)
+        .expect(404)
+        .end((err, res) => {
+          if (err) return done(err);
+          done();
+        });
+    }).timeout(20000);
+    it('should handle HTML5 projects', (done) => {
+      const payload = { 
+        "name": "Lots of Sentences!!",
+        "type": "html",
+        "description": "Prints lots of sentences!",
+        "dojoId": "54b7f667-6c3c-acbd-bb4c-0911a6e7cd5d",
+        "resourceUrl": null,
+        "entrypoint": "LotsOfSentences.java",
+        "filename": "LotsOfSentences.zip",
+        "file": "data:application/zip;base64,UEsDBBQACAAIADi3h0wAAAAAAAAAAMIAAAAUACAATG90c09mU2VudGVuY2VzLmphdmFVVA0AB9w+yVrcPsla3T7JWnV4CwABBOgDAAAE6AMAAE2OwQrCMAyG73uK3506BqOep28geKg38VBnNwNbO5ZMENm727IhfoT8OXwJGed7Tw2a3jLjFITPrXFenG8c45MhMq4Ki5UYr0APDJa8MjKR76432KnjYpMTbZigyAsIR+g6xgF7rdNUlv9iwrxZ3FCFWaox3pPeq/zyJEYsC95+2SXyov6tLtnal+wLUEsHCDruhleMAAAAwgAAAFBLAQIUAxQACAAIADi3h0w67oZXjAAAAMIAAAAUACAAAAAAAAAAAACkgQAAAABMb3RzT2ZTZW50ZW5jZXMuamF2YVVUDQAH3D7JWtw+yVrdPsladXgLAAEE6AMAAAToAwAAUEsFBgAAAAABAAEAYgAAAO4AAAAAAA==",
+        "userId": "12a4df02-6cbd-40b0-b2df-2531b136afec"  
+      };
+      request(serverInstance)
+        .post(`/api/2.0/projects/create-project`)
+        .send(payload)
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err);
+          done();
+        });
+    }).timeout(20000);
+    it('should ensure resource url is not malformed', (done) => {
+      const payload = { 
+        "name": "Lots of Sentences!!",
+        "type": "java",
+        "description": "Prints lots of sentences!",
+        "dojoId": "54b7f667-6c3c-acbd-bb4c-0911a6e7cd5d",
+        "resourceUrl": "zen.coderdojo.com",
+        "entrypoint": "LotsOfSentences.java",
+        "filename": "LotsOfSentences.zip",
+        "file": "data:application/zip;base64,UEsDBBQACAAIADi3h0wAAAAAAAAAAMIAAAAUACAATG90c09mU2VudGVuY2VzLmphdmFVVA0AB9w+yVrcPsla3T7JWnV4CwABBOgDAAAE6AMAAE2OwQrCMAyG73uK3506BqOep28geKg38VBnNwNbO5ZMENm727IhfoT8OXwJGed7Tw2a3jLjFITPrXFenG8c45MhMq4Ki5UYr0APDJa8MjKR76432KnjYpMTbZigyAsIR+g6xgF7rdNUlv9iwrxZ3FCFWaox3pPeq/zyJEYsC95+2SXyov6tLtnal+wLUEsHCDruhleMAAAAwgAAAFBLAQIUAxQACAAIADi3h0w67oZXjAAAAMIAAAAUACAAAAAAAAAAAACkgQAAAABMb3RzT2ZTZW50ZW5jZXMuamF2YVVUDQAH3D7JWtw+yVrdPsladXgLAAEE6AMAAAToAwAAUEsFBgAAAAABAAEAYgAAAO4AAAAAAA==",
+        "userId": "12a4df02-6cbd-40b0-b2df-2531b136afec"  
+      };
+      request(serverInstance)
+        .post(`/api/2.0/projects/create-project`)
+        .send(payload)
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err);
+          done();
+        });
+    }).timeout(20000);
   });
   describe('POST /api/2.0/projects/update-project', () => {
-    it('should not create a project with invalid data', (done) => {
+    it('should update a project given a valid payload', (done) => {
       const payload = {
-        dojoId: '1234-5678',
+        "projectId": "4d85efc2-64ff-4cd2-be19-ffa5a32c0161",
+        "type": "java",
+        "values": 
+         [ "Lots of Sentences!!",
+           "Prints lots of sentences!!",
+           null,
+           "LotsOfSentences.java" ],
+        "githubIntegrationId": "b301386a-75cc-438d-873b-7fb8f937a9a0",
+        "filename": "LotsOfSentences.zip",
+        "file": "data:application/zip;base64,UEsDBBQACAAIADi3h0wAAAAAAAAAAMIAAAAUACAATG90c09mU2VudGVuY2VzLmphdmFVVA0AB9w+yVrcPsla3T7JWnV4CwABBOgDAAAE6AMAAE2OwQrCMAyG73uK3506BqOep28geKg38VBnNwNbO5ZMENm727IhfoT8OXwJGed7Tw2a3jLjFITPrXFenG8c45MhMq4Ki5UYr0APDJa8MjKR76432KnjYpMTbZigyAsIR+g6xgF7rdNUlv9iwrxZ3FCFWaox3pPeq/zyJEYsC95+2SXyov6tLtnal+wLUEsHCDruhleMAAAAwgAAAFBLAQIUAxQACAAIADi3h0w67oZXjAAAAMIAAAAUACAAAAAAAAAAAACkgQAAAABMb3RzT2ZTZW50ZW5jZXMuamF2YVVUDQAH3D7JWtw+yVrdPsladXgLAAEE6AMAAAToAwAAUEsFBgAAAAABAAEAYgAAAO4AAAAAAA=="
+      };
+      request(serverInstance)
+        .post(`/api/2.0/projects/update-project`)
+        .send(payload)
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err);
+          done();
+        });
+    }).timeout(20000);
+    it('should update a project given a valid payload without a file update', (done) => {
+      const payload = {
+        "projectId": "4d85efc2-64ff-4cd2-be19-ffa5a32c0161",
+        "type": "java",
+        "values": 
+         [ "Lots of Sentences!!",
+           "Prints lots of sentences!!",
+           null,
+           "LotsOfSentences.java" ],
+        "githubIntegrationId": "b301386a-75cc-438d-873b-7fb8f937a9a0",
+        "filename": null,
+        "file": null
+      };
+      request(serverInstance)
+        .post(`/api/2.0/projects/update-project`)
+        .send(payload)
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err);
+          done();
+        });
+    }).timeout(20000);
+    it('should handle an invalid entrypoint value', (done) => {
+      const payload = {
+        "projectId": "4d85efc2-64ff-4cd2-be19-ffa5a32c0161",
+        "type": "java",
+        "values": 
+         [ "Lots of Sentences!!",
+           "Prints lots of sentences!!",
+           null,
+           "LotsOfSentences" ],
+        "githubIntegrationId": "b301386a-75cc-438d-873b-7fb8f937a9a0",
+        "filename": "LotsOfSentences.zip",
+        "file": "data:application/zip;base64,UEsDBBQACAAIADi3h0wAAAAAAAAAAMIAAAAUACAATG90c09mU2VudGVuY2VzLmphdmFVVA0AB9w+yVrcPsla3T7JWnV4CwABBOgDAAAE6AMAAE2OwQrCMAyG73uK3506BqOep28geKg38VBnNwNbO5ZMENm727IhfoT8OXwJGed7Tw2a3jLjFITPrXFenG8c45MhMq4Ki5UYr0APDJa8MjKR76432KnjYpMTbZigyAsIR+g6xgF7rdNUlv9iwrxZ3FCFWaox3pPeq/zyJEYsC95+2SXyov6tLtnal+wLUEsHCDruhleMAAAAwgAAAFBLAQIUAxQACAAIADi3h0w67oZXjAAAAMIAAAAUACAAAAAAAAAAAACkgQAAAABMb3RzT2ZTZW50ZW5jZXMuamF2YVVUDQAH3D7JWtw+yVrdPsladXgLAAEE6AMAAAToAwAAUEsFBgAAAAABAAEAYgAAAO4AAAAAAA=="
       };
       request(serverInstance)
         .post(`/api/2.0/projects/update-project`)
         .send(payload)
         .expect(404)
-        .expect((res) => {
-          expect(res.error.text).to.equal('Error');
-        })
         .end((err, res) => {
           if (err) return done(err);
           done();
         });
-    }).timeout(10000);
+    }).timeout(20000);
+    it('should ensure resource url is not malformed', (done) => {
+      const payload = {
+        "projectId": "4d85efc2-64ff-4cd2-be19-ffa5a32c0161",
+        "type": "java",
+        "values": 
+         [ "Lots of Sentences!!",
+           "Prints lots of sentences!!",
+           "zen.coderdojo.com",
+           "LotsOfSentences.java" ],
+        "githubIntegrationId": "b301386a-75cc-438d-873b-7fb8f937a9a0",
+        "filename": "LotsOfSentences.zip",
+        "file": "data:application/zip;base64,UEsDBBQACAAIADi3h0wAAAAAAAAAAMIAAAAUACAATG90c09mU2VudGVuY2VzLmphdmFVVA0AB9w+yVrcPsla3T7JWnV4CwABBOgDAAAE6AMAAE2OwQrCMAyG73uK3506BqOep28geKg38VBnNwNbO5ZMENm727IhfoT8OXwJGed7Tw2a3jLjFITPrXFenG8c45MhMq4Ki5UYr0APDJa8MjKR76432KnjYpMTbZigyAsIR+g6xgF7rdNUlv9iwrxZ3FCFWaox3pPeq/zyJEYsC95+2SXyov6tLtnal+wLUEsHCDruhleMAAAAwgAAAFBLAQIUAxQACAAIADi3h0w67oZXjAAAAMIAAAAUACAAAAAAAAAAAACkgQAAAABMb3RzT2ZTZW50ZW5jZXMuamF2YVVUDQAH3D7JWtw+yVrdPsladXgLAAEE6AMAAAToAwAAUEsFBgAAAAABAAEAYgAAAO4AAAAAAA=="
+      };
+      request(serverInstance)
+        .post(`/api/2.0/projects/update-project`)
+        .send(payload)
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err);
+          done();
+        });
+    }).timeout(20000);
+    it('should update a HTML5 project', (done) => {
+      const payload = {
+        "projectId": "4d85efc2-64ff-4cd2-be19-ffa5a32c0161",
+        "type": "html",
+        "values": 
+         [ "Lots of Sentences!!",
+           "Prints lots of sentences!!",
+           null,
+           "index.html" ],
+        "githubIntegrationId": "b301386a-75cc-438d-873b-7fb8f937a9a0",
+        "filename": "LotsOfSentences.zip",
+        "file": "data:application/zip;base64,UEsDBBQACAAIADi3h0wAAAAAAAAAAMIAAAAUACAATG90c09mU2VudGVuY2VzLmphdmFVVA0AB9w+yVrcPsla3T7JWnV4CwABBOgDAAAE6AMAAE2OwQrCMAyG73uK3506BqOep28geKg38VBnNwNbO5ZMENm727IhfoT8OXwJGed7Tw2a3jLjFITPrXFenG8c45MhMq4Ki5UYr0APDJa8MjKR76432KnjYpMTbZigyAsIR+g6xgF7rdNUlv9iwrxZ3FCFWaox3pPeq/zyJEYsC95+2SXyov6tLtnal+wLUEsHCDruhleMAAAAwgAAAFBLAQIUAxQACAAIADi3h0w67oZXjAAAAMIAAAAUACAAAAAAAAAAAACkgQAAAABMb3RzT2ZTZW50ZW5jZXMuamF2YVVUDQAH3D7JWtw+yVrdPsladXgLAAEE6AMAAAToAwAAUEsFBgAAAAABAAEAYgAAAO4AAAAAAA=="
+      };
+      request(serverInstance)
+        .post(`/api/2.0/projects/update-project`)
+        .send(payload)
+        .expect(200)
+        .end((err, res) => {
+          if (err) return done(err);
+          done();
+        });
+    }).timeout(20000);
   });
   describe('POST /api/2.0/projects/increment-project-plays', () => {
     it('should increment the project plays by 1 for a project id', (done) => {
