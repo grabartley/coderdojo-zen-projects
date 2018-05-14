@@ -176,8 +176,31 @@ describe('EditProject', () => {
         editProject.isFileUploaded = false;
         editProject.filename = null;
         editProject.uploadedFile = null;
-        let fileMock = new File([new Blob(['sample data'])], 'test.zip', {type: 'application/zip'});
-        let eMock = {
+        const fileMock = new File([new Blob(['sample data'])], 'test.zip', {type: 'application/zip'});
+        const eMock = {
+          target: {
+            files: [
+              fileMock
+            ],
+          },
+        };
+        
+        // ACT
+        editProject.onFileUpload(eMock);
+        
+        // ASSERT
+        expect(editProject.filename).to.equal('test.zip');
+        expect(editProject.isZip).to.equal(true);
+      });
+      it('should store a Windows zip file in uploadedFile', () => {
+        // ARRANGE
+        let editProject = vueUnitHelper(EditProject());
+        editProject.isZip = false;
+        editProject.isFileUploaded = false;
+        editProject.filename = null;
+        editProject.uploadedFile = null;
+        const fileMock = new File([new Blob(['sample data'])], 'test.zip', {type: 'application/x-zip-compressed'});
+        const eMock = {
           target: {
             files: [
               fileMock
@@ -199,7 +222,7 @@ describe('EditProject', () => {
         editProject.isFileUploaded = false;
         editProject.filename = null;
         editProject.uploadedFile = null;
-        let eMock = {
+        const eMock = {
           target: {
             files: [
               {

@@ -135,7 +135,7 @@
               <div class="project-creation-form__content-section-content-input-field">
                 <label class="project-creation-form__content-section-content-input-file">
                   <span class="project-creation-form__content-section-content-input-file-image fa fa-upload" alt="File Upload"></span>
-                  <input class="project-creation-form__content-section-content-input-file-hidden" v-validate.initial="'required'" type="file" name="project files" @change="onFileUpload"></input>
+                  <input class="project-creation-form__content-section-content-input-file-hidden" v-validate.initial="'required'" type="file" accept="application/zip,application/x-zip-compressed" name="project files" @change="onFileUpload"></input>
                 </label>
                 <span class="project-creation-form__content-section-content-input-file-details" v-show="filename">
                   <span class="project-creation-form__content-section-content-input-file-details-icon fa fa-file-archive"></span>
@@ -230,7 +230,7 @@ export default {
         // store the filename
         this.filename = file.name;
         // if the file is a zip file
-        if (file.type === 'application/zip') {
+        if (file.type === 'application/zip' || file.type === 'application/x-zip-compressed') {
           this.isZip = true;
           // read the file
           fr.readAsDataURL(file);
