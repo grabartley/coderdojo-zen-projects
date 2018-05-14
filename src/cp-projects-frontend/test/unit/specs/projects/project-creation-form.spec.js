@@ -106,8 +106,31 @@ describe('ProjectCreationForm', () => {
         projectCreationForm.isFileUploaded = false;
         projectCreationForm.filename = null;
         projectCreationForm.uploadedFile = null;
-        let fileMock = new File([new Blob(['sample data'])], 'test.zip', {type: 'application/zip'});
-        let eMock = {
+        const fileMock = new File([new Blob(['sample data'])], 'test.zip', {type: 'application/zip'});
+        const eMock = {
+          target: {
+            files: [
+              fileMock
+            ],
+          },
+        };
+        
+        // ACT
+        projectCreationForm.onFileUpload(eMock);
+        
+        // ASSERT
+        expect(projectCreationForm.isZip).to.equal(true);
+        expect(projectCreationForm.filename).to.equal('test.zip');
+      });
+      it('should store a Winndows zip file in uploadedFile', () => {
+        // ARRANGE
+        let projectCreationForm = vueUnitHelper(ProjectCreationForm());
+        projectCreationForm.isZip = false;
+        projectCreationForm.isFileUploaded = false;
+        projectCreationForm.filename = null;
+        projectCreationForm.uploadedFile = null;
+        const fileMock = new File([new Blob(['sample data'])], 'test.zip', {type: 'application/x-zip-compressed'});
+        const eMock = {
           target: {
             files: [
               fileMock
@@ -129,7 +152,7 @@ describe('ProjectCreationForm', () => {
         projectCreationForm.isFileUploaded = false;
         projectCreationForm.filename = null;
         projectCreationForm.uploadedFile = null;
-        let eMock = {
+        const eMock = {
           target: {
             files: [
               {
@@ -156,7 +179,7 @@ describe('ProjectCreationForm', () => {
         projectCreationForm.isFileUploaded = false;
         projectCreationForm.filename = null;
         projectCreationForm.uploadedFile = null;
-        let eMock = {
+        const eMock = {
           target: {
             files: [],
           },

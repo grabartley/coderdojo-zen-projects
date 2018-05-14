@@ -68,13 +68,17 @@
         <div class="edit-project__information-input-field">
           <label class="edit-project__information-input-file">
             <span class="edit-project__information-input-file-image fa fa-upload" alt="File Upload"></span>
-            <input class="edit-project__information-input-file-hidden" type="file" name="project files" @change="onFileUpload"></input>
+            <input class="edit-project__information-input-file-hidden" type="file" accept="application/zip,application/x-zip-compressed" name="project files" @change="onFileUpload"></input>
           </label>
           <span class="edit-project__information-input-file-details" v-show="filename">
             <span class="edit-project__information-input-file-details-icon fa fa-file-archive"></span>
             <span class="edit-project__information-input-file-details-name">{{ filename }}</span>
           </span>
         </div>
+      </div>
+      <div class="edit-project__information-error">
+        <div class="error-message" v-show="isFormValidated && errors.has('project files')">{{ errors.first('project files') }}</div>
+        <div class="error-message" v-show="isFormValidated && !isZip">Project files must be uploaded as a zip archive!</div>
       </div>
     </div>
     <div v-if="!projectData.deleted_at" class="edit-project__control">
@@ -168,7 +172,7 @@
           // store the filename
           this.filename = file.name;
           // if the file is a zip file
-          if (file.type === 'application/zip') {
+          if (file.type === 'application/zip' || file.type === 'application/x-zip-compressed') {
             this.isZip = true;
             // read the file
             fr.readAsDataURL(file);
