@@ -53,9 +53,6 @@
     "include": [
       "src/**/*.js"
     ],
-    "exclude": [
-      "src/services/web-socket-service.js"
-    ],
     "reporter": [
       "lcov",
       "text-summary"

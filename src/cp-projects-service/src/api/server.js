@@ -58,6 +58,7 @@ function stopServer(server) {
 migrations.migrate();
 
 // set up and start the server if not running tests
+/* istanbul ignore next */
 if (process.env.NODE_ENV != 'test') {
   const server = setUpServer();
   startServer(server);
