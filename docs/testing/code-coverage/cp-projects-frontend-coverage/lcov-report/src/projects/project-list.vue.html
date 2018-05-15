@@ -1,0 +1,1025 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for src/projects/project-list.vue</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../index.html">all files</a> / <a href="index.html">src/projects/</a> project-list.vue
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">96.15% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>25/26</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>8/8</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">50% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>1/2</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">96.15% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>25/26</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line high'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">&lt;template&gt;
+  &lt;div class="project-list"&gt;
+    &lt;div class="project-list__banner"&gt;
+      &lt;span class="project-list__banner-title"&gt;Projects&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class="project-list__content"&gt;
+      &lt;div class="project-list__content-groups"&gt;
+        &lt;div class="project-list__content-groups-box"&gt;
+          &lt;div class="project-list__content-groups-box-header"&gt;
+            &lt;span class="project-list__content-groups-box-header-icon fas fa-rocket"&gt;&lt;/span&gt;
+            &lt;span class="project-list__content-groups-box-header-title"&gt;Most Played&lt;/span&gt;
+          &lt;/div&gt;
+          &lt;ol class="project-list__content-groups-box-list"&gt;
+            &lt;div v-for="project in mostPlayedProjects" class="project-list__content-groups-box-list-container"&gt;
+              &lt;li class="project-list__content-groups-box-list-item"&gt;
+                &lt;router-link :to="{ name: 'ProjectDetails', params: { projectId: project.project_id } }"&gt;{{ project.name }}&lt;/router-link&gt;
+              &lt;/li&gt;
+              &lt;span class="project-list__content-groups-box-list-metadata"&gt;{{ formattedPlays(project.plays) }}&lt;/span&gt;
+            &lt;/div&gt;
+          &lt;/ol&gt;
+        &lt;/div&gt;
+        &lt;div class="project-list__content-groups-box"&gt;
+          &lt;div class="project-list__content-groups-box-header"&gt;
+            &lt;span class="project-list__content-groups-box-header-icon far fa-clock"&gt;&lt;/span&gt;
+            &lt;span class="project-list__content-groups-box-header-title"&gt;Recently Updated&lt;/span&gt;
+          &lt;/div&gt;
+          &lt;ol class="project-list__content-groups-box-list"&gt;
+            &lt;li v-for="project in recentlyUpdatedProjects" class="project-list__content-groups-box-list-item"&gt;
+              &lt;router-link :to="{ name: 'ProjectDetails', params: { projectId: project.project_id } }"&gt;{{ project.name }}&lt;/router-link&gt;
+            &lt;/li&gt;
+          &lt;/ol&gt;
+        &lt;/div&gt;
+        &lt;div class="project-list__content-groups-box"&gt;
+          &lt;div class="project-list__content-groups-box-header"&gt;
+            &lt;span class="project-list__content-groups-box-header-icon fas fa-certificate"&gt;&lt;/span&gt;
+            &lt;span class="project-list__content-groups-box-header-title"&gt;Newly Created&lt;/span&gt;
+          &lt;/div&gt;
+          &lt;ol class="project-list__content-groups-box-list"&gt;
+            &lt;li v-for="project in newlyCreatedProjects" class="project-list__content-groups-box-list-item"&gt;
+              &lt;router-link :to="{ name: 'ProjectDetails', params: { projectId: project.project_id } }"&gt;{{ project.name }}&lt;/router-link&gt;
+            &lt;/li&gt;
+          &lt;/ol&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class="project-list__content-projects"&gt;
+        &lt;div class="project-list__content-projects-search"&gt;
+          &lt;input class="project-list__content-projects-search-input" v-model="searchQuery" placeholder="Search projects..."&gt;&lt;/input&gt;
+          &lt;span class="project-list__content-projects-search-icon fa fa-search"&gt;&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;div class="project-list__content-projects-list"&gt;
+          &lt;div v-if="paginatedProjectData.length &gt; 0" class="project-list__content-projects-list-message"&gt;
+            Showing {{ firstOnPage }} to {{ lastOnPage }} of {{ projectData.length }} projects
+          &lt;/div&gt;
+          &lt;div v-else class="project-list__content-projects-list-message"&gt;
+            No projects found!
+          &lt;/div&gt;
+          &lt;div class="project-list__content-projects-list-container"&gt;
+            &lt;div class="project-list__content-projects-list-items"&gt;
+              &lt;div v-for="project in paginatedProjectData" class="project-list__content-projects-list-items-item"&gt;
+                &lt;div class="project-list__content-projects-list-items-item-name"&gt;
+                  &lt;router-link :to="{ name: 'ProjectDetails', params: { projectId: project.project_id } }"&gt;{{ project.name }}&lt;/router-link&gt;
+                &lt;/div&gt;
+                &lt;div class="project-list__content-projects-list-items-item-description"&gt;
+                  &lt;label&gt;{{ project.description }}&lt;/label&gt;
+                &lt;/div&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div v-if="loggedInUser &amp;&amp; loggedInUser.type === 'youth-o13'" class="project-list__content-projects-list-box"&gt;
+              &lt;div class="project-list__content-projects-list-box-message"&gt;Got an idea to share?&lt;/div&gt;
+              &lt;button class="project-list__content-projects-list-box-button" @click="createProject"&gt;
+                &lt;span&gt;Create a Project&lt;/span&gt;
+              &lt;/button&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+          &lt;pagination :records="projectData.length" :per-page="projectsPerPage" ref="pagination" for="projects-pagination" :options="{ texts: { count: '||' }, edgeNavigation: true }"&gt;&lt;/pagination&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+&lt;script&gt;
+import { Pagination, PaginationEvent } from 'vue-pagination-2';
+import projectService from '@/projects/service';
+import userService from '@/users/service';
+&nbsp;
+export default {
+  name: 'ProjectList',
+  data() {
+    return {
+      projectData: [],
+      fullProjectData: [],
+      mostPlayedProjects: [],
+      recentlyUpdatedProjects: [],
+      newlyCreatedProjects: [],
+      loggedInUser: null,
+      projectsPerPage: 6,
+      currentPage: 1,
+      searchQuery: '',
+    };
+  },
+  components: {
+    Pagination,
+  },
+  computed: {
+    // project data to display on this page
+    paginatedProjectData() {
+      const firstIndex = (this.currentPage - 1) * this.projectsPerPage;
+      const lastIndex = firstIndex + this.projectsPerPage;
+      return this.projectData.slice(firstIndex, lastIndex);
+    },
+    // number of first on page
+    firstOnPage() {
+      return 1 + (this.projectsPerPage * (this.currentPage - 1));
+    },
+    // number of last on page
+    lastOnPage() {
+      let result = this.firstOnPage + (this.projectsPerPage - 1);
+      return result &lt;= this.projectData.length ? result : this.projectData.length;
+    },
+  },
+  methods: {
+    // returns the number of plays formatted for viewing in the users locale
+    formattedPlays(plays) {
+      return parseInt(plays).toLocaleString();
+    },
+    // redirect the user to the Project Creation Form
+    createProject() {
+      this.$router.push('/create-project');
+    },
+  },
+  async created() {
+    // get the project data to display in the list
+    this.projectData = (await projectService.getProjectData()).body;
+    // backup the project data for use in searching
+    this.fullProjectData = this.projectData;
+    // get the most played projects
+    this.mostPlayedProjects = (await projectService.getProjectData(false, 'plays', 'desc', 5)).body;
+    // get the recently updated projects
+    this.recentlyUpdatedProjects = (await projectService.getProjectData(false, 'updated_at', 'desc', 5)).body;
+    // get the newly created projects
+    this.newlyCreatedProjects = (await projectService.getProjectData(false, 'created_at', 'desc', 5)).body;
+    // get the logged in user (if there is one)
+    const userId = this.$cookie.get('loggedIn');
+    if (userId) {
+      this.loggedInUser = (await userService.getUserById(userId)).body;
+    }
+    // pagination event handler
+    PaginationEvent.$on('vue-pagination::projects-pagination', (page) =&gt; <span class="fstat-no" title="function not covered" >{</span>
+<span class="cstat-no" title="statement not covered" >      this.currentPage = page;</span>
+    });
+  },
+  watch: {
+    searchQuery: {
+      // when a new search query is entered
+      handler(newSearchQuery, prevSearchQuery) {
+        // searches are not case sensitive
+        const searchQuery = newSearchQuery.toUpperCase();
+        let newProjectData = [];
+        // find relevant projects and push them to newProjectData
+        this.fullProjectData.forEach((project) =&gt; {
+          if (project.name.toUpperCase().includes(searchQuery) || project.description.toUpperCase().includes(searchQuery)) {
+            newProjectData.push(project);
+          }
+        });
+        // set projectData to the found projects and reset pagination
+        this.projectData = newProjectData;
+        this.$refs.pagination.setPage(1);
+      },
+    },
+  },
+}
+&lt;/script&gt;
+&lt;style scoped lang="less"&gt;
+  .project-list {
+    &amp;__banner {
+      padding: 25px 20px;
+      color: white;
+      background-color: #73449B;
+      &amp;-title {
+        font-size: 30px;
+      }
+    }
+    &amp;__content {
+      &amp;-groups {
+        display: flex;
+        margin: 16px;
+        text-align: left;
+        &amp;-box {
+          flex: 4;
+          padding: 8px 16px;
+          margin: 16px 16px;
+          border: solid 1px #FAA31A;
+          border-bottom: solid 2px #FAA31A;
+          &amp;-header {
+            display: flex;
+            align-items: center;
+            margin-top: 4px;
+            color: #73449B;
+            &amp;-icon {
+              font-size: 24px;
+            }
+            &amp;-title {
+              margin-left: 16px;
+              font-size: 19px;
+              font-weight: bold;
+            }
+          }
+          &amp;-list {
+            margin-top: 16px;
+            padding-left: 20px;
+            &amp;-container {
+              display: flex;
+              align-items: center;
+            }
+            &amp;-item {
+              margin: 4px 0;
+              &amp; a {
+                margin-left: 8px;
+                color: #0093D5;
+                text-decoration: none;
+                &amp;:hover {
+                  text-decoration: underline;
+                  color: #005e89;
+                }
+              }
+            }
+            &amp;-metadata {
+              margin-left: auto;
+              font-size: 18px;
+              font-weight: 600;
+              color: #73449B;
+            }
+          }
+        }
+      }
+      &amp;-projects {
+        &amp;-search {
+          margin: 0 48px;
+          display: flex;
+          margin-bottom: 16px;
+          &amp;-input {
+            flex: 11;
+            padding: 8px 12px;
+            border-right: none;
+            border-radius: 0;
+            &amp;:focus {
+              outline: none;
+            }
+          }
+          &amp;-icon {
+            flex: 0.5;
+            padding: 8px;
+            font-size: 16px;
+            border: solid 0.5px #99999F;
+            border-left: none;
+            border-radius: none;
+          }
+        }
+        &amp;-list {
+          margin: 0 64px;
+          margin-top: 32px;
+          &amp;-message {
+            padding-bottom: 4px;
+            text-align: left;
+            color: #bdbfbf;
+            border-bottom: solid 1px #bdbfbf;
+          }
+          &amp;-container {
+            display: flex;
+          }
+          &amp;-items {
+            flex: 10;
+            &amp;-item {
+              margin: 16px 0;
+              text-align: left;
+              &amp;-name {
+                margin-bottom: 4px;
+                &amp; a {
+                  color: #0093D5;
+                  text-decoration: none;
+                  &amp;:hover {
+                    text-decoration: underline;
+                    color: #005e89;
+                  }
+                }
+              }
+            }
+          }
+          &amp;-box {
+            flex: 3;
+            margin: 64px 16px 64px 64px;
+            padding: 8px 16px;
+            min-height: 150px;
+            max-height: 150px;
+            border: solid 1px #FAA31A;
+            border-bottom: solid 2px #FAA31A;
+            &amp;-message {
+              margin-top: 24px;
+              font-size: 18px;
+            }
+            &amp;-button {
+              margin-top: 20px;
+              padding: 10px 4px;
+              width: 160px;
+              height: 40px;
+              font-size: 18px;
+              color: #FAA31A;
+              background-color: #FFFFFF;
+              border: solid 1px #FAA31A;
+              &amp;:hover {
+                color: #FFFFFF;
+                background-color: #FAA31A;
+                cursor: pointer;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+&lt;/style&gt;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue May 15 2018 10:57:41 GMT+0100 (IST)
+</div>
+</div>
+<script src="../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../sorter.js"></script>
+</body>
+</html>

@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for services/web-socket-service.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">All files</a> / <a href="index.html">services</a> web-socket-service.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">15.38% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>4/26</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/5</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">14.29% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>1/7</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">15.38% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>4/26</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const pty = require('node-pty');
+import io from 'socket.io';
+import dbService from '../services/db-service';
+&nbsp;
+function setupSockets(server) {
+  const IO_SERVER = io(server);
+  
+  // when a client connects
+  IO_SERVER.on('connection', <span class="fstat-no" title="function not covered" >(s</span>ocket) =&gt; {
+    // when a start event is emited by the frontend
+<span class="cstat-no" title="statement not covered" >    socket.on('start', <span class="fstat-no" title="function not covered" >as</span>ync (projectId) =&gt; {</span>
+      // get data for this project id
+      const projectData = <span class="cstat-no" title="statement not covered" >(await dbService.query({</span>
+        text: 'SELECT * FROM projects WHERE project_id=$1;',
+        values: [projectId],
+      })).rows[0];
+      // used to signify the first output from the project process
+      let firstOutput = <span class="cstat-no" title="statement not covered" >true;</span>
+      // used to store the tag of the image to pull
+      let imageTag = <span class="cstat-no" title="statement not covered" >'';</span>
+      // set the image tag to use based on the project type
+<span class="cstat-no" title="statement not covered" >      switch (projectData.type) {</span>
+        case 'python':
+<span class="cstat-no" title="statement not covered" >          imageTag = 'python3';</span>
+<span class="cstat-no" title="statement not covered" >          break;</span>
+        case 'javascript':
+<span class="cstat-no" title="statement not covered" >          imageTag = 'nodejs';</span>
+<span class="cstat-no" title="statement not covered" >          break;</span>
+        case 'java':
+<span class="cstat-no" title="statement not covered" >          imageTag = 'java';</span>
+      }
+      // spawn a process to run the project
+      const projectProcess = <span class="cstat-no" title="statement not covered" >pty.spawn('./scripts/run-project', [projectData.github_url, projectData.entrypoint, imageTag]);</span>
+      // when anything is outputted by the process
+<span class="cstat-no" title="statement not covered" >      projectProcess.on('data', <span class="fstat-no" title="function not covered" >(d</span>ata) =&gt; {</span>
+        // emit special event for first output from project process
+<span class="cstat-no" title="statement not covered" >        if (firstOutput) {</span>
+<span class="cstat-no" title="statement not covered" >          socket.emit('firstOutput');</span>
+<span class="cstat-no" title="statement not covered" >          firstOutput = false;</span>
+        }
+        // emit it to the client to display
+<span class="cstat-no" title="statement not covered" >        socket.emit('output', data);</span>
+      });
+      // when a command is received from the frontend
+<span class="cstat-no" title="statement not covered" >      socket.on('command', <span class="fstat-no" title="function not covered" >(d</span>ata) =&gt; {</span>
+        // execute it in the running container
+<span class="cstat-no" title="statement not covered" >        projectProcess.write(data);</span>
+      });
+      // when a stop event is emitted by the frontend
+<span class="cstat-no" title="statement not covered" >      socket.on('stop', <span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+        // kill the running process
+<span class="cstat-no" title="statement not covered" >        projectProcess.destroy();</span>
+      });
+      // when the connection is lost
+<span class="cstat-no" title="statement not covered" >      socket.on('disconnect', <span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+        // kill the running process
+<span class="cstat-no" title="statement not covered" >        projectProcess.destroy();</span>
+      });
+    });
+  });  
+}
+&nbsp;
+module.exports = {
+  setupSockets: setupSockets,
+};</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Tue May 15 2018 11:03:44 GMT+0100 (IST)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>
