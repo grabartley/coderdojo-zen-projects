@@ -4,6 +4,15 @@
 
 ****
 
+## Final Delivery of Project Materials & Conclusions
+#### 20th May 2018
+
+I have now completed the user manual, video walkthrough and technical guide and have **pushed all project deliverables and testing documentation** to my GitLab repository to be collected by my project examiners. This blog post is the **final part of my project** which I will be pushing to the repository.
+
+Overall I have **learned a massive amount** from working on this project through the whole journey from the original idea to requirements gathering and refinement, research, high level design, detailed design, writing user stories, prioritisation of my backlog, project meetings with my supervisor and with the CoderDojo Foundation (CDF), creating user interface mockups, conducting user evaluations, implementation, testing, bugfixes, writing documentation and writing these blog posts. I've gained a **tremendous amount of experience and knowledge** and it is my **ambition going forward** to integrate this system into Zen for the benefit of the CoderDojo community.
+
+****
+
 ## Second User Evaluation & Finishing Development
 #### 4th May 2018
 
