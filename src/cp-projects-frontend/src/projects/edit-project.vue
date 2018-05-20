@@ -78,7 +78,7 @@
       </div>
       <div class="edit-project__information-error">
         <div class="error-message" v-show="isFormValidated && errors.has('project files')">{{ errors.first('project files') }}</div>
-        <div class="error-message" v-show="isFormValidated && !isZip">Project files must be uploaded as a zip archive!</div>
+        <div class="error-message" v-show="isFormValidated && filename && !isZip">Project files must be uploaded as a zip archive!</div>
       </div>
     </div>
     <div v-if="!projectData.deleted_at" class="edit-project__control">
