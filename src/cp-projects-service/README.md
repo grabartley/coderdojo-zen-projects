@@ -1,18 +1,19 @@
 # cp-projects-service
 
-This is the projects microservice for the CoderDojo Zen platform. This microservice handles:
+This is the projects microservice which forms the backend of my project. It handles:
 
 
   * Runtimes of projects of the following types:
     * Python 3
     * NodeJS
     * Java
+  * Implementation of API endpoints
   * Version control for projects using GitHub
   * Creation/Update/Deletion of projects
   * Project statistics tracking
   
-  
-This microservice will be integrated into the existing Zen stack to work alongside the other microservices once CA400 is finished.
+
+This microservice is designed to fit into the existing Zen stack to work alongside the other microservices once integration takes place.
 
 ### Running the microservice
 

@@ -1,6 +1,6 @@
 # cp-projects-frontend
 
-This is the frontend code for my project system. When integrating my system into the existing Zen stack, this code will likely become part of the existing Zen frontend (cp-zen-frontend) but for purposes of developing a standalone project in the meantime it is separate.
+This is the frontend code for my project system. When integrating my system into the existing Zen stack, this code will likely become part of the existing Zen frontend (cp-zen-frontend) but for purposes of my final year project it is separate.
 
 ### Running locally
 
